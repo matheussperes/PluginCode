@@ -1,11 +1,11 @@
 # Status do Projeto — PDF Explicativo do Framework .maestro
 
 **Data Última Atualização**: 2026-07-20  
-**Estado Geral**: 🔵 Development em Andamento — Task 3.1 concluída, aguardando aprovação
+**Estado Geral**: 🔵 Development em Andamento — Task 3.1 aprovada, iniciando Task 3.2
 
 ## Resumo Executivo
 
-Novo projeto iniciado neste repositório: gerar um PDF de referência que explica a estrutura, os agentes e os pipelines do framework .maestro. A construção do próprio framework está concluída e preservada em `docs/archive/maestro-framework-bootstrap/`. Discovery, outline de conteúdo e template HTML/CSS concluídos e mergeados. Primeiro PDF gerado com sucesso pela Task 3.1.
+Novo projeto iniciado neste repositório: gerar um PDF de referência que explica a estrutura, os agentes e os pipelines do framework .maestro. A construção do próprio framework está concluída e preservada em `docs/archive/maestro-framework-bootstrap/`. Discovery, outline de conteúdo, template HTML/CSS e script de build concluídos e mergeados. Primeiro PDF aprovado pelo operador.
 
 ## Progresso por Pipeline
 
@@ -17,7 +17,7 @@ Novo projeto iniciado neste repositório: gerar um PDF de referência que explic
 - ✅ Task 2.2: Template HTML/CSS do Documento (`tools/pdf-guide/template.html`, `styles.css`)
 
 ### Pipeline Stage 3: Geração do PDF
-- ⏳ Task 3.1: Script de Build (`tools/pdf-guide/build-pdf.ts`) — PDF gerado, aguardando aprovação do operador
+- ✅ Task 3.1: Script de Build (`tools/pdf-guide/build-pdf.ts`)
 - ⏱️ Task 3.2: Revisão de Conteúdo e Diagramas
 
 ### Pipeline Stage 3: Geração do PDF
