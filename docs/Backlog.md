@@ -105,6 +105,13 @@
 - **Arquivos**: `.maestro/agents/backend-engineer.md`
 - **Critérios**: Arquivo criado com modelo recomendado [Model: Sonnet]
 
+### Task 4.1C: Agente Security Auditor
+- **Status**: ✅ Completo
+- **Modelo Recomendado**: Sonnet
+- **Descrição**: Fiscalizador de segurança, OWASP e vazamento de dados, com poder de Circuit Breaker. Varre código em busca de secrets hardcoded; valida RLS habilitado em todas as tabelas do Supabase; audita rotas e Edge Functions contra OWASP Top 10 (Broken Access Control, Injection, Sensitive Data Exposure, Security Misconfiguration, Insufficient Logging); em caso de falha, gera `.maestro/tmp/Security-Decline-Payload.md` e aciona o Circuit Breaker de 2 tentativas
+- **Arquivos**: `.maestro/agents/security-auditor.md`
+- **Critérios**: Arquivo criado com modelo recomendado [Model: Sonnet]
+
 ---
 
 ## Legenda de Status

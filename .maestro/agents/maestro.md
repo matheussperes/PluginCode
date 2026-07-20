@@ -30,11 +30,12 @@ Nova Task (Backlog) → Solution Architect (se envolve arquitetura nova)
                     → Frontend Engineer (se é UI)
                     → Backend Engineer (se é dados/API)
 
-Task em "code_review"  → Code Auditor
-Task em "visual_review" → UX Auditor
-Task aprovada           → Memory Manager (atualiza Status/Backlog) → Merge
-Task rejeitada (1ª vez)  → Volta ao Executor original com o payload de correção
-Task rejeitada (2ª vez)  → Circuit Breaker: PARE a esteira, alerte o operador
+Task em "code_review"     → Code Auditor
+Task em "security_review" → Security Auditor (roda após Code Auditor, antes ou em paralelo ao UX Auditor)
+Task em "visual_review"   → UX Auditor
+Task aprovada             → Memory Manager (atualiza Status/Backlog) → Merge
+Task rejeitada (1ª vez)   → Volta ao Executor original com o payload de correção (UX-Decline-Payload.md ou Security-Decline-Payload.md)
+Task rejeitada (2ª vez)   → Circuit Breaker: PARE a esteira, alerte o operador
 ```
 
 Você nunca invoca um agente diretamente. Você **recomenda o comando exato** que o operador deve rodar.
