@@ -125,8 +125,15 @@ function buildChapter3(): string {
   return injectCallouts(html);
 }
 
+const OVERALL_PIPELINE_FLOW = `01-discovery.md   →   02-development.md   →   03-quality.md   →   04-retrospective.md
+   (Discovery)          (Development)          (Quality)          (Retrospective)
+        ▲                                                                │
+        └───────────────────────── próxima task ────────────────────────┘`;
+
 function buildChapter4(): string {
   let html = chapterHeading("Capítulo 4 — Pipelines Declarativos", "cap-4");
+  html += `<p>As quatro fases abaixo são conectadas por handoffs explícitos: cada pipeline termina indicando qual o próximo, formando um ciclo que se repete task a task.</p>`;
+  html += `<div class="pipeline-diagram">${OVERALL_PIPELINE_FLOW}</div>`;
   for (const file of PIPELINES) {
     html += markPipelineDiagrams(demoteHeadings(mdToHtml(readMd(file)), 1));
   }
@@ -185,13 +192,13 @@ async function main() {
 
   let html = fs.readFileSync(TEMPLATE_PATH, "utf-8");
   html = html
-    .replace('href="styles.css"', `href="${stylesHref}"`)
-    .replace("{{TITLE}}", "Guia de Referência — Framework .maestro")
-    .replace("{{SUBTITLE}}", "Estrutura, Agentes e Pipelines")
-    .replace("{{VERSION}}", version)
-    .replace("{{DATE}}", date)
-    .replace("{{TOC}}", toc)
-    .replace("{{CONTENT}}", content);
+    .replaceAll('href="styles.css"', `href="${stylesHref}"`)
+    .replaceAll("{{TITLE}}", "Guia de Referência — Framework .maestro")
+    .replaceAll("{{SUBTITLE}}", "Estrutura, Agentes e Pipelines")
+    .replaceAll("{{VERSION}}", version)
+    .replaceAll("{{DATE}}", date)
+    .replaceAll("{{TOC}}", toc)
+    .replaceAll("{{CONTENT}}", content);
 
   fs.mkdirSync(OUT_DIR, { recursive: true });
   const buildHtmlPath = path.join(OUT_DIR, "_build.html");

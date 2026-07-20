@@ -40,10 +40,11 @@
 - **Nota**: corrigido bug de incompatibilidade `typescript@7.x`/`ts-node@10.x` introduzido pelo `bootstrap.sh` (Task 4.2) — ver `.maestro/tmp/task-3.1-contract.md`
 
 ### Task 3.2: Revisão de Conteúdo e Diagramas
-- **Status**: ⏱️ Planejado
+- **Status**: ✅ Completo
 - **Modelo Recomendado**: Sonnet
 - **Descrição**: Revisar o PDF gerado quanto a completude (todos os 9 agentes e 4 pipelines cobertos), legibilidade, e presença de um diagrama de fluxo entre os pipelines
-- **Critérios**: Checklist de completude 100% e diagrama de fluxo presente e legível
+- **Bugs encontrados e corrigidos**: (1) capa exibia `{{TITLE}}` literal — `.replace()` só troca a 1ª ocorrência, corrigido para `.replaceAll()`; (2) diagramas ASCII colapsavam sem `white-space: pre` no CSS; (3) `tsconfig.json` precisou de `target: ES2021` para suportar `replaceAll`; (4) diagrama de fluxo geral entre as 4 fases estava faltando, adicionado ao Capítulo 4
+- **Critérios**: Checklist de completude 100% e diagrama de fluxo presente e legível — validado via screenshot real (não só contagem estrutural), ver `.maestro/tmp/task-3.2-contract.md`
 
 ---
 
