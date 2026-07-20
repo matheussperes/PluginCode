@@ -21,10 +21,11 @@
 - **Critérios**: Outline aprovado, sem lacunas — todo agente/pipeline/contrato tem uma seção mapeada
 
 ### Task 2.2: Template HTML/CSS do Documento
-- **Status**: ⏱️ Planejado
+- **Status**: ✅ Completo
 - **Modelo Recomendado**: Sonnet
 - **Descrição**: Criar o template HTML+CSS que define capa, sumário, cabeçalhos de seção, blocos de código e callouts, seguindo `docs/Design-System.md` (versão print). **Nota**: esta task não é "Frontend Engineer" no sentido de React/Shadcn — é HTML/CSS estático para renderização a PDF (ver Observação Técnica em `docs/PRD.md`)
-- **Critérios**: Template renderiza corretamente no Chromium local, visualmente conforme `docs/Design-System.md`
+- **Arquivos**: `tools/pdf-guide/template.html`, `tools/pdf-guide/styles.css`
+- **Critérios**: Template renderiza corretamente no Chromium local, visualmente conforme `docs/Design-System.md` — validado: `@page` A4 (594.96×841.92pt), 4 páginas de teste com quebras corretas (capa/sumário/capítulos), paleta e tipografia aplicadas via CSS custom properties
 
 ---
 

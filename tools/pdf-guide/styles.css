@@ -1,0 +1,211 @@
+/* Design System: docs/Design-System.md (versão print, A4) */
+
+@page {
+  size: A4;
+  margin: 25mm 20mm;
+}
+
+:root {
+  --color-primary: #0052CC;
+  --color-secondary: #6B21A8;
+  --color-success: #22C55E;
+  --color-warning: #F59E0B;
+  --color-danger: #EF4444;
+  --color-text: #1F2937;
+  --color-text-secondary: #6B7280;
+  --color-border: #E5E7EB;
+  --color-bg: #FFFFFF;
+  --color-code-bg: #F3F4F6;
+  --color-callout-danger-bg: #FEF2F2;
+  --color-callout-success-bg: #F0FDF4;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  font-family: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  font-size: 11pt;
+  line-height: 1.4;
+  color: var(--color-text);
+  background: var(--color-bg);
+}
+
+code, pre, .mono {
+  font-family: "Fira Code", "Menlo", "Courier New", monospace;
+}
+
+/* Capa */
+.cover {
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  page-break-after: always;
+}
+
+.cover-title {
+  font-size: 32pt;
+  font-weight: 700;
+  line-height: 1.2;
+  color: var(--color-primary);
+  margin: 0 0 8pt 0;
+}
+
+.cover-subtitle {
+  font-size: 14pt;
+  color: var(--color-text-secondary);
+  margin: 0 0 24pt 0;
+}
+
+.cover-meta {
+  font-size: 10pt;
+  color: var(--color-text-secondary);
+}
+
+/* Sumário */
+.toc {
+  page-break-after: always;
+}
+
+.toc h1 {
+  font-size: 24pt;
+  font-weight: 700;
+  line-height: 1.2;
+  color: var(--color-primary);
+}
+
+.toc ol, .toc ul {
+  list-style: none;
+  padding-left: 0;
+}
+
+.toc a {
+  color: var(--color-text);
+  text-decoration: none;
+}
+
+.toc li {
+  margin-bottom: 6pt;
+  font-size: 11pt;
+}
+
+/* Conteúdo */
+h1 {
+  font-size: 24pt;
+  font-weight: 700;
+  line-height: 1.2;
+  color: var(--color-primary);
+  page-break-before: always;
+}
+
+h2 {
+  font-size: 18pt;
+  font-weight: 600;
+  line-height: 1.3;
+  color: var(--color-text);
+  margin-top: 20pt;
+}
+
+h3 {
+  font-size: 14pt;
+  font-weight: 600;
+  line-height: 1.3;
+  color: var(--color-text);
+}
+
+p, li {
+  font-size: 11pt;
+  line-height: 1.4;
+}
+
+/* Cabeçalho de Agente */
+.agent-header {
+  display: flex;
+  align-items: baseline;
+  gap: 8pt;
+  border-bottom: 1px solid var(--color-border);
+  padding-bottom: 4pt;
+  margin-bottom: 8pt;
+}
+
+.agent-header .agent-role {
+  font-size: 11pt;
+  color: var(--color-text-secondary);
+}
+
+.badge-veto {
+  display: inline-block;
+  font-size: 9pt;
+  font-weight: 600;
+  color: var(--color-danger);
+  border: 1px solid var(--color-danger);
+  border-radius: 4pt;
+  padding: 1pt 6pt;
+}
+
+/* Bloco de código */
+pre, code {
+  background: var(--color-code-bg);
+  border: 1px solid var(--color-border);
+  border-radius: 4pt;
+  font-size: 10pt;
+  line-height: 1.4;
+}
+
+pre {
+  padding: 8pt 10pt;
+  overflow-x: auto;
+  white-space: pre-wrap;
+}
+
+p code, li code {
+  padding: 1pt 4pt;
+}
+
+/* Callouts */
+.callout {
+  border-left: 4px solid;
+  padding: 8pt 12pt;
+  margin: 10pt 0;
+  font-size: 11pt;
+}
+
+.callout-danger {
+  border-left-color: var(--color-danger);
+  background: var(--color-callout-danger-bg);
+}
+
+.callout-success {
+  border-left-color: var(--color-success);
+  background: var(--color-callout-success-bg);
+}
+
+/* Diagrama de Fluxo de Pipeline */
+.pipeline-diagram {
+  font-size: 10pt;
+  color: var(--color-text);
+  border: 1px solid var(--color-text-secondary);
+  border-radius: 4pt;
+  padding: 10pt;
+  background: var(--color-code-bg);
+}
+
+/*
+  Rodapé (número de página + "Framework .maestro — Guia de Referência"):
+  não é implementável de forma confiável via CSS de impressão em Chromium
+  headless. Deve ser injetado pelo script de build (Task 3.1) através de
+  page.pdf({ displayHeaderFooter: true, footerTemplate: ... }) do Playwright,
+  não neste arquivo.
+*/
+
+/* Legenda/Rodapé (uso inline, não o rodapé de página) */
+.caption {
+  font-size: 9pt;
+  line-height: 1.3;
+  color: var(--color-text-secondary);
+}
