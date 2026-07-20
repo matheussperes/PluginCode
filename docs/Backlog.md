@@ -18,7 +18,7 @@
   - `.maestro/contracts/Task-Execution-Contract.md`
 - **Critérios**: Arquivos com campos obrigatórios definidos
 
-### Task 1.3: Agent Definitions (parcial — restante coberto no Stage 2)
+### Task 1.3: Agent Definitions (parcial — restante coberto nos Stages 2 e 3)
 - **Status**: ⏳ Em Progresso
 - **Modelo Recomendado**: Sonnet
 - **Descrição**: Criar definições de agentes em `.maestro/agents/`
@@ -26,10 +26,11 @@
   - `maestro.md` ✅
   - `frontend-engineer.md` ✅
   - `ux-auditor.md` ✅
-  - `solution-architect.md` ⏱️
-  - `backend-engineer.md` ⏱️
-  - `code-auditor.md` ⏱️
-  - `memory-manager.md` ⏱️
+  - `code-auditor.md` ✅
+  - `memory-manager.md` ✅
+  - `improvement-agent.md` ✅
+  - `solution-architect.md` ⏱️ (sem stage definido ainda)
+  - `backend-engineer.md` ⏱️ (sem stage definido ainda)
 
 ### Task 1.4: Design-System.md e refinamento do Backlog
 - **Status**: ✅ Completo
@@ -66,23 +67,39 @@
 
 ---
 
-## Pipeline Stage 3: Agentes Restantes e Automação (⏱️ Futuro)
+## Pipeline Stage 3: Esteira de Qualidade e Retrospectiva (✅ Completo)
 
-### Task 3.1: Solution Architect Agent
-- **Status**: ⏱️ Planejado
-- **Modelo Recomendado**: Opus
-
-### Task 3.2: Backend Engineer Agent
-- **Status**: ⏱️ Planejado
-- **Modelo Recomendado**: Opus
-
-### Task 3.3: Code Auditor Agent
-- **Status**: ⏱️ Planejado
-- **Modelo Recomendado**: Sonnet
-
-### Task 3.4: Memory Manager Agent
-- **Status**: ⏱️ Planejado
+### Task 3.1: Agentes Code Auditor e Memory Manager
+- **Status**: ✅ Completo
 - **Modelo Recomendado**: Haiku
+- **Descrição**: `code-auditor.md` roda `npm run build` e `npm run lint`, retorna apenas erros de compilação sem análise prolixa. `memory-manager.md` lê o resultado da sprint, atualiza status em `Backlog.md` e posição atual em `Status.md`
+- **Arquivos**: 
+  - `.maestro/agents/code-auditor.md`
+  - `.maestro/agents/memory-manager.md`
+- **Critérios**: Prompts criados e capazes de rodar checagens sem gastar tokens com análises prolixas
+
+### Task 3.2: Agente de Retrospectiva e Sincronizador de Aprendizados
+- **Status**: ✅ Completo
+- **Modelo Recomendado**: Sonnet
+- **Descrição**: `improvement-agent.md` analisa histórico da sprint (vetos de UX, erros de build) e registra em `Lessons-Learned.md`. `sync-lessons.sh` faz commit/push do arquivo de volta ao repositório template
+- **Arquivos**: 
+  - `.maestro/agents/improvement-agent.md`
+  - `.maestro/scripts/sync-lessons.sh`
+- **Critérios**: Agente e script de sincronização prontos e testados (detecção de diff validada; commit/push executado apenas quando há alteração real)
+
+---
+
+## Pendências Sem Stage Definido
+
+### Solution Architect Agent
+- **Status**: ⏱️ Planejado
+- **Modelo Recomendado**: Opus
+- **Descrição**: Desenha arquitetura do MVP, estrutura do banco no Supabase e gera o Design-System.md (aguardando task numerada em um próximo Pipeline Stage)
+
+### Backend Engineer Agent
+- **Status**: ⏱️ Planejado
+- **Modelo Recomendado**: Opus
+- **Descrição**: Constrói tabelas, schemas, políticas de RLS no Supabase e Edge Functions (aguardando task numerada em um próximo Pipeline Stage)
 
 ---
 

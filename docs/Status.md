@@ -1,18 +1,18 @@
 # Status do Projeto
 
 **Data Última Atualização**: 2026-07-20  
-**Estado Geral**: 🔵 Pipeline Stage 2 Completo — Aguardando Stage 3
+**Estado Geral**: 🔵 Pipeline Stage 3 Completo — Aguardando definição do próximo Stage
 
 ## Resumo Executivo
 
-Framework .maestro com fundação de arquivos e contratos estabelecida. Prompts de sistema dos agentes-chave (Maestro, Frontend Engineer, UX Auditor) e script de seed do Supabase implementados.
+Framework .maestro com fundação de arquivos, contratos e esteira completa de agentes (orquestração, execução, auditoria de qualidade e retrospectiva) implementada. Faltam apenas Solution Architect e Backend Engineer, ainda sem stage numerado no PRD.
 
 ## Progresso por Pipeline
 
 ### Pipeline Stage 1: Fundação do Sistema de Arquivos e Memória
 - ✅ Task 1.1: Inicialização da Estrutura de Diretórios `.maestro`
 - ✅ Task 1.2: Templates de Contratos de Troca de Estado
-- ⏳ Task 1.3: Agent Definitions (3 de 7 agentes criados via Stage 2)
+- ⏳ Task 1.3: Agent Definitions (6 de 8 agentes criados via Stages 2 e 3; faltam Solution Architect e Backend Engineer)
 - ✅ Task 1.4: Design-System.md e Backlog.md
 
 ### Pipeline Stage 2: Prompts de Sistema dos Agentes (Especialistas)
@@ -20,11 +20,9 @@ Framework .maestro com fundação de arquivos e contratos estabelecida. Prompts 
 - ✅ Task 2.2: Agente Executor Frontend (`frontend-engineer.md`)
 - ✅ Task 2.3: Agente UX Auditor + Script de Seed do Supabase (`ux-auditor.md`, `seed-qa-user.ts`)
 
-### Pipeline Stage 3: Agentes Restantes e Automação
-- ⏱️ Task 3.1: Solution Architect Agent
-- ⏱️ Task 3.2: Backend Engineer Agent
-- ⏱️ Task 3.3: Code Auditor Agent
-- ⏱️ Task 3.4: Memory Manager Agent
+### Pipeline Stage 3: Esteira de Qualidade e Retrospectiva
+- ✅ Task 3.1: Agentes Code Auditor e Memory Manager (`code-auditor.md`, `memory-manager.md`)
+- ✅ Task 3.2: Improvement Agent e Sincronizador de Aprendizados (`improvement-agent.md`, `sync-lessons.sh`)
 
 ## Branches Ativas
 - `claude/maestro-framework-prd-0ehq5t` - Desenvolvimento do framework
@@ -33,6 +31,6 @@ Framework .maestro com fundação de arquivos e contratos estabelecida. Prompts 
 Nenhum no momento.
 
 ## Próximos Passos
-1. Criar `solution-architect.md`, `backend-engineer.md`, `code-auditor.md`, `memory-manager.md` (fecha Task 1.3)
-2. Definir pipelines em `.maestro/pipelines/` (01-discovery.md, 02-development.md, 03-quality.md)
-3. Validar script `seed-qa-user.ts` contra uma instância Supabase real
+1. Aguardar definição do próximo Pipeline Stage (Solution Architect e Backend Engineer agents)
+2. Criar `.maestro/pipelines/` (01-discovery.md, 02-development.md, 03-quality.md) descrevendo o fluxo entre os agentes já implementados
+3. Validar `seed-qa-user.ts` contra uma instância Supabase real e `sync-lessons.sh` em um cenário de retrospectiva real
