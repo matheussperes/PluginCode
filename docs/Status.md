@@ -28,6 +28,7 @@ Framework .maestro com fundação de arquivos, contratos e a esteira completa de
 - ✅ Task 4.1A: Agente Solution Architect (`solution-architect.md`)
 - ✅ Task 4.1B: Agente Backend Engineer / Supabase Specialist (`backend-engineer.md`)
 - ✅ Task 4.1C: Agente Security Auditor (`security-auditor.md`)
+- ✅ Task 4.2: Script de Bootstrap de Dependências (`bootstrap.sh`)
 
 ## Catálogo Completo de Agentes
 | Agente | Arquivo | Papel |
@@ -47,6 +48,10 @@ Framework .maestro com fundação de arquivos, contratos e a esteira completa de
 
 ## Bloqueadores
 Nenhum no momento.
+
+## Ambiente de Runtime
+- `package.json`/`package-lock.json` na raiz, gerados via `.maestro/scripts/bootstrap.sh`
+- `devDependencies` instaladas: `@supabase/supabase-js`, `typescript`, `ts-node`, `dotenv` (necessárias para rodar `seed-qa-user.ts`)
 
 ## Próximos Passos
 1. Aguardar definição do próximo Pipeline Stage pelo operador

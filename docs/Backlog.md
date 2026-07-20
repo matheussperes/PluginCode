@@ -112,6 +112,13 @@
 - **Arquivos**: `.maestro/agents/security-auditor.md`
 - **Critérios**: Arquivo criado com modelo recomendado [Model: Sonnet]
 
+### Task 4.2: Script de Bootstrap de Dependências do Framework
+- **Status**: ✅ Completo
+- **Modelo Recomendado**: Haiku
+- **Descrição**: Script Bash que garante que o ambiente local possui as ferramentas para rodar os scripts TypeScript do `.maestro` (ex: `seed-qa-user.ts`). Verifica `node`/`npm` instalados; cria `package.json` via `npm init -y` se ausente; instala como `devDependencies` as ausentes entre `@supabase/supabase-js`, `typescript`, `ts-node`, `dotenv`; exibe confirmação final
+- **Arquivos**: `.maestro/scripts/bootstrap.sh`
+- **Critérios**: Script criado, marcado como executável (`chmod +x`) e testado via terminal — validado em dois cenários: (1) sem `package.json`, cria e instala todas as dependências; (2) com dependências já presentes, detecta e não reinstala nada
+
 ---
 
 ## Legenda de Status
