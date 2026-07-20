@@ -29,7 +29,7 @@
   - `code-auditor.md` ✅
   - `memory-manager.md` ✅
   - `improvement-agent.md` ✅
-  - `solution-architect.md` ⏱️ (sem stage definido ainda)
+  - `solution-architect.md` ✅ (formalizado como Task 4.1A)
   - `backend-engineer.md` ⏱️ (sem stage definido ainda)
 
 ### Task 1.4: Design-System.md e refinamento do Backlog
@@ -89,12 +89,18 @@
 
 ---
 
-## Pendências Sem Stage Definido
+## Pipeline Stage 4: Discovery e Planejamento (⏳ Em Progresso)
 
-### Solution Architect Agent
-- **Status**: ⏱️ Planejado
-- **Modelo Recomendado**: Opus
-- **Descrição**: Desenha arquitetura do MVP, estrutura do banco no Supabase e gera o Design-System.md (aguardando task numerada em um próximo Pipeline Stage)
+### Task 4.1A: Agente Solution Architect
+- **Status**: ✅ Completo
+- **Modelo Recomendado**: Sonnet / Opus
+- **Descrição**: Agente responsável pelo Discovery (Fase 1) e Planejamento (Fase 2) — transforma ideias brutas em `docs/PRD.md`, `docs/Design-System.md`, especificação do schema inicial do Supabase e divisão de micro-sprints em `docs/Backlog.md`. Nunca programa nem cria arquivos de código de aplicação
+- **Arquivos**: `.maestro/agents/solution-architect.md`
+- **Critérios**: Arquivo criado com modelo recomendado [Model: Sonnet / Opus]
+
+---
+
+## Pendências Sem Stage Definido
 
 ### Backend Engineer Agent
 - **Status**: ⏱️ Planejado
