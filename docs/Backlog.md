@@ -18,8 +18,8 @@
   - `.maestro/contracts/Task-Execution-Contract.md`
 - **Critérios**: Arquivos com campos obrigatórios definidos
 
-### Task 1.3: Agent Definitions (parcial — restante coberto nos Stages 2 e 3)
-- **Status**: ⏳ Em Progresso
+### Task 1.3: Agent Definitions
+- **Status**: ✅ Completo
 - **Modelo Recomendado**: Sonnet
 - **Descrição**: Criar definições de agentes em `.maestro/agents/`
 - **Arquivos**: 
@@ -30,7 +30,7 @@
   - `memory-manager.md` ✅
   - `improvement-agent.md` ✅
   - `solution-architect.md` ✅ (formalizado como Task 4.1A)
-  - `backend-engineer.md` ⏱️ (sem stage definido ainda)
+  - `backend-engineer.md` ✅ (formalizado como Task 4.1B)
 
 ### Task 1.4: Design-System.md e refinamento do Backlog
 - **Status**: ✅ Completo
@@ -89,7 +89,7 @@
 
 ---
 
-## Pipeline Stage 4: Discovery e Planejamento (⏳ Em Progresso)
+## Pipeline Stage 4: Discovery e Planejamento (✅ Completo)
 
 ### Task 4.1A: Agente Solution Architect
 - **Status**: ✅ Completo
@@ -98,14 +98,12 @@
 - **Arquivos**: `.maestro/agents/solution-architect.md`
 - **Critérios**: Arquivo criado com modelo recomendado [Model: Sonnet / Opus]
 
----
-
-## Pendências Sem Stage Definido
-
-### Backend Engineer Agent
-- **Status**: ⏱️ Planejado
-- **Modelo Recomendado**: Opus
-- **Descrição**: Constrói tabelas, schemas, políticas de RLS no Supabase e Edge Functions (aguardando task numerada em um próximo Pipeline Stage)
+### Task 4.1B: Agente Backend Engineer (Supabase Specialist)
+- **Status**: ✅ Completo
+- **Modelo Recomendado**: Sonnet
+- **Descrição**: Especialista em banco de dados, RLS e Edge Functions. Escreve migrations SQL limpas e retrocompatíveis; toda tabela criada tem `ENABLE ROW LEVEL SECURITY` obrigatório e políticas de RLS explícitas; implementa Edge Functions em TypeScript e integrações de API; lê apenas requisitos de backend em `docs/PRD.md` e no contrato da task
+- **Arquivos**: `.maestro/agents/backend-engineer.md`
+- **Critérios**: Arquivo criado com modelo recomendado [Model: Sonnet]
 
 ---
 
