@@ -1,11 +1,11 @@
 # Status do Projeto — PDF Explicativo do Framework .maestro
 
 **Data Última Atualização**: 2026-07-20  
-**Estado Geral**: 🔵 Development em Andamento — Task 2.1 aguardando aprovação do outline
+**Estado Geral**: 🔵 Development em Andamento — Task 2.1 concluída, iniciando Task 2.2
 
 ## Resumo Executivo
 
-Novo projeto iniciado neste repositório: gerar um PDF de referência que explica a estrutura, os agentes e os pipelines do framework .maestro. A construção do próprio framework está concluída e preservada em `docs/archive/maestro-framework-bootstrap/`. Discovery aprovado pelo operador; Development iniciado na branch `feature/2.1-content-outline`.
+Novo projeto iniciado neste repositório: gerar um PDF de referência que explica a estrutura, os agentes e os pipelines do framework .maestro. A construção do próprio framework está concluída e preservada em `docs/archive/maestro-framework-bootstrap/`. Discovery aprovado; outline de conteúdo aprovado e mergeado.
 
 ## Progresso por Pipeline
 
@@ -13,7 +13,7 @@ Novo projeto iniciado neste repositório: gerar um PDF de referência que explic
 - ✅ Task 1.1: Discovery do Projeto (`PRD.md`, `Design-System.md`, schema N/A, `Backlog.md`)
 
 ### Pipeline Stage 2: Extração e Estruturação de Conteúdo
-- ⏳ Task 2.1: Inventário e Outline do Conteúdo-Fonte (`docs/Content-Outline.md` produzido, aguardando aprovação)
+- ✅ Task 2.1: Inventário e Outline do Conteúdo-Fonte (`docs/Content-Outline.md`)
 - ⏱️ Task 2.2: Template HTML/CSS do Documento
 
 ### Pipeline Stage 3: Geração do PDF
