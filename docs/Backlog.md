@@ -32,11 +32,12 @@
 ## Pipeline Stage 3: Geração do PDF (⏱️ Planejado)
 
 ### Task 3.1: Script de Build (Markdown → HTML → PDF)
-- **Status**: ⏱️ Planejado
+- **Status**: ✅ Completo
 - **Modelo Recomendado**: Sonnet
 - **Descrição**: Script Node/TypeScript que lê os arquivos fonte do outline (Task 2.1), injeta no template (Task 2.2), e usa Playwright/Chromium (já disponível no ambiente) para exportar o HTML final como PDF em `dist/Maestro-Framework-Guide.pdf`
-- **Arquivos**: script de build (caminho a definir na task, ex: `scripts/build-pdf.ts`)
-- **Critérios**: Rodar o script gera um PDF válido, com sumário navegável e todas as seções do outline presentes
+- **Arquivos**: `tools/pdf-guide/build-pdf.ts`, `tools/pdf-guide/content/*.md`, `tsconfig.json`
+- **Critérios**: Rodar o script gera um PDF válido (789KB, 8 páginas, A4), com sumário navegável e todas as seções do outline presentes — validado: 9 agentes, 4 pipelines, 2 contratos, 2 badges de veto, 8 callouts de Regra Absoluta, 2 diagramas de pipeline
+- **Nota**: corrigido bug de incompatibilidade `typescript@7.x`/`ts-node@10.x` introduzido pelo `bootstrap.sh` (Task 4.2) — ver `.maestro/tmp/task-3.1-contract.md`
 
 ### Task 3.2: Revisão de Conteúdo e Diagramas
 - **Status**: ⏱️ Planejado
