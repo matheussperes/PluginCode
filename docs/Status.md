@@ -1,11 +1,11 @@
 # Status do Projeto
 
 **Data Última Atualização**: 2026-07-20  
-**Estado Geral**: 🟢 Pipeline Stage 4 Completo — Esteira de Agentes Fundamental Pronta (9 agentes)
+**Estado Geral**: 🟢 Pipeline Stage 5 Completo — Framework Operacional de Ponta a Ponta
 
 ## Resumo Executivo
 
-Framework .maestro com fundação de arquivos, contratos e a esteira completa de 9 agentes especializados implementada: orquestração (Maestro), discovery/planejamento (Solution Architect), execução (Frontend Engineer, Backend Engineer), auditoria de qualidade e segurança (Code Auditor, UX Auditor, Security Auditor) e memória/retrospectiva (Memory Manager, Improvement Agent). Aguardando definição do próximo Pipeline Stage pelo operador.
+Framework .maestro com fundação de arquivos, contratos, 9 agentes especializados e os 4 documentos de pipeline declarativo (Discovery → Development → Quality → Retrospective) que conectam esses agentes em um fluxo executável pelo Maestro. Aguardando definição do próximo Pipeline Stage pelo operador ou o primeiro ciclo real de uso.
 
 ## Progresso por Pipeline
 
@@ -29,6 +29,12 @@ Framework .maestro com fundação de arquivos, contratos e a esteira completa de
 - ✅ Task 4.1B: Agente Backend Engineer / Supabase Specialist (`backend-engineer.md`)
 - ✅ Task 4.1C: Agente Security Auditor (`security-auditor.md`)
 - ✅ Task 4.2: Script de Bootstrap de Dependências (`bootstrap.sh`)
+
+### Pipeline Stage 5: Documentação Declarativa dos Pipelines
+- ✅ Task 5.1: Pipeline 01 — Discovery & Planning (`01-discovery.md`)
+- ✅ Task 5.2: Pipeline 02 — Development (`02-development.md`)
+- ✅ Task 5.3: Pipeline 03 — Quality & Audit Gates (`03-quality.md`)
+- ✅ Task 5.4: Pipeline 04 — Retrospective & Sync (`04-retrospective.md`)
 
 ## Catálogo Completo de Agentes
 | Agente | Arquivo | Papel |
@@ -55,6 +61,5 @@ Nenhum no momento.
 
 ## Próximos Passos
 1. Aguardar definição do próximo Pipeline Stage pelo operador
-2. Criar `.maestro/pipelines/` (01-discovery.md, 02-development.md, 03-quality.md) descrevendo o fluxo formal entre os 9 agentes já implementados
-3. Validar `seed-qa-user.ts` contra uma instância Supabase real e `sync-lessons.sh` em um cenário de retrospectiva real
-4. Rodar um primeiro ciclo end-to-end simulado (Solution Architect → Frontend/Backend Engineer → Code Auditor → Security Auditor → UX Auditor → Memory Manager) para validar os contratos na prática
+2. Validar `seed-qa-user.ts` contra uma instância Supabase real e `sync-lessons.sh` em um cenário de retrospectiva real
+3. Rodar o primeiro ciclo end-to-end real seguindo `01-discovery.md` → `02-development.md` → `03-quality.md` → `04-retrospective.md`, com um projeto/ideia concreta, para validar os 4 pipelines e os 9 agentes na prática

@@ -121,6 +121,38 @@
 
 ---
 
+## Pipeline Stage 5: Documentação Declarativa dos Pipelines (✅ Completo)
+
+### Task 5.1: Pipeline 01 — Discovery & Planning
+- **Status**: ✅ Completo
+- **Modelo Recomendado**: Sonnet
+- **Descrição**: Fluxo declarativo que instrui o Maestro a convocar o Solution Architect a partir de uma ideia bruta, produzindo `docs/PRD.md`, `docs/Design-System.md`, schema SQL inicial em `.maestro/tmp/schema.sql` e `docs/Backlog.md` fatiado em micro-tasks. Gate de saída: aprovação explícita do operador antes de avançar para Development
+- **Arquivos**: `.maestro/pipelines/01-discovery.md`
+- **Critérios**: Arquivo criado com a sequência de comandos e artefatos esperados
+
+### Task 5.2: Pipeline 02 — Development
+- **Status**: ✅ Completo
+- **Modelo Recomendado**: Sonnet
+- **Descrição**: Fluxo declarativo que instrui o Maestro a ler a próxima micro-task do Backlog, criar a branch efêmera (`git checkout -b feature/<task-id>`), preencher o `Task-Execution-Contract.md`, e rotear para `backend-engineer.md` (banco/API) e/ou `frontend-engineer.md` (interface, lendo Design-System.md). Saída: código alterado e compilando localmente
+- **Arquivos**: `.maestro/pipelines/02-development.md`
+- **Critérios**: Arquivo criado com a ordem e regras de branching
+
+### Task 5.3: Pipeline 03 — Quality & Audit Gates
+- **Status**: ✅ Completo
+- **Modelo Recomendado**: Sonnet
+- **Descrição**: Fluxo declarativo com a sequência exata de fiscalização — Code Auditor (build/lint) → Security Auditor (secrets/RLS, gera `Security-Decline-Payload.md`) → UX Auditor (seed QA + servidor local + visão, gera `UX-Decline-Payload.md`). Circuit Breaker de no máximo 2 tentativas por gate antes de travar a esteira. Aprovação nos 3 gates autoriza `git checkout main && git merge feature/<task-id>`
+- **Arquivos**: `.maestro/pipelines/03-quality.md`
+- **Critérios**: Arquivo criado com a ordem e regras dos gatilhos de veto
+
+### Task 5.4: Pipeline 04 — Retrospective & Sync
+- **Status**: ✅ Completo
+- **Modelo Recomendado**: Sonnet
+- **Descrição**: Fluxo declarativo que instrui o Maestro a convocar o Memory Manager após toda task (marca conclusão em Backlog.md, atualiza Status.md) e o Improvement Agent ao final de Sprint/Stage (registra aprendizados em Lessons-Learned.md), seguido da execução de `sync-lessons.sh` para sincronizar com o repositório base
+- **Arquivos**: `.maestro/pipelines/04-retrospective.md`
+- **Critérios**: Arquivo criado e validado
+
+---
+
 ## Legenda de Status
 - ✅ Completo
 - ⏳ Em Progresso

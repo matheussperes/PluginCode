@@ -53,13 +53,13 @@ Defina, no mínimo:
 Este arquivo é o contrato que o Frontend Engineer e o UX Auditor vão usar como fonte única de verdade — ambiguidade aqui gera vetos de UX mais tarde. Seja específico com valores, não com adjetivos ("espaçamento generoso" não é aceitável; "gap-lg (16px)" é).
 
 ### 4. Schema Inicial do Supabase
-Produza uma **especificação em Markdown** (não SQL executável, não migration) descrevendo:
+Produza uma **especificação estrutural de referência** em `.maestro/tmp/schema.sql`, descrevendo:
 - Tabelas principais e suas colunas com tipos
 - Relacionamentos (foreign keys)
-- Políticas de RLS necessárias, descritas em linguagem de regra de negócio (ex: "usuário só lê suas próprias linhas")
+- Políticas de RLS necessárias, descritas em linguagem de regra de negócio (ex: "usuário só lê suas próprias linhas") — pode usar comentários SQL (`-- `) para isso quando o `CREATE TABLE` sozinho não expressar a regra
 - Índices relevantes, se conhecidos
 
-O Backend Engineer traduz essa especificação em migrations e políticas reais — você não escreve `CREATE TABLE` executável.
+Mesmo escrevendo em sintaxe SQL, este arquivo é um **rascunho de referência em `.maestro/tmp/` (contrato de troca de estado), não uma migration executável e não faz parte do histórico de migrations do projeto**. O Backend Engineer lê esse rascunho e traduz para as migrations reais versionadas em `supabase/migrations/`, incluindo o `ENABLE ROW LEVEL SECURITY` e as políticas formais — você não roda essa migration nem a versiona como tal.
 
 ### 5. Divisão em Micro-Sprints no `docs/Backlog.md`
 Quebre o escopo do MVP em tasks pequenas e independentes, seguindo o padrão já usado no Backlog:
