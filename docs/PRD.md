@@ -1,67 +1,61 @@
-# PRD Mestre do Framework .maestro
+# PRD — PDF Explicativo do Framework .maestro
 
-## 1. Visão Geral e Filosofia do Produto
+## 1. Visão Geral
 
-O .maestro Framework é uma plataforma de engenharia de software baseada em agentes e orientada por arquivos (File-System Based). Ele transforma o Claude Code em uma linha de produção ágil, separando estritamente os papéis de quem constrói (Executores) de quem valida (Fiscalizadores/Auditores).
+Produto: um **documento PDF único, navegável e reprodutível** que explica a estrutura, filosofia e fluxo de trabalho do framework .maestro, para qualquer pessoa que precise entendê-lo sem ler manualmente os ~15 arquivos Markdown espalhados em `.maestro/` e `docs/`.
 
 ## 2. Problema vs. Solução
 
-### Problema Atual no Claude Code
-- **Código Frankenstein**: Modificações desordenadas que misturam arquiteturas e quebram módulos
-- **Interfaces Feias / Pobre UX**: Componentes brutos, desalinhados e fluxos confusos
-- **Estouro de Tokens & Sessões Longas**: Reenvio de históricos massivos e PRDs gigantes
-- **Uso Ineficiente de Modelos Caros**: Usar Opus/Fable para criar funções simples
-- **Perda de Estado na Troca de Sessão**: Ter que pedir Base.md e Status.md
+### Problema
+O conhecimento do framework está fragmentado em muitos arquivos `.md` (9 agentes, 4 pipelines, 2 contratos, docs de PRD/Design-System/Backlog/Lessons). Não há uma visão consolidada, navegável ou facilmente compartilhável fora do repositório Git. Onboarding de um novo operador ou colaborador exige ler tudo manualmente.
 
-### Solução do Framework .maestro
-- **Isolamento via Git**: Toda task roda em uma branch efêmera e só faz merge após aprovação total
-- **UX Auditor Multimodal**: O agente sobe a aplicação local, tira screenshots, testa cliques e reprova layouts fora do Design-System
-- **Contexto Mínimo via Contratos**: Agentes leem apenas resumos e payloads específicos
-- **Model Routing Tagging**: Cada task no Backlog vem com a indicação do modelo ideal
-- **Memory Manager**: Agente silencioso de documentação que atualiza o estado
+### Solução
+Gerar um PDF único a partir das fontes de verdade já existentes no repositório — sem duplicar conteúdo manualmente — com:
+- Capa e sumário navegável (links internos)
+- Catálogo dos 9 agentes (papel, regras absolutas, proibições)
+- Os 4 pipelines declarativos (sequência de convocação, gates, handoffs)
+- Regras de governança (Circuit Breaker, protocolos de decline payload)
+- Estrutura de diretórios da plataforma
+- Guia rápido de "como iniciar um novo projeto com o framework"
 
-## 3. Catálogo de Agentes
+## 3. Personas / Público-Alvo
 
-### Agentes de Estratégia e Planejamento
-- **Maestro**: Tech Lead, PO e Scrum Master. Decide qual especialista convocar
-- **Solution Architect**: Desenha a arquitetura do MVP
+- **Operador humano** que já usa o framework mas quer uma referência offline/compartilhável
+- **Novo colaborador** que precisa entender a arquitetura antes de operar a esteira
+- **Stakeholder não-técnico** que quer entender o "porquê" do framework (visão executiva)
 
-### Agentes Executores (Builders)
-- **Frontend Engineer**: Constrói interfaces em React com Tailwind e Shadcn/UI
-- **Backend Engineer**: Constrói tabelas, schemas, políticas de RLS no Supabase
+## 4. Escopo do MVP
 
-### Agentes Fiscalizadores (Auditores / Quality Gates)
-- **Code Auditor**: Roda comandos estáticos (lint, tsc)
-- **UX Auditor**: Executa testes visuais da aplicação
+### Dentro do escopo
+- 1 PDF final, gerado a partir de conteúdo Markdown já existente no repositório
+- Conteúdo: Visão Geral, Filosofia, Catálogo de 9 Agentes, os 4 Pipelines, Regras de Governança, Estrutura de Diretórios, Quick-Start
+- Processo de geração **repetível via script** — não é um PDF editado manualmente uma única vez; deve poder ser regenerado quando os `.md` fontes mudarem
 
-### Agente de Memória e Retrospectiva
-- **Memory Manager**: Atualiza Status.md e Backlog.md
-- **Improvement Agent**: Analisa falhas e grava lições aprendidas
+### Fora do escopo (deste MVP)
+- Tradução para outros idiomas
+- Versão interativa/HTML navegável (iteração futura, se solicitado)
+- Branding ilustrado/profissional — estilo limpo e funcional é suficiente
+- Distribuição automática (e-mail, hospedagem) — o MVP entrega apenas o arquivo PDF gerado localmente
 
-## 4. Estrutura de Diretórios
+## 5. Requisitos Funcionais de Alto Nível
 
-```
-.maestro/
-├── agents/           # Definições dos agentes especializados
-├── contracts/        # Templates de troca de estado
-├── scripts/          # Scripts de automação
-├── pipelines/        # Definições dos pipelines
-└── tmp/              # Arquivos temporários (gitignore)
+- **RF1**: Deve existir um script de build que lê os arquivos fonte (`.maestro/agents/*.md`, `.maestro/pipelines/*.md`, `.maestro/contracts/*.md`, `docs/archive/maestro-framework-bootstrap/*.md`) e gera um único arquivo PDF de saída
+- **RF2**: O PDF deve ter sumário (table of contents) com links internos por seção
+- **RF3**: O PDF deve seguir `docs/Design-System.md` deste projeto (tipografia, cores, margens de impressão)
+- **RF4**: A geração deve ser reprodutível — rodar o script novamente a partir do mesmo conteúdo-fonte produz o mesmo PDF, sem edição manual
+- **RF5**: O PDF final deve ser salvo em caminho previsível (ex: `dist/Maestro-Framework-Guide.pdf`)
 
-docs/
-├── PRD.md            # Este arquivo
-├── Design-System.md  # Especificações de design
-├── Backlog.md        # Lista de tasks
-├── Status.md         # Estado atual do projeto
-└── Lessons-Learned.md # Lições aprendidas
-```
+## 6. Critérios de Sucesso
 
-## 5. Regras de Governança e Circuit Breaker
+- PDF gerado sem erros no script de build
+- Sumário/índice funcional, com links para cada seção
+- Conteúdo cobre os 9 agentes e os 4 pipelines sem omissão
+- Legibilidade validada (fonte, espaçamento, contraste) pelo operador
 
-### Protocolo de Veto do UX Auditor
-O UX Auditor tem poder de circuit breaker para reprovar implementações que violem o Design-System.
+## 7. Observação Técnica do Solution Architect
 
-### Regra de 2 Tentativas
-1. Tentativa 1: Frontend lê `UX-Decline-Payload.md` e ajusta
-2. Tentativa 2: Frontend tenta novamente
-3. Se falhar na Tentativa 2: Pausa e solicita orientação humana
+Este projeto **não requer armazenamento de dados persistentes nem Supabase** — não há usuários, autenticação ou estado de aplicação a modelar (ver `.maestro/tmp/schema.sql`, marcado como N/A).
+
+Também não é um aplicativo React/Web tradicional: os papéis de **Frontend Engineer** (React/Tailwind/Shadcn) e **Backend Engineer** (Supabase/RLS) não se encaixam diretamente na implementação. A geração do PDF é um problema de **build tooling** — um script Node/TypeScript que renderiza Markdown/HTML e exporta para PDF via Chromium (Playwright, já disponível neste ambiente).
+
+Recomenda-se ao Maestro tratar as tasks de implementação (Pipeline Stages 2 e 3 do Backlog deste projeto) como execução genérica, sem forçar encaixe artificial em `frontend-engineer.md` ou `backend-engineer.md`. Isso é registrado explicitamente aqui para evitar que um Executor tente aplicar regras que não se aplicam a este tipo de entregável.
