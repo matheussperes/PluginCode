@@ -1,11 +1,11 @@
 # Status do Projeto — PDF Explicativo do Framework .maestro
 
 **Data Última Atualização**: 2026-07-20  
-**Estado Geral**: 🔵 Pipeline Stage 3 concluído — aguardando aprovação para Stage 4
+**Estado Geral**: ✅ Projeto Concluído — PDF Explicativo do Framework .maestro entregue e aprovado
 
 ## Resumo Executivo
 
-Novo projeto iniciado neste repositório: gerar um PDF de referência que explica a estrutura, os agentes e os pipelines do framework .maestro. A construção do próprio framework está concluída e preservada em `docs/archive/maestro-framework-bootstrap/`. Discovery, outline, template, script de build e revisão visual concluídos e mergeados. PDF revisado (com bugs de capa/diagrama corrigidos) enviado para aprovação final do operador.
+Projeto concluído neste repositório: PDF de referência explicando a estrutura, os agentes e os pipelines do framework .maestro, gerado a partir das fontes de verdade já existentes (sem duplicação manual de conteúdo). A construção do próprio framework está preservada em `docs/archive/maestro-framework-bootstrap/`. Todos os 4 Pipeline Stages concluídos e aprovados pelo operador. Entregável final: `dist/Maestro-Framework-Guide.pdf` (gerado via `npm run build:pdf-guide`, não versionado — `dist/` está no `.gitignore`).
 
 ## Progresso por Pipeline
 
@@ -21,14 +21,7 @@ Novo projeto iniciado neste repositório: gerar um PDF de referência que explic
 - ✅ Task 3.2: Revisão de Conteúdo e Diagramas — 3 bugs reais encontrados e corrigidos via inspeção visual (screenshot), não apenas checagem estrutural
 
 ### Pipeline Stage 4: Validação e Entrega
-- ⏱️ Task 4.1: Validação Final e Aprovação do Operador
-
-### Pipeline Stage 3: Geração do PDF
-- ⏱️ Task 3.1: Script de Build (Markdown → HTML → PDF)
-- ⏱️ Task 3.2: Revisão de Conteúdo e Diagramas
-
-### Pipeline Stage 4: Validação e Entrega
-- ⏱️ Task 4.1: Validação Final e Aprovação do Operador
+- ✅ Task 4.1: Validação Final e Aprovação do Operador — aprovação recebida ("ok, aprovado."); reprodutibilidade confirmada via rebuild limpo
 
 ## Histórico do Repositório
 
@@ -40,8 +33,11 @@ A construção do próprio framework .maestro (9 agentes, 4 pipelines, 2 contrat
 
 ## Bloqueadores
 
-Nenhum. Aguardando aprovação explícita do operador (Gate de Saída de `.maestro/pipelines/01-discovery.md`) antes de avançar para `02-development.md`.
+Nenhum. Projeto concluído.
 
 ## Próximos Passos
-1. Operador aprova o Discovery (PRD/Design-System/Backlog) apresentado
-2. Maestro cria a branch efêmera e inicia `02-development.md` para a Task 2.1
+
+Nenhum pendente para este projeto. Possíveis iterações futuras (fora do escopo deste MVP, conforme `docs/PRD.md` Seção 4):
+1. Versão interativa/HTML navegável do guia
+2. Tradução para outros idiomas
+3. Regenerar o PDF sempre que os arquivos fonte (`.maestro/agents/`, `.maestro/pipelines/`, `.maestro/contracts/`) mudarem, via `npm run build:pdf-guide`

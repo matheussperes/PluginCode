@@ -51,10 +51,10 @@
 ## Pipeline Stage 4: Validação e Entrega (⏱️ Planejado)
 
 ### Task 4.1: Validação Final e Aprovação do Operador
-- **Status**: ⏱️ Planejado
+- **Status**: ✅ Completo
 - **Modelo Recomendado**: Haiku
 - **Descrição**: Apresentar o PDF final ao operador para aprovação e registrar a conclusão em `docs/Status.md`
-- **Critérios**: Aprovação explícita do operador registrada
+- **Critérios**: Aprovação explícita do operador registrada — recebida ("ok, aprovado."). Reprodutibilidade confirmada via rebuild limpo pós-merge (RF4 do PRD)
 
 ---
 
