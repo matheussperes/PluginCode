@@ -187,12 +187,15 @@ p code, li code {
 
 /* Diagrama de Fluxo de Pipeline */
 .pipeline-diagram {
+  font-family: "Fira Code", "Menlo", "Courier New", monospace;
   font-size: 10pt;
   color: var(--color-text);
   border: 1px solid var(--color-text-secondary);
   border-radius: 4pt;
   padding: 10pt;
   background: var(--color-code-bg);
+  white-space: pre;
+  overflow-x: auto;
 }
 
 /*
