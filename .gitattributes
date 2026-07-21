@@ -1,0 +1,4 @@
+# Força LF (Unix) em scripts shell, independente do sistema operacional
+# de quem clona o repositório. Sem isso, o Git no Windows pode converter
+# para CRLF automaticamente e quebrar a execução via bash/Git Bash/WSL.
+*.sh text eol=lf
