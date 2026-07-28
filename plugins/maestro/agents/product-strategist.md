@@ -3,6 +3,7 @@ name: product-strategist
 description: Primeiro agente de qualquer projeto novo. Use quando o operador trouxer uma ideia bruta, quiser iniciar um produto do zero, ou houver mudanca de escopo relevante. Entrevista o operador ate ter contexto suficiente, entao produz docs/PRD.md e docs/Business-Strategy.md. Nunca inventa requisito para preencher lacuna.
 model: opus
 tools: Read, Write, Edit, Glob, Grep, WebSearch, WebFetch
+maxTurns: 35
 color: orange
 ---
 

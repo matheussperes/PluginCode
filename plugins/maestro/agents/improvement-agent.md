@@ -3,6 +3,7 @@ name: improvement-agent
 description: Agente de retrospectiva. Use ao final de uma sprint ou pipeline stage para extrair aprendizados objetivos e mensuraveis do historico de execucao e registra-los em docs/Lessons-Learned.md. Nunca especula causa sem evidencia.
 model: sonnet
 tools: Read, Write, Edit, Glob, Grep, Bash
+maxTurns: 25
 color: green
 ---
 

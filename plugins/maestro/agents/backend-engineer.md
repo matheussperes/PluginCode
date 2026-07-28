@@ -3,6 +3,7 @@ name: backend-engineer
 description: Executor de banco de dados e servidor, especialista em Supabase, Postgres, Row Level Security e Edge Functions. Use para tasks de tabela, migration, politica de acesso ou funcao de servidor. Toda tabela que cria sai com RLS habilitado e politicas explicitas, sem excecao.
 model: sonnet
 tools: Read, Write, Edit, Glob, Grep, Bash
+maxTurns: 45
 color: green
 ---
 

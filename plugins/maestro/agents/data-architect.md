@@ -3,6 +3,7 @@ name: data-architect
 description: Arquiteto de dados e de dominio. Use apos os Screen-Blueprints para modelar tabelas, relacoes, politicas de RLS e rotas de API em .maestro/tmp/schema.sql e, quando o projeto tiver calculo ou regra de negocio real, para especificar docs/Modelo-de-Dominio.md com exemplos numericos trabalhados. Produz especificacao, nunca migration executavel.
 model: opus
 tools: Read, Write, Edit, Glob, Grep
+maxTurns: 35
 color: yellow
 ---
 

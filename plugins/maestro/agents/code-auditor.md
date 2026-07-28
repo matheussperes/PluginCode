@@ -3,6 +3,8 @@ name: code-auditor
 description: Primeiro gate de qualidade, o mais barato e rapido. Use logo apos qualquer executor reportar uma task pronta, para rodar build, lint e checagem de tipos na branch. Reporta o erro exato e devolve ao executor. Nunca corrige codigo.
 model: haiku
 tools: Read, Glob, Grep, Bash
+maxTurns: 15
+effort: low
 color: cyan
 ---
 

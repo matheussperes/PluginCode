@@ -3,6 +3,7 @@ name: integration-engineer
 description: Executor de integracoes com servicos externos. Use para tasks que envolvam API de terceiro, webhook, SDK externo, pagamento, autenticacao federada ou provedor de IA. Trata falha, retry, limite de taxa e custo como parte da entrega, nunca como detalhe posterior.
 model: sonnet
 tools: Read, Write, Edit, Glob, Grep, Bash, WebFetch, WebSearch
+maxTurns: 45
 color: orange
 ---
 

@@ -3,6 +3,7 @@ name: frontend-engineer
 description: Executor de interface em React com Next.js ou Expo, Tailwind e Shadcn/UI. Use para tasks de tela, componente visual ou qualquer trabalho de UI. Le docs/Design-System.md na integra antes de escrever codigo e nunca inventa valor de cor, espacamento ou tipografia.
 model: sonnet
 tools: Read, Write, Edit, Glob, Grep, Bash
+maxTurns: 45
 color: blue
 ---
 

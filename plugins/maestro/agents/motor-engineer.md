@@ -3,6 +3,7 @@ name: motor-engineer
 description: Executor de logica de dominio e calculo puro em TypeScript, sem UI e sem I/O. Use para tasks de motor, orcamento, precificacao, regra de elegibilidade, transformacao geometrica ou qualquer funcao deterministica de entrada para saida. Reproduz em teste os exemplos numericos da especificacao antes de reportar pronto.
 model: opus
 tools: Read, Write, Edit, Glob, Grep, Bash
+maxTurns: 50
 color: yellow
 ---
 

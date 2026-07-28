@@ -25,9 +25,34 @@ Delegue a cada especialista **em ordem**, um de cada vez, usando a ferramenta Ag
 
 ## Se o spec-auditor reprovar
 
-Leia `.maestro/tmp/Spec-Decline-Payload.md` e reconvoque **apenas os agentes nomeados como responsáveis** em cada achado bloqueante. Não refaça a descoberta inteira.
+Leia `.maestro/tmp/Spec-Decline-Payload.md` e vá direto para a tabela **Agrupamento para correção**.
 
-Depois da correção, rode o spec-auditor novamente. Após duas reprovações consecutivas, pare e traga ao operador — o problema provavelmente está na ideia original, não na execução dos agentes.
+### Despache uma correção por linha da tabela, não por achado
+
+Cada linha reúne todos os achados que caem no mesmo documento e no mesmo agente. Delegue **uma vez por linha**, passando todos os achados daquela linha de uma só vez.
+
+```
+Errado: 3 achados no Backlog → 3 subagentes, cada um relendo o Backlog
+Certo:  3 achados no Backlog → 1 subagente corrigindo os 3 na mesma leitura
+```
+
+A releitura do documento é o custo dominante de uma correção, não a edição. Três subagentes para o mesmo arquivo pagam a leitura três vezes e entregam o mesmo resultado.
+
+Na delegação, passe apenas os achados e as seções citadas — não mande o agente reler a descoberta inteira para corrigir uma inconsistência localizada.
+
+### Reconvoque só quem foi nomeado
+
+Não refaça a descoberta. Se nenhum achado é do `product-designer`, ele não é chamado.
+
+### Rode o spec-auditor de novo
+
+Ele vai detectar sozinho que existe payload e entrar em modo incremental, lendo apenas as seções corrigidas em vez dos cinco documentos.
+
+### Limite de duas rodadas
+
+Se ele reprovar na segunda rodada, **pare a esteira** e traga ao operador. Não existe terceira rodada automática.
+
+Duas reprovações seguidas quase nunca são falha de execução dos agentes — indicam decisão pendente no PRD ou ambiguidade na ideia original. Continuar o ciclo auditar-corrigir-auditar é o padrão de gasto mais caro que a esteira produz, e a decisão de seguir é sua, não do Maestro.
 
 ## Gate de saída
 

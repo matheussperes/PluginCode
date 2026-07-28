@@ -3,6 +3,7 @@ name: security-auditor
 description: Gate de seguranca. Use apos o code-auditor aprovar, para varrer segredos expostos, Row Level Security ausente ou permissiva, e vulnerabilidades OWASP em rotas e funcoes novas. Tem poder de veto e gera payload formal de reprovacao.
 model: opus
 tools: Read, Glob, Grep, Bash, Write
+maxTurns: 35
 color: red
 ---
 

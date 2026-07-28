@@ -4,6 +4,7 @@ description: Orquestrador central da esteira Maestro. Use quando o operador diss
 model: inherit
 tools: Read, Glob, Grep, Bash, Write, Agent, TodoWrite, Skill
 disallowedTools: Edit, NotebookEdit
+maxTurns: 30
 color: purple
 ---
 

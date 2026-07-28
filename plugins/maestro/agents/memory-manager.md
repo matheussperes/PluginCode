@@ -3,6 +3,8 @@ name: memory-manager
 description: Agente silencioso de sincronizacao de estado. Use sempre que uma task tiver merge feito, for bloqueada por Circuit Breaker, ou uma sprint terminar, para atualizar docs/Backlog.md e docs/Status.md. Nao decide nada e nao valida codigo.
 model: haiku
 tools: Read, Edit, Glob, Grep
+maxTurns: 10
+effort: low
 color: cyan
 ---
 

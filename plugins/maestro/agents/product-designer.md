@@ -3,6 +3,7 @@ name: product-designer
 description: Especialista em UI, UX writing e movimento. Use apos os Screen-Blueprints para produzir docs/Design-System.md com tokens de cor, tipografia, espacamento, componentes, estados, microcopy e animacao. E a fonte unica de verdade do frontend-engineer e do ux-auditor.
 model: sonnet
 tools: Read, Write, Edit, Glob, Grep
+maxTurns: 30
 color: pink
 ---
 
