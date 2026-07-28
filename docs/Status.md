@@ -40,4 +40,4 @@ Nenhum. Projeto concluído.
 Nenhum pendente para este projeto. Possíveis iterações futuras (fora do escopo deste MVP, conforme `docs/PRD.md` Seção 4):
 1. Versão interativa/HTML navegável do guia
 2. Tradução para outros idiomas
-3. Regenerar o PDF sempre que os arquivos fonte (`core/agents/`, `core/pipelines/`, `core/contracts/`) mudarem, via `npm run build:pdf-guide`
+3. Regenerar o PDF sempre que os arquivos fonte (`plugins/maestro/agents/`, `plugins/maestro/commands/`) mudarem, via `npm run build:pdf-guide`

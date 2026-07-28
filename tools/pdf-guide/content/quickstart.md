@@ -1,27 +1,55 @@
-## Passo 1 — Prepare o Ambiente
+## Passo 1 — Instale o Plugin
 
-No projeto consumidor, rode `maestro/core/scripts/bootstrap.sh` para garantir que `node`/`npm` estão disponíveis e que as devDependencies necessárias (`@supabase/supabase-js`, `typescript`, `ts-node`, `dotenv`) estão instaladas.
+Registre o repositório como marketplace local, uma vez só na máquina:
 
-## Passo 2 — Descreva a Ideia Bruta
+```
+claude plugin marketplace add D:\Github\PluginCode
+claude plugin install maestro@plugincode
+```
 
-Diga ao Maestro que você quer iniciar o Pipeline 01 (Discovery) e descreva o MVP em 1-2 frases. Não é necessário formatar nada — o Solution Architect faz as perguntas necessárias se algo estiver incompleto.
+A partir daí os 17 agentes e os 7 comandos ficam disponíveis em todos os seus projetos. Não há pasta para copiar nem symlink para criar.
 
-## Passo 3 — Aprove o Discovery
+## Passo 2 — Prepare o Projeto
 
-O Solution Architect produz `docs/PRD.md`, `docs/Design-System.md`, `.maestro/tmp/schema.sql` e `docs/Backlog.md`. O Maestro apresenta um resumo e pergunta explicitamente se você aprova antes de avançar — nada é implementado sem essa aprovação.
+Dentro do projeto, rode `/maestro-init` uma vez. Ele cria `.maestro/` para o estado da esteira, `docs/` para a especificação e o `CLAUDE.md` de integração. É idempotente: rodar de novo não sobrescreve nada.
 
-## Passo 4 — Desenvolvimento por Task
+Preencha a seção `conventions` de `.maestro/config.json` com os caminhos e scripts reais do repositório — é o que evita os executores deduzirem.
 
-Para cada micro-task do Backlog, o Maestro cria uma branch efêmera (`feature/<task-id>`) e convoca o Executor certo: Backend Engineer para dados/API, Frontend Engineer para interface.
+## Passo 3 — Descreva a Ideia Bruta
 
-## Passo 5 — Gates de Qualidade
+Rode `/maestro-discovery` e descreva o MVP em uma ou duas frases. Não é necessário formatar nada.
 
-Antes de qualquer merge, a task passa por até três fiscalizadores: Code Auditor (build/lint), Security Auditor (secrets/RLS/OWASP) e UX Auditor (validação visual, usando `maestro/core/scripts/seed-qa-user.ts` para autenticar um usuário de teste no Supabase quando a tela exige login). Qualquer um dos três pode vetar.
+O Product Strategist não escreve nenhum artefato antes de fechar as lacunas: ele devolve de 3 a 5 perguntas decisórias e espera a sua resposta. É o que impede uma ideia vaga de virar um produto que ninguém pediu.
 
-## Passo 6 — Circuit Breaker
+## Passo 4 — Aprove a Descoberta
 
-Se a mesma task falhar a mesma validação duas vezes, a esteira para e o Maestro pede sua orientação diretamente — nada avança sem uma decisão sua.
+Cinco especialistas produzem, em sequência, o PRD e a estratégia de negócio, os blueprints de tela, o design system, o schema de dados com o modelo de domínio, e o backlog fatiado.
 
-## Passo 7 — Retrospectiva
+O Spec Auditor então cruza os cinco documentos entre si, confere a aritmética dos exemplos numéricos e responde à pergunta de fundo: o backlog ainda entrega a ideia original? Ele tem poder de veto. Só depois da aprovação dele o Maestro apresenta o resumo e pede a sua liberação — nada é implementado sem ela.
 
-Após o merge, o Memory Manager atualiza `Backlog.md`/`Status.md` automaticamente. Ao final de cada sprint, o Improvement Agent registra aprendizados em `docs/Lessons-Learned.md` e cria uma proposta local com `maestro/core/scripts/sync-lessons.sh` para revisão humana.
+## Passo 5 — Desenvolvimento por Task
+
+Rode `/maestro-next`. Para cada micro-task, o Maestro cria uma branch efêmera `feature/<task-id>`, preenche o contrato de execução e convoca o executor certo: Backend Engineer para dados e API, Frontend Engineer para interface, Integration Engineer para serviço externo, Motor Engineer para cálculo de domínio.
+
+O executor recebe apenas o contrato preenchido — nunca o PRD completo nem o histórico da sessão.
+
+## Passo 6 — Gates de Qualidade
+
+Antes de qualquer merge, a task passa pelos gates em ordem, do mais barato ao mais caro:
+
+1. **Code Auditor** — build, lint e tipos
+2. **Security Auditor** — segredos, RLS e OWASP na diferença da branch
+3. **QA Engineer** — comportamento, regressão e casos de borda
+4. **UX Auditor** — validação visual com evidência, apenas se houver mudança de tela
+
+Os três últimos têm poder de veto e geram um payload estruturado de reprovação em `.maestro/tmp/`.
+
+## Passo 7 — Circuit Breaker
+
+Duas reprovações da mesma task no mesmo gate: a terceira submissão para a esteira e o Maestro pede a sua orientação. A contagem é por gate, não agregada — aprovação prévia em segurança não zera o contador de UX.
+
+## Passo 8 — Retrospectiva
+
+Após o merge, o Memory Manager sincroniza `Backlog.md` e `Status.md` automaticamente. Ao final de cada stage, `/maestro-retro` aciona o Improvement Agent, que extrai padrões do registro objetivo em `.maestro/logs/agents.jsonl` e dos payloads de veto.
+
+Quando um aprendizado é reutilizável em qualquer projeto, ele vira uma proposta em `.maestro/proposals/`. Nenhum agente altera o framework por conta própria — a promoção ao plugin exige a sua decisão.
