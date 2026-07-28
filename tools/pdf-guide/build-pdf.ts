@@ -24,28 +24,45 @@ const CHROMIUM_PATH = "/opt/pw-browsers/chromium";
 
 const ARCHIVED_PRD = "docs/archive/maestro-framework-bootstrap/PRD.md";
 
+const PLUGIN = "plugins/maestro";
+
 const AGENTS = [
-  { file: ".maestro/agents/maestro.md", name: "Maestro", role: "Orquestrador", veto: false },
-  { file: ".maestro/agents/solution-architect.md", name: "Solution Architect", role: "Discovery e Planejamento", veto: false },
-  { file: ".maestro/agents/frontend-engineer.md", name: "Frontend Engineer", role: "Executor — React/Tailwind/Shadcn", veto: false },
-  { file: ".maestro/agents/backend-engineer.md", name: "Backend Engineer", role: "Executor — Supabase/RLS/Edge Functions", veto: false },
-  { file: ".maestro/agents/code-auditor.md", name: "Code Auditor", role: "Fiscalizador — build/lint", veto: false },
-  { file: ".maestro/agents/security-auditor.md", name: "Security Auditor", role: "Fiscalizador — secrets/RLS/OWASP", veto: true },
-  { file: ".maestro/agents/ux-auditor.md", name: "UX Auditor", role: "Fiscalizador — visual", veto: true },
-  { file: ".maestro/agents/memory-manager.md", name: "Memory Manager", role: "Atualiza Backlog.md/Status.md", veto: false },
-  { file: ".maestro/agents/improvement-agent.md", name: "Improvement Agent", role: "Retrospectiva e Lessons-Learned.md", veto: false },
+  // Squad de Governança
+  { file: `${PLUGIN}/agents/maestro.md`, name: "Maestro", role: "Governança — orquestrador da esteira", veto: false },
+  { file: `${PLUGIN}/agents/memory-manager.md`, name: "Memory Manager", role: "Governança — sincroniza Backlog e Status", veto: false },
+  { file: `${PLUGIN}/agents/improvement-agent.md`, name: "Improvement Agent", role: "Governança — retrospectiva e Lessons-Learned", veto: false },
+
+  // Squad de Descoberta
+  { file: `${PLUGIN}/agents/product-strategist.md`, name: "Product Strategist", role: "Descoberta — entrevista, PRD e estratégia de negócio", veto: false },
+  { file: `${PLUGIN}/agents/interaction-architect.md`, name: "Interaction Architect", role: "Descoberta — telas, rotas e fluxos", veto: false },
+  { file: `${PLUGIN}/agents/product-designer.md`, name: "Product Designer", role: "Descoberta — Design System, UX Writing e movimento", veto: false },
+  { file: `${PLUGIN}/agents/data-architect.md`, name: "Data Architect", role: "Descoberta — schema, RLS e modelo de domínio", veto: false },
+  { file: `${PLUGIN}/agents/backlog-planner.md`, name: "Backlog Planner", role: "Descoberta — fatiamento em micro-tasks", veto: false },
+  { file: `${PLUGIN}/agents/spec-auditor.md`, name: "Spec Auditor", role: "Descoberta — gate de coerência cruzada", veto: true },
+
+  // Squad de Execução
+  { file: `${PLUGIN}/agents/frontend-engineer.md`, name: "Frontend Engineer", role: "Execução — React, Tailwind e Shadcn/UI", veto: false },
+  { file: `${PLUGIN}/agents/backend-engineer.md`, name: "Backend Engineer", role: "Execução — Supabase, RLS e Edge Functions", veto: false },
+  { file: `${PLUGIN}/agents/integration-engineer.md`, name: "Integration Engineer", role: "Execução — APIs externas e webhooks", veto: false },
+  { file: `${PLUGIN}/agents/motor-engineer.md`, name: "Motor Engineer", role: "Execução — domínio e cálculo puro", veto: false },
+
+  // Squad de Auditoria
+  { file: `${PLUGIN}/agents/code-auditor.md`, name: "Code Auditor", role: "Auditoria — build, lint e tipos", veto: false },
+  { file: `${PLUGIN}/agents/security-auditor.md`, name: "Security Auditor", role: "Auditoria — segredos, RLS e OWASP", veto: true },
+  { file: `${PLUGIN}/agents/qa-engineer.md`, name: "QA Engineer", role: "Auditoria — comportamento e regressão", veto: true },
+  { file: `${PLUGIN}/agents/ux-auditor.md`, name: "UX Auditor", role: "Auditoria — validação visual com evidência", veto: true },
 ];
 
 const PIPELINES = [
-  ".maestro/pipelines/01-discovery.md",
-  ".maestro/pipelines/02-development.md",
-  ".maestro/pipelines/03-quality.md",
-  ".maestro/pipelines/04-retrospective.md",
+  `${PLUGIN}/commands/maestro-init.md`,
+  `${PLUGIN}/commands/maestro-discovery.md`,
+  `${PLUGIN}/commands/maestro-next.md`,
+  `${PLUGIN}/commands/maestro-audit.md`,
+  `${PLUGIN}/commands/maestro-retro.md`,
 ];
 
 const CONTRACTS = [
-  ".maestro/contracts/Task-Execution-Contract.md",
-  ".maestro/contracts/UX-Decline-Payload-Template.md",
+  `${PLUGIN}/templates/project/.maestro/contracts/Task-Execution-Contract.md`,
 ];
 
 function readMd(relPath: string): string {

@@ -1,0 +1,22 @@
+{
+  "$schema": "https://json.schemastore.org/claude-code-plugin-manifest.json",
+  "name": "maestro",
+  "displayName": "Maestro",
+  "version": "3.0.0",
+  "description": "Esteira de agentes especialistas para levar um projeto de software da ideia bruta ate o merge, com gates de auditoria e memoria de execucao por projeto.",
+  "author": {
+    "name": "Gabi",
+    "email": "gabrielleaureliano@arboreengenharia.com.br"
+  },
+  "repository": "https://github.com/matheussperes/PluginCode",
+  "license": "ISC",
+  "keywords": [
+    "orchestration",
+    "subagents",
+    "discovery",
+    "product",
+    "audit",
+    "supabase",
+    "nextjs"
+  ]
+}

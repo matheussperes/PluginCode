@@ -1,0 +1,23 @@
+{
+  "$schema": "https://json.schemastore.org/claude-code-marketplace.json",
+  "name": "plugincode",
+  "description": "Marketplace local do framework Maestro: esteira de agentes para descoberta, execucao e auditoria de projetos de software.",
+  "owner": {
+    "name": "Gabi",
+    "email": "gabrielleaureliano@arboreengenharia.com.br",
+    "url": "https://github.com/matheussperes/PluginCode"
+  },
+  "plugins": [
+    {
+      "name": "maestro",
+      "source": "./plugins/maestro",
+      "description": "Esteira de 17 agentes especialistas organizados em quatro squads: governanca, descoberta, execucao e auditoria.",
+      "version": "3.0.0",
+      "category": "development",
+      "tags": ["orchestration", "agents", "discovery", "audit", "supabase", "nextjs"],
+      "author": {
+        "name": "Gabi"
+      }
+    }
+  ]
+}

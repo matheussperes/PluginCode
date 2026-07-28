@@ -8,7 +8,8 @@
   },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "build:pdf-guide": "ts-node tools/pdf-guide/build-pdf.ts"
+    "build:pdf-guide": "ts-node tools/pdf-guide/build-pdf.ts",
+    "init:project": "node plugins/maestro/scripts/init-project.mjs"
   },
   "repository": {
     "type": "git",

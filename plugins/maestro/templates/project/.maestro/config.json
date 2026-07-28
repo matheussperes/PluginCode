@@ -1,0 +1,31 @@
+{
+  "schemaVersion": 2,
+  "framework": {
+    "plugin": "maestro",
+    "version": "3.0.0"
+  },
+  "conventions": {
+    "enginePath": null,
+    "sourcePath": null,
+    "migrationsPath": null,
+    "scripts": {
+      "build": null,
+      "lint": null,
+      "typecheck": null,
+      "test": null,
+      "dev": null,
+      "seedQaUser": null
+    },
+    "breakpoints": {
+      "mobile": 375,
+      "tablet": 768,
+      "desktop": 1440
+    },
+    "mainBranch": "main"
+  },
+  "gates": {
+    "maxAttemptsPerGate": 2,
+    "uxAuditRequiresScreenshots": true,
+    "qaGateEnabled": true
+  }
+}
