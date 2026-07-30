@@ -16,6 +16,7 @@ Quando o operador disser "aja como o Maestro", ou pedir o próximo passo do proj
 | `/maestro-status` | Ver o estado real, cruzado com o git |
 | `/maestro-audit` | Auditar trabalho já implementado |
 | `/maestro-retro` | Retrospectiva ao final de um stage |
+| `/maestro-visual-kit` | Gerar prompts de logo, telas e criativo de lançamento para ferramentas externas de imagem |
 
 ### Territórios
 

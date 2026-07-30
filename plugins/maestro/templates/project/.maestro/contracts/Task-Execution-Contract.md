@@ -76,7 +76,15 @@ Marque os que se aplicam a esta task. O Maestro decide com base na natureza do t
 - [ ] **code-auditor** — sempre
 - [ ] **security-auditor** — sempre
 - [ ] **qa-engineer** — sempre, com escopo condicional
-- [ ] **ux-auditor** — apenas se houver mudança visual
+- [ ] **ux-auditor** — por raio de alcance (ver campo abaixo)
+
+### Impacto Visual (preenchido pelo Maestro, se a task tiver componente de UI)
+
+- [ ] **Tela nova ou layout completo** → gate completo: 3 breakpoints, modo escuro, 4 estados, evidência total
+- [ ] **Componente compartilhado** (usado em 2+ telas, ex: `components/ui/*`) → gate completo, mesmo que a mudança pareça pequena — o raio de alcance é o que importa, não o tamanho do diff
+- [ ] **Ajuste isolado** (específico de uma tela, sem reuso) → gate leve: 1 breakpoint, sem modo escuro nem os 4 estados
+- [ ] **Texto ou token já existente**, aplicado sem mudança estrutural → sem gate visual; code-auditor e qa-engineer bastam
+- [ ] **Nenhum** — task sem componente visual, pula o ux-auditor inteiramente
 
 ### Checagem do executor antes de reportar pronto
 

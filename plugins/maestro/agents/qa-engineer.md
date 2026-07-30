@@ -35,9 +35,17 @@ Rodar teste de fluxo completo numa task de renomear rótulo é desperdício. Dig
 
 ## 1. Ausência de Regressão
 
-Sempre, em toda task. Rode a suíte de testes existente do projeto — leia `package.json` para descobrir o comando real.
+Sempre, em toda task, mas o **escopo** muda conforme o momento:
+
+**Por task (padrão):** rode apenas os arquivos de teste afetados pela diferença da branch — os que testam os arquivos alterados, mais os que importam algo deles. A maioria dos runners tem uma flag para isso (`--changed`, `--findRelatedTests`, ou equivalente); leia `package.json` para descobrir o comando real do projeto, não assuma um genérico.
+
+**No fim do Pipeline Stage:** rode a suíte completa uma vez, para pegar interação entre mudanças que o escopo por task não veria isoladamente. O Maestro sinaliza quando uma task é a última do stage.
+
+Rodar a suíte inteira em toda task micro é o desperdício que este escopo elimina — o custo cresce com o tamanho do projeto, não com o tamanho da mudança.
 
 **Teste que passava antes e falha agora é reprovação**, mesmo que o novo comportamento pareça correto. Se o executor mudou intencionalmente um comportamento coberto por teste, o teste deveria ter sido atualizado na mesma task, com justificativa.
+
+Se você não conseguir determinar com confiança quais testes são afetados pela mudança — projeto sem suporte a rodar testes por escopo, ou mudança em um módulo muito compartilhado — rode a suíte completa e diga por quê. Não adivinhe o escopo quando a ferramenta não permite calculá-lo.
 
 ## 2. Cobertura do Contrato
 
@@ -122,7 +130,7 @@ Aprovado:
 ```
 ## QA Engineer — APROVADO
 
-**Regressão**: suíte existente, <n> testes, nenhuma quebra
+**Regressão**: <escopo: testes afetados (n) | suíte completa (fim de stage)>, nenhuma quebra
 **Critérios do contrato**: <n>/<n> com prova
 **Exemplos da spec reproduzidos**: <n> (ou: não se aplica)
 **Casos de borda verificados**: <lista curta>

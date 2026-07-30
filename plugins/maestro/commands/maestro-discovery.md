@@ -73,3 +73,16 @@ Aprovar e liberar a execução?
 ```
 
 Não avance para a execução sem confirmação explícita. Se o operador pedir ajustes, reconvoque apenas os agentes afetados.
+
+## Após a aprovação: ofereça o Visual Kit
+
+Com a descoberta aprovada, antes de encerrar, pergunte:
+
+```
+Quer que eu já gere os prompts de identidade visual do projeto —
+logo, telas-chave e criativo de lançamento? (sim/não)
+```
+
+Se sim, invoque `/maestro-visual-kit`, que por sua vez confirma novamente antes de gerar qualquer coisa — a pergunta aqui é sobre iniciar o fluxo, a confirmação de lá é sobre efetivamente escrever o arquivo. Se não, apenas mencione que o comando fica disponível para rodar a qualquer momento.
+
+Isso não bloqueia a liberação da execução: o operador pode responder não ao Visual Kit e sim à execução, e a esteira segue normalmente.

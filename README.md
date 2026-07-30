@@ -41,6 +41,7 @@ No dia a dia:
 | `/maestro-status` | Estado real do projeto, cruzado com o git |
 | `/maestro-audit` | Audita trabalho já implementado |
 | `/maestro-retro` | Retrospectiva com evidência ao final de um stage |
+| `/maestro-visual-kit` | Gera prompts de logo, telas e criativo de lançamento para ferramentas externas de imagem. Sempre confirma antes de gerar |
 | `/maestro-eject` | Copia um agente para escopo editável |
 
 Ou simplesmente, dentro do projeto:
@@ -63,16 +64,16 @@ Aja como o Maestro. Quero criar uma tela de dashboard...
 
 | Agente | Modelo | Artefato |
 |---|---|---|
-| `product-strategist` | opus | `PRD.md` e `Business-Strategy.md` |
-| `interaction-architect` | sonnet | `Screen-Blueprints.md` |
-| `product-designer` | sonnet | `Design-System.md` |
+| `product-strategist` | opus | `PRD.md` e `Business-Strategy.md` (monetização, fases de crescimento, expansão, roadmap pós-MVP) |
+| `interaction-architect` | sonnet | `Screen-Blueprints.md` — o mapa de telas, com descrição de layout e funcional por tela |
+| `product-designer` | sonnet | `Design-System.md` (tokens, elevação, motion premium) e, sob demanda, `Image-Prompts.md` |
 | `data-architect` | opus | `schema.sql` e `Modelo-de-Dominio.md` |
 | `backlog-planner` | sonnet | `Backlog.md` |
-| `spec-auditor` | opus | Gate de coerência cruzada. Poder de veto |
+| `spec-auditor` | opus | Gate de coerência cruzada, com reauditoria incremental. Poder de veto |
 
 O `product-strategist` não escreve nada antes de fechar as lacunas: ele devolve de 3 a 5 perguntas decisórias ao operador e espera. É o que impede uma ideia vaga de virar um produto que ninguém pediu.
 
-O `spec-auditor` é o único gate entre a descoberta e a primeira linha de código. Ele cruza os cinco documentos entre si, confere a aritmética dos exemplos numéricos, e faz a pergunta de fundo: o backlog ainda entrega a ideia original?
+O `spec-auditor` é o único gate entre a descoberta e a primeira linha de código. Ele cruza os cinco documentos entre si, confere a aritmética dos exemplos numéricos, e faz a pergunta de fundo: o backlog ainda entrega a ideia original? Reprovações consecutivas têm limite de duas rodadas — a terceira para a esteira e chama o operador.
 
 ### Execução
 
@@ -89,10 +90,12 @@ O `spec-auditor` é o único gate entre a descoberta e a primeira linha de códi
 |---|---|---|---|
 | `code-auditor` | haiku | Build, lint, tipos | não |
 | `security-auditor` | opus | Segredos, RLS, OWASP | sim |
-| `qa-engineer` | sonnet | Comportamento, regressão, bordas | sim |
-| `ux-auditor` | sonnet | Validação visual com evidência | sim |
+| `qa-engineer` | sonnet | Comportamento, regressão, bordas — testes afetados por task, suíte completa no fim do stage | sim |
+| `ux-auditor` | sonnet | Validação visual com evidência, por raio de alcance | sim |
 
 Os gates rodam do mais barato ao mais caro. Não faz sentido gastar auditoria visual em código que não compila.
+
+O `ux-auditor` roda em três níveis, não binário: **completo** para tela nova ou componente compartilhado entre telas, **leve** (um breakpoint, sem os 4 estados) para ajuste isolado sem reuso, e **nenhum** para texto ou token já existente. O critério é raio de alcance — um componente compartilhado sempre recebe o gate completo, mesmo que o diff seja pequeno. Quando há mais de uma task do mesmo stage aguardando este gate, o Maestro agrupa numa única chamada, amortizando o setup fixo (subir app, autenticar, navegar).
 
 Duas reprovações no mesmo gate e a terceira submissão ativa o **Circuit Breaker**: a esteira para e espera o operador. A contagem é por gate, não agregada.
 
@@ -106,6 +109,18 @@ Duas reprovações no mesmo gate e a terceira submissão ativa o **Circuit Break
 | Código de aplicação | Implementação | Somente a execução |
 
 Nada que muda por projeto vive no plugin. É isso que permite dez projetos usarem o mesmo Maestro sem contaminar uns aos outros.
+
+## Acabamento premium
+
+O `product-designer` define, e o `frontend-engineer` executa, um padrão de acabamento comparável a produtos como Linear, Vercel e Stripe: sistema de elevação em camadas (nunca `shadow-lg` genérico), tipografia com tracking e altura de linha refinados, motion system declarado por plataforma (Framer Motion na web, Moti no mobile — nunca Framer Motion em Expo, que não roda em React Native), e loading de conteúdo real sempre como skeleton com shimmer, nunca spinner central.
+
+O `ux-auditor` audita esses itens como token — compara contra o que o Design System especificou, nunca contra uma noção subjetiva de "parece premium o bastante". Isso mantém o padrão de qualidade sem reabrir ciclo de veto por gosto.
+
+## Visual Kit
+
+`/maestro-visual-kit` gera `docs/Image-Prompts.md`: prompts de texto para logo, telas-chave e criativo de lançamento, prontos para colar em ChatGPT, Gemini ou ferramenta equivalente. Sempre pede confirmação antes de gerar, mesmo quando oferecido automaticamente ao final da descoberta.
+
+Depois de gerar e aprovar as imagens externamente, salve-as em `docs/visual-reference/{logo,screens,marketing}/`. O `ux-auditor` passa a comparar a tela construída com a referência aprovada — só como observação de direção (paleta, hierarquia, tom), nunca como critério de veto. O que aprova ou reprova continua sendo exclusivamente `Design-System.md` e `Screen-Blueprints.md`.
 
 ## Melhoria do framework
 

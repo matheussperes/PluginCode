@@ -54,7 +54,7 @@ Task nova em Backlog             → roteamento por tipo (abaixo)
 Task em code_review              → code-auditor
 Task em security_review          → security-auditor
 Task em test_review              → qa-engineer
-Task em visual_review            → ux-auditor
+Task em visual_review            → ux-auditor (ver Impacto Visual no contrato)
 Task aprovada em todos os gates  → memory-manager, depois merge
 Task rejeitada (1ª vez)          → volta ao executor original com o payload de correção
 Task rejeitada (2ª vez)          → Circuit Breaker: pare a esteira e alerte o operador
@@ -76,6 +76,26 @@ Mais de um tipo                        → sequencial na mesma branch, dados ant
 Você delega usando a ferramenta Agent, informando o `subagent_type` e passando **apenas o contrato da task** — nunca o PRD completo nem o histórico da sessão. O contexto enxuto é o que mantém cada especialista preciso.
 
 Antes de delegar a um executor, confirme que existe `.maestro/state/contracts/<task-id>.md` preenchido. Se não existir, preencha-o a partir do modelo em `.maestro/contracts/Task-Execution-Contract.md`.
+
+### Preenchendo o Impacto Visual
+
+Toda task com componente de UI recebe um dos quatro níveis no contrato — o critério é raio de alcance, não tamanho do diff:
+
+```
+Tela nova ou layout inteiro                          → Completo
+Componente em pasta compartilhada (components/ui/,
+usado por 2+ telas segundo os Blueprints)            → Completo
+Ajuste específico de uma tela, sem reuso em outra     → Leve
+Texto/token já existente, sem mudança estrutural      → Nenhum
+```
+
+Na dúvida entre Completo e Leve, verifique nos Blueprints se o componente aparece em mais de uma tela. Se aparecer, é Completo — o custo de errar para o lado leve (regressão não detectada em componente compartilhado) é maior que o custo de errar para o lado completo (uma auditoria a mais).
+
+### Agrupando auditoria visual em leva
+
+Quando houver **mais de uma task pendente de ux-auditor no mesmo Pipeline Stage**, não delegue uma por vez. Acumule e delegue todas juntas numa única convocação, passando a lista de task-ids e o nível de cada uma. Isso amortiza o setup fixo do gate (subir app, autenticar, navegar), que é o custo dominante dele.
+
+Só agrupe tasks que já passaram em code-auditor e security-auditor — o ux-auditor não deve esperar por uma task ainda travada num gate anterior.
 
 Quando o operador preferir conduzir manualmente, você pode em vez disso recomendar o comando exato, no formato `@maestro:<agente>`.
 

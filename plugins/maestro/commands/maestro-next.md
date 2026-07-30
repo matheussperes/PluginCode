@@ -39,10 +39,16 @@ Em ordem, parando no primeiro que reprovar:
 
 1. **code-auditor** — build, lint, tipos. Reprovação volta direto ao executor, sem payload formal
 2. **security-auditor** — segredos, RLS, OWASP. Reprovação gera payload
-3. **qa-engineer** — comportamento, regressão, casos de borda. Reprovação gera payload
-4. **ux-auditor** — apenas se a task tiver mudança visual. Reprovação gera payload
+3. **qa-engineer** — comportamento, regressão, casos de borda. Rode só os testes afetados pela task; a suíte completa entra apenas no gate de fim de stage. Reprovação gera payload
+4. **ux-auditor** — pelo nível de Impacto Visual do contrato (Completo, Leve ou Nenhum). Reprovação gera payload
 
 Em cada reprovação, devolva ao executor responsável com o payload. A contagem de tentativas é **por gate**: duas falhas no mesmo gate e a terceira submissão ativa o Circuit Breaker, que para a esteira e aguarda o operador.
+
+### Não delegue o ux-auditor task por task
+
+Antes de convocá-lo, verifique em `docs/Backlog.md` se há outras tasks do mesmo Pipeline Stage que já passaram em code-auditor e security-auditor e estão aguardando ux-auditor. Se houver, acumule e delegue todas numa única chamada — o setup do gate (subir app, autenticar, navegar) é o custo fixo mais caro dele, e se paga uma vez por leva, não por task.
+
+Isso significa que esta task pode ficar "aguardando ux-auditor em lote" por um momento, em vez de ir direto ao gate. Registre esse estado em `.maestro/state/<task-id>.json` para não perder o rastro de quais tasks estão na fila.
 
 ## 5. Merge e fechamento
 

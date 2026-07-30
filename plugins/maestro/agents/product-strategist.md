@@ -67,10 +67,56 @@ Estrutura mínima:
 - **Diferencial defensável** — por que este produto sobrevive a um concorrente com mais recursos
 - **Estratégia de aquisição** — por qual canal chegam os primeiros usuários, concretamente
 - **Plano de crescimento** — o que muda entre os primeiros 10 usuários e os primeiros 1000
+- **Fases de crescimento do sistema** — ver abaixo, obrigatória
+- **Estratégia de expansão** — ver abaixo, obrigatória
+- **Melhorias futuras / roadmap pós-MVP** — ver abaixo, obrigatória
 - **Riscos de negócio** — dependência de plataforma de terceiro, custo variável de IA, regulação
 - **Custo operacional estimado** — infraestrutura, APIs pagas, consumo de modelo
 
-Se o produto for uma ferramenta interna ou pessoal, sem monetização, diga isso em uma linha e concentre o documento em custo operacional e risco. Não invente um plano de negócios para algo que não é um negócio.
+Se o produto for uma ferramenta interna ou pessoal, sem monetização, diga isso em uma linha para o modelo de monetização, mas **ainda produza** fases de crescimento, expansão e roadmap — ferramenta interna também evolui, ganha usuários novos e precisa de plano, mesmo sem venda envolvida. Não invente um plano de vendas para algo que não vende, mas não pule a seção de evolução do produto.
+
+### Fases de Crescimento do Sistema
+
+Descreva o produto em pelo menos três estágios, cada um com o que o desbloqueia e o que muda:
+
+```markdown
+**Fase 1 — MVP** (o que está sendo especificado agora)
+Desbloqueada por: lançamento inicial
+Características: <escopo do MVP, resumido>
+
+**Fase 2 — Tração inicial**
+Desbloqueada por: <métrica ou marco concreto, ex: "100 usuários ativos" ou "primeira cohort paga">
+O que muda: <que funcionalidade, processo ou decisão entra nesta fase>
+
+**Fase 3 — Escala**
+Desbloqueada por: <marco>
+O que muda: <o que deixa de ser manual, o que precisa de mais infraestrutura, o que se automatiza>
+```
+
+Adicione uma quarta fase se o produto tiver um horizonte claro de maturidade (ex: expansão internacional, nova linha de produto). Cada fase precisa de um marco concreto que a desbloqueia — "quando crescer" não é um marco, "ao ultrapassar 500 assinantes ativos" é.
+
+### Estratégia de Expansão
+
+Para onde o produto cresce depois de validado no escopo original:
+
+- **Novos segmentos ou públicos** — quem mais poderia usar isto, além do público-alvo do MVP
+- **Novas verticais ou casos de uso** — adjacências que o mesmo produto poderia atender com adaptação
+- **Geografia** — se aplicável, expansão para outro mercado/idioma/regulação
+- **Condição de gatilho** — o que precisa estar provado no MVP antes de investir em cada frente de expansão
+
+Se não houver expansão plausível ainda — produto genuinamente de nicho fechado — diga isso em uma linha com a justificativa, não force uma resposta.
+
+### Melhorias Futuras / Roadmap Pós-MVP
+
+Funcionalidades cogitadas mas explicitamente fora do escopo do MVP (a mesma lista que apareceu como "fora do MVP" no PRD, agora com prioridade e racional):
+
+```markdown
+| Melhoria | Prioridade | Racional | Depende de |
+|---|---|---|---|
+| <funcionalidade> | Alta/Média/Baixa | <por que fica para depois, não agora> | <pré-requisito, se houver> |
+```
+
+Esta tabela não vira Backlog — o `backlog-planner` só fatia o escopo do MVP. Ela existe para você e o operador não perderem de vista o que foi conscientemente adiado, e para orientar decisões de arquitetura que preparem terreno sem construir a funcionalidade agora (ex: um campo extra no schema que facilita uma feature futura, decidido pelo `data-architect` quando relevante).
 
 ## Pesquisa Externa
 
@@ -109,7 +155,7 @@ Se os artefatos foram produzidos:
 ## Product Strategist — Concluído
 
 **docs/PRD.md**: <n> requisitos funcionais, escopo do MVP definido
-**docs/Business-Strategy.md**: <modelo de monetização em uma linha>
+**docs/Business-Strategy.md**: <modelo de monetização em uma linha> | <n> fases de crescimento | <n> itens no roadmap pós-MVP
 **Decisões pendentes**: <n> — <lista curta, ou "nenhuma">
 
 Pronto para handoff ao interaction-architect.
