@@ -14,6 +14,7 @@
 - **Status**: Nova | Em Progresso | Em Revisão | Bloqueada
 - **Prioridade**: Crítica | Alta | Normal | Baixa
 - **Executor**: frontend-engineer | backend-engineer | integration-engineer | motor-engineer
+- **Plataforma** (obrigatório quando o executor é frontend-engineer): web | mobile
 - **Modelo**: padrão do agente, ou override com justificativa
 - **Branch**: `feature/<task-id>`
 - **Depende de**:
@@ -140,4 +141,4 @@ O Maestro mantém `.maestro/state/<task-id>.json`:
 
 ---
 
-**Versão**: 2.0
+**Versão**: 2.1

@@ -12,7 +12,7 @@
       "name": "maestro",
       "source": "./plugins/maestro",
       "description": "Esteira de 17 agentes especialistas organizados em quatro squads: governanca, descoberta, execucao e auditoria.",
-      "version": "3.2.0",
+      "version": "3.3.0",
       "category": "development",
       "tags": ["orchestration", "agents", "discovery", "audit", "supabase", "nextjs"],
       "author": {

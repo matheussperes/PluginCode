@@ -2,7 +2,7 @@
   "$schema": "https://json.schemastore.org/claude-code-plugin-manifest.json",
   "name": "maestro",
   "displayName": "Maestro",
-  "version": "3.2.0",
+  "version": "3.3.0",
   "description": "Esteira de agentes especialistas para levar um projeto de software da ideia bruta ate o merge, com gates de auditoria e memoria de execucao por projeto.",
   "author": {
     "name": "Gabi",

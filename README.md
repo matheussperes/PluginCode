@@ -122,6 +122,18 @@ O `ux-auditor` audita esses itens como token — compara contra o que o Design S
 
 Depois de gerar e aprovar as imagens externamente, salve-as em `docs/visual-reference/{logo,screens,marketing}/`. O `ux-auditor` passa a comparar a tela construída com a referência aprovada — só como observação de direção (paleta, hierarquia, tom), nunca como critério de veto. O que aprova ou reprova continua sendo exclusivamente `Design-System.md` e `Screen-Blueprints.md`.
 
+## Web e Mobile
+
+O padrão comum é começar só na web e portar para mobile depois. Isso é declarado em `.maestro/config.json`:
+
+```json
+"platforms": { "web": "ativo", "mobile": "nao_iniciado" }
+```
+
+Cor, tipografia, espaçamento e elevação em `Design-System.md` são valores, não código — servem para as duas plataformas sem retrabalho. O que muda por plataforma é a biblioteca que implementa esses valores: Shadcn/UI e Framer Motion na web, uma biblioteca de componentes declarada (nunca Shadcn, que é web-only) e Moti no mobile.
+
+Quando chegar a hora de portar, mude `mobile` para `"ativo"` e rode `/maestro-discovery` de novo. O Maestro reconhece que é ativação de plataforma, não projeto novo, e convoca só o `product-designer` (declara Moti e a biblioteca mobile) e o `backlog-planner` (cria as tasks de portagem, uma por tela já existente). PRD, mapa de telas, schema e regras de domínio não são refeitos — só a camada de frontend é reconstruída para o novo cliente.
+
 ## Melhoria do framework
 
 ```

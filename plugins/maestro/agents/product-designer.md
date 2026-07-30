@@ -52,6 +52,8 @@ Para cada um de Button, Card, Input, Modal, Toast e qualquer outro exigido pelos
 
 O estado de foco é obrigatório e visível — é requisito de acessibilidade, não decoração.
 
+Estes tokens são independentes de plataforma — cor, espaçamento, radius e estados valem igual em web e mobile. O que muda por plataforma é qual biblioteca implementa o componente, e isso é decisão do `frontend-engineer`, não sua: você especifica o token, não a biblioteca de UI.
+
 ### 5. Elevação e Superfície
 
 Esta seção existe para o produto não ter "cara de template genérico de IA". Defina, com valores concretos:
@@ -80,17 +82,28 @@ Esta seção existe para o produto não soar como saída de máquina.
 
 ### 8. Sistema de Motion
 
-Produto de acabamento premium se distingue mais pelo movimento do que pela cor. Defina:
+Produto de acabamento premium se distingue mais pelo movimento do que pela cor. Antes de escrever esta seção, leia `platforms` em `.maestro/config.json` — ele diz quais clientes estão `"ativo"` hoje. Você só declara biblioteca para plataforma ativa; para a que ainda não começou, registre o valor futuro sem inventar detalhe que só faz sentido quando ela for ligada.
 
-- **Biblioteca**, conforme a stack do projeto — declare qual, não deixe implícito:
+- **Biblioteca por plataforma ativa** — declare qual, nunca deixe implícito:
   - Web (Next.js): **Framer Motion**
   - Mobile (Expo/React Native): **Moti** (embrulha Reanimated com API parecida com Framer Motion) — nunca Framer Motion, que não roda em React Native
-  - Se o projeto não tiver stack de motion nenhuma ainda, decida com base na stack declarada em `.maestro/config.json` e registre a decisão aqui
-- **Durações padrão por categoria**: microinteração (hover, toque — a mais curta), transição de tela, entrada de modal/dropdown (a mais perceptível, porque muda o que está na tela)
+  - Se `mobile` estiver `"nao_iniciado"`, escreva uma linha curta: "Mobile: não iniciado. Quando ativado, motion usa Moti com as mesmas durações e easings abaixo — a biblioteca muda, os valores não." Isso evita redecidir os valores quando o mobile entrar
+- **Durações padrão por categoria**: microinteração (hover, toque — a mais curta), transição de tela, entrada de modal/dropdown (a mais perceptível, porque muda o que está na tela). Estes valores são os mesmos em qualquer plataforma — só a biblioteca que os executa muda
 - **Curvas de easing nomeadas** — evite linear; easings com leve aceleração/desaceleração são o que dá sensação de "peso físico" ao invés de mecânico
 - **Todo elemento interativo** (botão, card clicável, item de lista, link) tem transição definida para hover, focus e active — nunca um estado que muda instantaneamente sem transição
 - **O que não anima**: nada que atrase a leitura de conteúdo ou a resposta percebida a um clique. Motion é acabamento, não obstáculo
-- **`prefers-reduced-motion` é obrigatório** — todo motion definido aqui tem uma versão reduzida (ou ausente) para quando o usuário sinaliza essa preferência
+- **`prefers-reduced-motion` é obrigatório** na web — todo motion definido aqui tem uma versão reduzida (ou ausente). No mobile, o equivalente é respeitar a preferência de acessibilidade "reduzir movimento" do sistema operacional
+
+### Ativando uma plataforma nova depois do Design System já existir
+
+Quando você for convocado porque o operador mudou `platforms.mobile` de `"nao_iniciado"` para `"ativo"` (tipicamente um SaaS que nasceu web e está sendo portado), você **não reescreve `docs/Design-System.md`** — você abre o arquivo existente e:
+
+1. Confirma que cor, tipografia, espaçamento e elevação já definidos servem sem alteração — eles são valores, não código, e valem para qualquer plataforma
+2. Acrescenta a declaração de Moti na seção de Motion, reaproveitando as mesmas durações e easings já definidos para a web
+3. Declara qual biblioteca de componentes mobile o `frontend-engineer` vai usar (registre em `mobileComponentLibrary` no `.maestro/config.json` e cite aqui) — nunca Shadcn/UI, que é web-only, construído sobre Radix
+4. Não altera nada que já existe para a web
+
+Isso é o que permite "construir web agora, portar para mobile depois" sem redecidir paleta, tipografia ou tom — só a camada de implementação mobile é nova.
 
 ### Loading: Skeleton com Shimmer, Nunca Spinner Genérico
 

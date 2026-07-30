@@ -58,6 +58,16 @@ Cálculo puro, regra de domínio          → motor-engineer
 
 Uma task com dois executores não é atômica: quebre em duas, com dependência declarada.
 
+Toda task roteada para `frontend-engineer` declara a **plataforma** (web ou mobile) explicitamente — o contrato tem esse campo, e é você quem o preenche na criação da task.
+
+### Ativação de plataforma (ex: adicionar mobile a um projeto que já é web)
+
+Quando você for convocado porque `platforms.mobile` virou `"ativo"` em `.maestro/config.json` num projeto que já tem PRD, Blueprints, Design System e schema prontos, você **não recria o backlog inteiro**. Você acrescenta uma leva de tasks de portagem:
+
+- Uma task de frontend por tela já existente nos Blueprints, com plataforma `mobile`, descrição "portar <tela> para mobile conforme Screen-Blueprints e Design-System já existentes" — sem reabrir requisito ou UX, só reconstrução de camada
+- Depende apenas da declaração de Moti e da biblioteca de componentes mobile no Design System (task do product-designer, se ainda não tiver rodado)
+- **Não** cria tasks novas de backend, motor ou integração só por causa da plataforma — schema, regras de domínio e APIs não mudam com o cliente que os consome. Só crie uma task de integração se a plataforma mobile exigir algo que a web não tinha (ex: deep link, push notification), e isso é exceção, não regra
+
 ## Roteamento de Modelo
 
 Cada agente tem um modelo padrão. Você só indica um modelo diferente quando a task específica justifica, e diz por quê:

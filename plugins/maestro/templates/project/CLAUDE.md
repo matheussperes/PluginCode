@@ -36,6 +36,8 @@ Regras que valem sempre:
 
 Preencha a seção `conventions` do `.maestro/config.json` para que os executores sigam os caminhos e scripts reais deste repositório, em vez de deduzir.
 
+O campo `platforms` declara quais clientes o projeto tem hoje (`"ativo"`) e quais ainda não começou (`"nao_iniciado"`). A maioria dos projetos começa só com `web: "ativo"` e `mobile: "nao_iniciado"` — quando chegar a hora de portar para mobile, mude `mobile` para `"ativo"` e rode `/maestro-discovery` novamente. O Maestro detecta que é ativação de plataforma, não projeto novo, e convoca só o `product-designer` (para declarar Moti e a biblioteca de componentes mobile) e o `backlog-planner` (para criar as tasks de portagem) — PRD, Blueprints, schema e regras de domínio já existentes não são refeitos.
+
 ---
 
 <!-- Adicione abaixo as instruções específicas do seu projeto -->

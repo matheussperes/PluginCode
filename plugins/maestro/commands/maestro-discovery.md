@@ -9,6 +9,18 @@ Se nada foi passado, leia `docs/PRD.md` e os demais artefatos para descobrir em 
 
 Antes de qualquer coisa, verifique se `.maestro/` e `docs/` existem. Se não existirem, pare e instrua o operador a rodar `/maestro-init` primeiro.
 
+## Gatilho: ativação de plataforma, não projeto novo
+
+Antes de rodar a sequência completa, confira `platforms` em `.maestro/config.json`. Se `docs/PRD.md` já existir **e** a única mudança for uma plataforma saindo de `"nao_iniciado"` para `"ativo"` (o caso comum: um SaaS que nasceu web e está sendo portado para mobile), isto **não é descoberta completa** — é uma ativação pontual. Rode só:
+
+1. **product-designer** — acrescenta a declaração de Moti e a biblioteca de componentes mobile ao `Design-System.md` já existente, sem reescrever paleta, tipografia ou tom (ver "Ativando uma plataforma nova" no seu próprio arquivo)
+2. **backlog-planner** — acrescenta a leva de tasks de portagem ao `Backlog.md` já existente, uma por tela, sem tocar backend/motor/integração
+3. **spec-auditor** — confere só que as tasks novas referenciam corretamente o Design System atualizado
+
+Não convoque `product-strategist`, `interaction-architect` nem `data-architect` — PRD, mapa de telas e schema não mudam com a plataforma do cliente. Reconvocá-los aqui seria pagar a releitura de documentos que não têm nada para corrigir.
+
+Se a mudança for maior que isso — o operador quer requisito novo, não só portar o que já existe — trate como mudança de escopo relevante e rode a sequência completa abaixo.
+
 ## Sequência
 
 Delegue a cada especialista **em ordem**, um de cada vez, usando a ferramenta Agent. Cada um lê os artefatos do anterior — por isso a ordem importa e por isso não devem rodar em paralelo.
