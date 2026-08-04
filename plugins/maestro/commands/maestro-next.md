@@ -60,6 +60,14 @@ git merge --no-ff feature/<task-id>
 git branch -d feature/<task-id>
 ```
 
+Atualize o grafo de código com os caminhos que a task tocou — incremental, nunca reconstrução total:
+
+```bash
+graphify update <caminhos alterados> --no-cluster
+```
+
+Rode isso **você**, na camada de comando. O `memory-manager` não tem a ferramenta `Bash` e não pode executá-lo.
+
 Em seguida delegue ao **memory-manager** para sincronizar `docs/Backlog.md` e `docs/Status.md`.
 
 Se esta task encerrou um Pipeline Stage, delegue também ao **improvement-agent** para a retrospectiva.
@@ -67,3 +75,22 @@ Se esta task encerrou um Pipeline Stage, delegue também ao **improvement-agent*
 ## Fechamento
 
 Reporte ao operador o resultado da task, quantas rodadas de correção foram necessárias em cada gate, e qual é a próxima task disponível.
+
+Em seguida, faça a **pergunta de encerramento do Obsidian** (Seção "Encerramento de Rodada" abaixo).
+
+## Encerramento de Rodada — Obsidian
+
+Esta pergunta é feita **aqui, na sessão principal** — nunca por um subagente. Subagentes não têm a ferramenta `AskUserQuestion` e não conseguem perguntar nada ao operador.
+
+Ao concluir a task, exiba:
+
+```
+Rodada concluída — Task <task-id>
+
+Salvar aprendizados, decisões e histórico desta rodada no seu cofre do Obsidian? (Sim / Não)
+```
+
+- **Sim** → monte uma nota Markdown limpa com: identificação da task, decisões tomadas, vetos recebidos por gate e como foram resolvidos, arquivos alterados, e o que ficou registrado em `docs/Lessons-Learned.md`. Pergunte o caminho do cofre se ainda não estiver em `.maestro/config.json` (`obsidianVaultPath`) e grave lá; se o operador não informar, entregue o arquivo em `.maestro/tmp/obsidian/<task-id>.md` para ele mover.
+- **Não** → encerre sem escrever nada.
+
+Não pergunte duas vezes na mesma rodada e não pergunte quando a task foi bloqueada por Circuit Breaker — nesse caso o encerramento é a orientação ao operador, não o registro.

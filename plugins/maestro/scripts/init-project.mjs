@@ -12,6 +12,7 @@
 
 import fs from "node:fs";
 import path from "node:path";
+import { execFileSync } from "node:child_process";
 import { fileURLToPath } from "node:url";
 
 const raizDoPlugin = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
@@ -75,6 +76,52 @@ if (claudeMdPreservado) {
   console.log(`  ${path.join(raizDosTemplates, "CLAUDE.md")}`);
 } else if (fs.existsSync(claudeMd)) {
   console.log("\nCLAUDE.md criado com a integracao do Maestro.");
+}
+
+// ---------------------------------------------------------------------------
+// Grafo de codigo (Graphify) — pre-requisito da esteira.
+// Executores e auditores consultam o grafo em vez de varrer o repositorio.
+// ---------------------------------------------------------------------------
+
+function graphifyDisponivel() {
+  try {
+    execFileSync("graphify", ["--version"], { stdio: "ignore" });
+    return true;
+  } catch {
+    return false;
+  }
+}
+
+const gitignore = path.join(raizDoProjeto, ".gitignore");
+const linhaIgnore = "graphify-out/";
+try {
+  const atual = fs.existsSync(gitignore) ? fs.readFileSync(gitignore, "utf8") : "";
+  if (!atual.split(/\r?\n/).some((l) => l.trim() === linhaIgnore)) {
+    const prefixo = atual.length > 0 && !atual.endsWith("\n") ? "\n" : "";
+    fs.appendFileSync(gitignore, `${prefixo}\n# Grafo de codigo derivado (Graphify)\n${linhaIgnore}\n`);
+    console.log("\n  + .gitignore: graphify-out/ adicionado");
+  }
+} catch (erro) {
+  console.log(`\n  ! Nao foi possivel atualizar .gitignore: ${erro.message}`);
+}
+
+console.log("\nGrafo de codigo (Graphify):");
+if (graphifyDisponivel()) {
+  const grafoExiste = fs.existsSync(path.join(raizDoProjeto, "graphify-out", "graph.json"));
+  console.log("  Instalado.");
+  console.log(
+    grafoExiste
+      ? "  Grafo ja existe. Use 'graphify update <caminhos>' apos cada merge."
+      : "  Grafo ainda nao construido. Rode '/graphify .' na sessao principal."
+  );
+} else {
+  console.log("  NAO INSTALADO — a esteira depende dele.");
+  console.log("  Instale com um destes:");
+  console.log("    uv tool install graphifyy");
+  console.log("    pipx install graphifyy");
+  console.log("    pip install graphifyy");
+  console.log("  Depois: graphify install    (registra a skill /graphify)");
+  console.log("  E entao: /graphify .        (constroi o grafo, na sessao principal)");
 }
 
 console.log("\nPreencha a secao 'conventions' de .maestro/config.json com os caminhos");

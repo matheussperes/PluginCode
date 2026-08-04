@@ -1,8 +1,8 @@
 {
-  "schemaVersion": 2,
+  "schemaVersion": 3,
   "framework": {
     "plugin": "maestro",
-    "version": "3.3.0"
+    "version": "3.4.0"
   },
   "conventions": {
     "platforms": {
@@ -32,5 +32,17 @@
     "maxAttemptsPerGate": 2,
     "uxAuditRequiresScreenshots": true,
     "qaGateEnabled": true
+  },
+  "graph": {
+    "enabled": true,
+    "tool": "graphify",
+    "outputDir": "graphify-out",
+    "report": "graphify-out/GRAPH_REPORT.md",
+    "data": "graphify-out/graph.json"
+  },
+  "obsidian": {
+    "askOnRoundEnd": true,
+    "vaultPath": null,
+    "notesSubfolder": "Maestro"
   }
 }

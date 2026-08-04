@@ -38,3 +38,16 @@ Reporte ao operador:
 ```
 
 Se houver propostas, liste-as e pergunte se o operador quer revisá-las agora. Não as aplique ao plugin por conta própria.
+
+## Encerramento de Rodada — Obsidian
+
+Feita **aqui, na sessão principal** — o `improvement-agent` é subagente e não tem `AskUserQuestion`.
+
+```
+Stage <n> encerrado.
+
+Salvar a retrospectiva, os aprendizados e o histórico deste stage no seu cofre do Obsidian? (Sim / Não)
+```
+
+- **Sim** → monte uma nota Markdown com as métricas do stage, os padrões identificados, as entradas novas de `docs/Lessons-Learned.md` e as propostas abertas. Grave no caminho em `obsidianVaultPath` do `.maestro/config.json`; se não estiver definido, pergunte e registre lá para as próximas rodadas. Sem resposta, entregue em `.maestro/tmp/obsidian/stage-<n>.md`.
+- **Não** → encerre sem escrever nada.

@@ -31,6 +31,24 @@ Regras que valem sempre:
 - Estado de execução nunca sai de `.maestro/` — não escreva estado no diretório do plugin
 - Lição aprendida fica primeiro neste projeto. Se for reutilizável, vira proposta em `.maestro/proposals/` e aguarda decisão humana antes de alterar o framework
 - Executor recebe o contrato preenchido da task, não o PRD completo
+- Nenhum agente lê documento inteiro. O contrato aponta arquivo e intervalo de linhas; o resto se localiza com `Grep`
+- Descoberta de dependência é consulta ao grafo (`graphify explain`), nunca varredura com `Glob`/`Grep` em vários arquivos
+
+### Grafo de código
+
+Este projeto usa o **Graphify** como pré-requisito da esteira. O grafo vive em `graphify-out/` (ignorado pelo git) e é o que substitui a varredura de repositório pelos executores.
+
+| Operação | Onde roda |
+|---|---|
+| Construir (`/graphify .`) | Sessão principal, uma vez, em `/maestro-init` ou ao fim de `/maestro-discovery` |
+| Atualizar (`graphify update <caminhos>`) | Camada de comando, após cada merge em `/maestro-next` |
+| Consultar (`graphify explain` / `path` / `query`) | Executores e auditores, durante a task |
+
+Se `graphify-out/` não existir, o agente para e reporta em vez de cair em varredura ampla.
+
+### Encerramento de rodada
+
+Ao concluir uma task ou encerrar um stage, o comando pergunta se os aprendizados e o histórico devem ir para o cofre do Obsidian. Configure o caminho em `obsidian.vaultPath` no `.maestro/config.json`. A pergunta é feita na sessão principal — subagentes não conseguem perguntar nada ao operador.
 
 ### Convenções deste projeto
 

@@ -16,6 +16,10 @@ Delegue em ordem, parando no primeiro que reprovar:
 3. **qa-engineer** — comportamento, regressão, casos de borda
 4. **ux-auditor** — apenas se houver mudança visual na diferença
 
+**Fast-fail é literal**: ao reprovar num gate, não convoque os seguintes. Um `security-auditor` ou `qa-engineer` convocado depois de o build já ter quebrado gasta contexto para auditar código que vai mudar de qualquer forma. Devolva ao executor e recomece a sequência do início quando ele re-submeter.
+
+Antes de convocar o **security-auditor**, se a diferença tocar autenticação, política de RLS, pagamento, dado pessoal sensível ou segredo de integração, avise o operador de que ele roda em `sonnet` com `effort: high` e ofereça subir o modelo da sessão para `opus` antes de seguir.
+
 Se não existir contrato em `.maestro/state/contracts/<task-id>.md`, avise os auditores de que estão trabalhando sem contrato: eles validarão contra os documentos de descoberta e contra a própria diferença, e o qa-engineer não terá critérios de aceitação para conferir. Registre essa limitação no relatório final.
 
 ## Escopo

@@ -86,6 +86,16 @@ Aprovar e liberar a execução?
 
 Não avance para a execução sem confirmação explícita. Se o operador pedir ajustes, reconvoque apenas os agentes afetados.
 
+## Após a aprovação: construa o grafo da descoberta
+
+Com os documentos aprovados, construa o grafo de código e documentação do projeto **na sessão principal**:
+
+```
+/graphify .
+```
+
+O Graphify indexa o PRD, os Blueprints, o Design System e o `schema.sql` junto com o código que existir, e é isso que os executores vão consultar em vez de varrer o repositório. Se o Graphify não estiver instalado, reporte e siga as instruções de `/maestro-init` antes de liberar a execução.
+
 ## Após a aprovação: ofereça o Visual Kit
 
 Com a descoberta aprovada, antes de encerrar, pergunte:

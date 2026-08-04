@@ -32,6 +32,37 @@ CLAUDE.md
 
 O inicializador é seguro para repetir: cria apenas o que falta e nunca sobrescreve documento existente.
 
+## Grafo de Código (Graphify) — pré-requisito da esteira
+
+A esteira depende do grafo do Graphify para consulta de dependências. Sem ele, os executores voltam a varrer o repositório com `Glob`/`Grep`, que é exatamente o custo que a esteira existe para evitar.
+
+Verifique a instalação:
+
+```bash
+graphify --version
+```
+
+Se o comando não existir, instale (nesta ordem de preferência) e reporte qual funcionou:
+
+```bash
+uv tool install graphifyy || pipx install graphifyy || pip install graphifyy
+graphify install
+```
+
+O pacote no PyPI é **`graphifyy`**, com dois "y"; o executável é `graphify`.
+
+Com o Graphify disponível, construa o grafo inicial do projeto **na sessão principal**:
+
+```
+/graphify .
+```
+
+Isso gera `graphify-out/GRAPH_REPORT.md` (relatório de arquitetura), `graphify-out/graph.json` (grafo consultável) e `graphify-out/graph.html` (visualização). Acrescente `graphify-out/` ao `.gitignore` do projeto — o grafo é derivado, não versionado.
+
+Se o projeto ainda não tem código (projeto novo indo para `/maestro-discovery`), pule a construção: ela acontece no fim da descoberta, quando houver o que mapear. Registre isso no relatório final em vez de tentar construir um grafo vazio.
+
+Se o Graphify não puder ser instalado neste ambiente, **pare e reporte ao operador** antes de seguir. Não inicialize a esteira em modo degradado sem que ele saiba.
+
 Depois de rodar, reporte ao operador:
 
 - O que foi criado e o que foi preservado
