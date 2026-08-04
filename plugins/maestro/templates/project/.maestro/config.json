@@ -42,7 +42,8 @@
   },
   "obsidian": {
     "askOnRoundEnd": true,
-    "vaultPath": null,
+    "useObsidianPlugin": true,
+    "vaultPathFallback": null,
     "notesSubfolder": "Maestro"
   }
 }

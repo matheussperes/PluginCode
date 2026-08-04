@@ -49,5 +49,8 @@ Stage <n> encerrado.
 Salvar a retrospectiva, os aprendizados e o histórico deste stage no seu cofre do Obsidian? (Sim / Não)
 ```
 
-- **Sim** → monte uma nota Markdown com as métricas do stage, os padrões identificados, as entradas novas de `docs/Lessons-Learned.md` e as propostas abertas. Grave no caminho em `obsidianVaultPath` do `.maestro/config.json`; se não estiver definido, pergunte e registre lá para as próximas rodadas. Sem resposta, entregue em `.maestro/tmp/obsidian/stage-<n>.md`.
-- **Não** → encerre sem escrever nada.
+**Não** → encerre sem escrever nada.
+
+**Sim** → use as skills do plugin `obsidian` em vez de gravar o arquivo à mão: `obsidian:obsidian-markdown` para o formato da nota e `obsidian:obsidian-cli` para criá-la no cofre. A nota traz as métricas do stage, os padrões identificados, as entradas novas de `docs/Lessons-Learned.md`, as propostas abertas em `.maestro/proposals/`, e wikilinks para as notas das tasks daquele stage.
+
+**Fallback**, apenas se o plugin `obsidian` não estiver instalado: grave em `obsidian.vaultPath` do `.maestro/config.json`, ou entregue em `.maestro/tmp/obsidian/stage-<n>.md`.

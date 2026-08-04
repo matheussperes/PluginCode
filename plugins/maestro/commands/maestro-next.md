@@ -90,7 +90,22 @@ Rodada concluída — Task <task-id>
 Salvar aprendizados, decisões e histórico desta rodada no seu cofre do Obsidian? (Sim / Não)
 ```
 
-- **Sim** → monte uma nota Markdown limpa com: identificação da task, decisões tomadas, vetos recebidos por gate e como foram resolvidos, arquivos alterados, e o que ficou registrado em `docs/Lessons-Learned.md`. Pergunte o caminho do cofre se ainda não estiver em `.maestro/config.json` (`obsidianVaultPath`) e grave lá; se o operador não informar, entregue o arquivo em `.maestro/tmp/obsidian/<task-id>.md` para ele mover.
-- **Não** → encerre sem escrever nada.
+**Não** → encerre sem escrever nada.
 
-Não pergunte duas vezes na mesma rodada e não pergunte quando a task foi bloqueada por Circuit Breaker — nesse caso o encerramento é a orientação ao operador, não o registro.
+**Sim** → não grave o arquivo à mão. Use as skills do plugin `obsidian`, que já conhecem o cofre e as convenções dele:
+
+1. `obsidian:obsidian-markdown` — formato da nota: frontmatter, tags, wikilinks e callouts no padrão do Obsidian
+2. `obsidian:obsidian-cli` — localizar o cofre e criar a nota nele
+
+Conteúdo da nota:
+
+- Identificação da task: id, título, stage, executor, branch
+- Decisões tomadas durante a execução, e por quê
+- Vetos recebidos por gate e como cada um foi resolvido
+- Arquivos alterados
+- Entradas novas em `docs/Lessons-Learned.md`
+- Wikilinks para as tasks dependentes e para a nota do stage, quando existirem
+
+**Fallback**, apenas se o plugin `obsidian` não estiver instalado: grave em `obsidian.vaultPath` do `.maestro/config.json`; se estiver vazio, entregue em `.maestro/tmp/obsidian/<task-id>.md` e avise o operador para mover.
+
+Não pergunte duas vezes na mesma rodada, e não pergunte quando a task foi bloqueada por Circuit Breaker — nesse caso o encerramento é a orientação ao operador, não o registro.

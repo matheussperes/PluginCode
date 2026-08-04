@@ -48,7 +48,9 @@ Se `graphify-out/` não existir, o agente para e reporta em vez de cair em varre
 
 ### Encerramento de rodada
 
-Ao concluir uma task ou encerrar um stage, o comando pergunta se os aprendizados e o histórico devem ir para o cofre do Obsidian. Configure o caminho em `obsidian.vaultPath` no `.maestro/config.json`. A pergunta é feita na sessão principal — subagentes não conseguem perguntar nada ao operador.
+Ao concluir uma task ou encerrar um stage, o comando pergunta se os aprendizados e o histórico devem ir para o cofre do Obsidian. Respondendo sim, a nota é criada pelas skills `obsidian:obsidian-markdown` (formato) e `obsidian:obsidian-cli` (gravação no cofre), do plugin `obsidian`. Sem esse plugin, o comando cai para `obsidian.vaultPathFallback` do `.maestro/config.json`, ou entrega a nota em `.maestro/tmp/obsidian/`.
+
+A pergunta é feita na sessão principal — subagentes não conseguem perguntar nada ao operador.
 
 ### Convenções deste projeto
 

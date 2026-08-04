@@ -172,13 +172,13 @@ Quando chegar a hora de portar, mude `mobile` para `"ativo"` e rode `/maestro-di
 
 Ao final de cada rodada — uma task concluída em `/maestro-next`, um stage encerrado em `/maestro-retro` — o comando pergunta se você quer salvar aprendizados, decisões e histórico no seu cofre do Obsidian. A pergunta acontece na **sessão principal**, nunca dentro de um subagente: subagentes não têm a ferramenta `AskUserQuestion` e não conseguem perguntar nada ao operador.
 
-Configure o caminho uma vez em `.maestro/config.json`:
+Respondendo "sim", a nota é criada pelas skills do plugin [`obsidian`](https://claude.com/plugins) — `obsidian:obsidian-markdown` para o formato (frontmatter, tags, wikilinks, callouts) e `obsidian:obsidian-cli` para localizar o cofre e gravar. O custo só é pago quando você responde sim; não há overhead por task recusada.
+
+Se o plugin `obsidian` não estiver instalado, o comando cai para gravação manual em `obsidian.vaultPathFallback` do `.maestro/config.json`, ou entrega a nota em `.maestro/tmp/obsidian/` para você mover:
 
 ```json
-"obsidian": { "askOnRoundEnd": true, "vaultPath": null, "notesSubfolder": "Maestro" }
+"obsidian": { "askOnRoundEnd": true, "useObsidianPlugin": true, "vaultPathFallback": null, "notesSubfolder": "Maestro" }
 ```
-
-Sem `vaultPath` definido, a nota é entregue em `.maestro/tmp/obsidian/` para você mover. Respondendo "não", nada é escrito.
 
 ## Melhoria do framework
 
