@@ -23,6 +23,8 @@ mkdir -p .maestro/tmp/verdicts
 
   Rode os scripts de checagem uma vez aqui e guarde a saída. O `code-auditor` audita o resultado; ele não deveria ser quem descobre que o `npm install` faltava.
 
+- **Confira o frescor do grafo** antes de delegar, conforme a seção "Grafo de Código" do `maestro.md`. Grafo defasado faz os executores consultarem um mapa errado com confiança total.
+
 ## 2. Contrato
 
 Copie `.maestro/contracts/Task-Execution-Contract.md` para `.maestro/state/contracts/<task-id>.md` e preencha a cópia com os dados da task: metadados, descrição, critérios de aceitação, arquivos impactados e as **referências de seção específicas** dos documentos de descoberta.
@@ -71,62 +73,10 @@ Antes de convocá-lo, verifique em `docs/Backlog.md` se há outras tasks do mesm
 
 Isso significa que esta task pode ficar "aguardando ux-auditor em lote" por um momento, em vez de ir direto ao gate. Registre esse estado em `.maestro/state/<task-id>.json` para não perder o rastro de quais tasks estão na fila.
 
-## 5. Merge e fechamento
+## 5. Fechamento da rodada
 
-Com todos os gates aplicáveis aprovados:
+Com todos os gates aplicáveis aprovados por arquivo de veredito, execute o **Protocolo de Fechamento de Rodada** do `maestro.md` na íntegra — merge, `graphify update` com os caminhos tocados, `memory-manager`, `improvement-agent` se encerrou stage, commit e push, e a pergunta do Obsidian.
 
-```bash
-git checkout <branch-principal>
-git merge --no-ff feature/<task-id>
-git branch -d feature/<task-id>
-```
+O protocolo mora no agente, não aqui, justamente para valer também quando o operador conduz pela conversa em vez de por este comando. Não reimplemente os passos: execute-os de lá.
 
-Atualize o grafo de código com os caminhos que a task tocou — incremental, nunca reconstrução total:
-
-```bash
-graphify update <caminhos alterados> --no-cluster
-```
-
-Rode isso **você**, na camada de comando. O `memory-manager` não tem a ferramenta `Bash` e não pode executá-lo.
-
-Em seguida delegue ao **memory-manager** para sincronizar `docs/Backlog.md` e `docs/Status.md`.
-
-Se esta task encerrou um Pipeline Stage, delegue também ao **improvement-agent** para a retrospectiva.
-
-## Fechamento
-
-Reporte ao operador o resultado da task, quantas rodadas de correção foram necessárias em cada gate, e qual é a próxima task disponível.
-
-Em seguida, faça a **pergunta de encerramento do Obsidian** (Seção "Encerramento de Rodada" abaixo).
-
-## Encerramento de Rodada — Obsidian
-
-Esta pergunta é feita **aqui, na sessão principal** — nunca por um subagente. Subagentes não têm a ferramenta `AskUserQuestion` e não conseguem perguntar nada ao operador.
-
-Ao concluir a task, exiba:
-
-```
-Rodada concluída — Task <task-id>
-
-Salvar aprendizados, decisões e histórico desta rodada no seu cofre do Obsidian? (Sim / Não)
-```
-
-**Não** → encerre sem escrever nada.
-
-**Sim** → não grave o arquivo à mão. Use as skills do plugin `obsidian`, que já conhecem o cofre e as convenções dele:
-
-1. `obsidian:obsidian-markdown` — formato da nota: frontmatter, tags, wikilinks e callouts no padrão do Obsidian
-2. `obsidian:obsidian-cli` — localizar o cofre e criar a nota nele
-
-Conteúdo da nota:
-
-- Identificação da task: id, título, stage, executor, branch
-- Decisões tomadas durante a execução, e por quê
-- Vetos recebidos por gate e como cada um foi resolvido
-- Arquivos alterados
-- Entradas novas em `docs/Lessons-Learned.md`
-- Wikilinks para as tasks dependentes e para a nota do stage, quando existirem
-
-**Fallback**, apenas se o plugin `obsidian` não estiver instalado: grave em `obsidian.vaultPath` do `.maestro/config.json`; se estiver vazio, entregue em `.maestro/tmp/obsidian/<task-id>.md` e avise o operador para mover.
-
-Não pergunte duas vezes na mesma rodada, e não pergunte quando a task foi bloqueada por Circuit Breaker — nesse caso o encerramento é a orientação ao operador, não o registro.
+Feche reportando ao operador o resultado da task, quantas rodadas de correção cada gate exigiu, e qual é a próxima task disponível.

@@ -91,7 +91,23 @@ Você não roda a mesma bateria em toda task visual. O nível vem do campo **Imp
 
 **A regra de ouro do nível Completo:** raio de alcance, não tamanho do diff. Uma linha alterada no `Button` compartilhado usado em oito telas é **Completo**, não Leve — porque a regressão se propaga para as oito telas, não só para onde o diff aparece. Um ajuste de três linhas isolado numa tela sem reuso é **Leve**, mesmo que o diff pareça do mesmo tamanho.
 
-Se o contrato não tiver o campo Impacto Visual preenchido, ou vier marcado de forma que não bate com o que você observa no código (ex: marcado como "isolado" mas o componente está em `components/ui/`), pare e reporte ao Maestro em vez de assumir.
+### Confirme o raio de alcance pelo grafo, não pela pasta
+
+O critério do nível Completo é "usado em 2 telas ou mais". Essa é exatamente a pergunta que o grafo do projeto responde melhor que qualquer heurística de nome de pasta:
+
+```bash
+graphify explain "<Componente>"
+```
+
+A saída diz quem importa o componente e onde ele é renderizado. Use isso para validar o nível que o contrato declarou:
+
+- Grafo mostra **2 ou mais consumidores** → Completo, mesmo que o contrato diga Leve e o diff seja de três linhas
+- Grafo mostra **um único consumidor** → Leve é adequado, mesmo que o arquivo esteja em `components/ui/` (estar na pasta compartilhada não significa estar compartilhado de fato)
+- `graphify-out/` ausente ou o comando falha → caia para a leitura dos Blueprints, e **registre no veredito** que o raio de alcance foi estimado sem o grafo
+
+Divergência entre o grafo e o nível declarado no contrato não é você decidindo sozinho: audite pelo nível maior dos dois e registre a divergência no arquivo de veredito, para o Maestro corrigir o contrato.
+
+Se o contrato não tiver o campo Impacto Visual preenchido, ou vier marcado de forma que não bate com o que você observa no código, pare e reporte ao Maestro em vez de assumir.
 
 Se for convocado para uma task marcada **Nenhum**, diga isso e devolva em vez de inventar uma verificação.
 

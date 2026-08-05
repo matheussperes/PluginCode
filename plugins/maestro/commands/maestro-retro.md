@@ -39,18 +39,6 @@ Reporte ao operador:
 
 Se houver propostas, liste-as e pergunte se o operador quer revisá-las agora. Não as aplique ao plugin por conta própria.
 
-## Encerramento de Rodada — Obsidian
+## Encerramento de Rodada
 
-Feita **aqui, na sessão principal** — o `improvement-agent` é subagente e não tem `AskUserQuestion`.
-
-```
-Stage <n> encerrado.
-
-Salvar a retrospectiva, os aprendizados e o histórico deste stage no seu cofre do Obsidian? (Sim / Não)
-```
-
-**Não** → encerre sem escrever nada.
-
-**Sim** → use as skills do plugin `obsidian` em vez de gravar o arquivo à mão: `obsidian:obsidian-markdown` para o formato da nota e `obsidian:obsidian-cli` para criá-la no cofre. A nota traz as métricas do stage, os padrões identificados, as entradas novas de `docs/Lessons-Learned.md`, as propostas abertas em `.maestro/proposals/`, e wikilinks para as notas das tasks daquele stage.
-
-**Fallback**, apenas se o plugin `obsidian` não estiver instalado: grave em `obsidian.vaultPath` do `.maestro/config.json`, ou entregue em `.maestro/tmp/obsidian/stage-<n>.md`.
+Feche pelo **Protocolo de Fechamento de Rodada** do `maestro.md`, incluindo a pergunta do Obsidian — que aqui registra a retrospectiva do stage, não uma task isolada.

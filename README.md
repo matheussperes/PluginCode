@@ -31,7 +31,7 @@ uv tool install graphifyy   # ou: pipx install graphifyy / pip install graphifyy
 graphify install            # registra a skill /graphify no Claude Code
 ```
 
-O pacote no PyPI é **`graphifyy`**, com dois "y"; o executável é `graphify`. A construção do grafo (`/graphify .`) roda na sessão principal, uma vez por projeto, e a manutenção é incremental (`graphify update <caminhos>`) na camada de comando, após cada merge. Os agentes apenas consultam:
+O pacote no PyPI é **`graphifyy`**, com dois "y"; o executável é `graphify`. A construção do grafo (`/graphify .`) roda na sessão principal, uma vez por projeto, e a manutenção incremental (`graphify update <caminhos>`) é do Maestro, após cada merge. Os agentes apenas consultam:
 
 ```bash
 graphify explain "Button"              # o que é, onde vive, quem depende
@@ -39,6 +39,8 @@ graphify path "Checkout" "PaymentAPI"  # como A alcança B
 ```
 
 `/maestro-init` verifica a instalação e acrescenta `graphify-out/` ao `.gitignore` do projeto.
+
+A manutenção é responsabilidade do **Maestro**, não dos comandos: ele confere o frescor do grafo no início de cada rodada (`find . -newer graphify-out/graph.json`) e roda o `graphify update` depois de cada merge. Isso vive no `maestro.md` de propósito — se vivesse só no `/maestro-next`, conduzir a esteira pela conversa ("aja como o Maestro") pularia a atualização e o grafo envelheceria em silêncio, que é pior que não ter grafo: os agentes consultam um mapa errado com confiança total.
 
 ## Uso em um projeto
 
@@ -191,6 +193,10 @@ O padrão comum é começar só na web e portar para mobile depois. Isso é decl
 Cor, tipografia, espaçamento e elevação em `Design-System.md` são valores, não código — servem para as duas plataformas sem retrabalho. O que muda por plataforma é a biblioteca que implementa esses valores: Shadcn/UI e Framer Motion na web, uma biblioteca de componentes declarada (nunca Shadcn, que é web-only) e Moti no mobile.
 
 Quando chegar a hora de portar, mude `mobile` para `"ativo"` e rode `/maestro-discovery` de novo. O Maestro reconhece que é ativação de plataforma, não projeto novo, e convoca só o `product-designer` (declara Moti e a biblioteca mobile) e o `backlog-planner` (cria as tasks de portagem, uma por tela já existente). PRD, mapa de telas, schema e regras de domínio não são refeitos — só a camada de frontend é reconstruída para o novo cliente.
+
+## Protocolo de fechamento de rodada
+
+Toda rodada — task mesclada ou stage encerrado — fecha pela mesma sequência, definida no `maestro.md` e válida em qualquer caminho de entrada: merge, `graphify update`, sincronização de docs pelo `memory-manager`, retrospectiva se encerrou stage, commit e push, e a pergunta do Obsidian. Os comandos `/maestro-next` e `/maestro-retro` apontam para esse protocolo em vez de reimplementá-lo, para que os dois caminhos nunca divirjam.
 
 ## Registro no Obsidian
 
