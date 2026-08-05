@@ -117,6 +117,30 @@ O `ux-auditor` roda em três níveis, não binário: **completo** para tela nova
 
 Duas reprovações no mesmo gate e a terceira submissão ativa o **Circuit Breaker**: a esteira para e espera o operador. A contagem é por gate, não agregada.
 
+## Vereditos de gate — por que eles vão para arquivo
+
+O Claude Code tem um bug conhecido ([#58109](https://github.com/anthropics/claude-code/issues/58109), fechado como *not planned*): quando a **última mensagem de um subagente termina em chamada de ferramenta**, o CLI descarta o texto final e entrega ao chamador apenas o último bloco de texto *anterior* àquela chamada. O agente conclui o trabalho inteiro e o pai recebe uma narração de meio de investigação — algo como *"Script ran without error. Let's check outputs."*.
+
+Num orquestrador de gates isso é devastador e silencioso: a auditoria roda, o veredito se perde, e o comportamento é indistinguível de um agente que travou. O sintoma correlaciona com número de chamadas de ferramenta — quanto mais o agente usa ferramentas, maior a chance de a última mensagem terminar em `tool_use` — o que faz parecer estouro de limite de turnos quando não é.
+
+A esteira convive com isso em três camadas:
+
+**O arquivo é o veredito.** Todo gate grava `.maestro/tmp/verdicts/<task-id>-<gate>.md` — com `APROVADO`, `REPROVADO` ou `BLOQUEADO`, checklist e evidência — **antes** de redigir a resposta. O Maestro lê o arquivo, nunca a mensagem. Mensagem truncada com arquivo presente é sucesso.
+
+**Ferramenta antes, resposta depois.** Oitava diretriz Ponytail, nos 17 agentes: toda escrita e todo comando acontecem antes de começar a redigir; a última mensagem é exclusivamente texto. Ataca o gatilho do bug diretamente.
+
+**Primeiro plano nos gates.** `background: false` nos cinco auditores, para o chamador bloquear e receber o resultado inline em vez de depender de notificação assíncrona.
+
+E uma regra que fecha o buraco: **o Maestro nunca emite o veredito de um gate no lugar dele.** Gate que falha duas vezes por motivo técnico vira `gate_indisponivel`, e a decisão de seguir sem ele é do operador — registrada no Backlog como "não executado (autorizado)", nunca como "aprovado". Falha de transporte também não conta tentativa de Circuit Breaker: esse contador mede a qualidade do trabalho, não a saúde da ferramenta.
+
+## Maestro como agente principal
+
+`/maestro-init` grava `.claude/settings.json` no projeto com `{ "agent": "maestro:maestro" }`. As sessões abertas naquele diretório passam a ter o Maestro como thread principal, em vez de um subagente convocado por outra sessão.
+
+Isso importa por três motivos concretos: como agente principal ele tem `AskUserQuestion` e pergunta direto ao operador, em vez de depender de alguém repassar mensagens; as notificações dos gates chegam nele, em vez de subirem para a sessão acima; e os gates rodam a um nível de profundidade em vez de dois.
+
+O escopo é **por projeto, nunca global** — o Maestro tem `disallowedTools: Edit, NotebookEdit`, então ativá-lo como agente padrão de toda sessão impediria você de editar arquivos em qualquer outro repositório. Para uma sessão comum dentro de um projeto Maestro: `claude --agent claude`.
+
 ## Economia de tokens
 
 Quatro decisões de projeto sustentam o custo da esteira, em ordem de impacto:
@@ -129,7 +153,7 @@ Quatro decisões de projeto sustentam o custo da esteira, em ordem de impacto:
 
 **Diretrizes Ponytail.** Todos os 17 agentes carregam o mesmo bloco de execução enxuta no topo: zero prolixidade na resposta, operação atômica, leitura cirúrgica, YAGNI, deletar antes de adicionar, causa raiz em vez de sintoma, respeito ao domínio do contrato. Tokens de saída custam várias vezes o que custam os de entrada, e é aí que a prolixidade pesa.
 
-Uma nota sobre `maxTurns`: ele está declarado em todos os agentes como rede de segurança, mas **não é uma alavanca de economia**. Turno alto se resolve com task atômica e leitura focada, não com teto baixo — um executor cortado no meio custa mais que um que terminou.
+Uma nota sobre `maxTurns`: ele está declarado como rede de segurança, mas **não é alavanca de economia nem causa de gate travado** — existe relato de que nem chegou a ser aplicado ([#41143](https://github.com/anthropics/claude-code/issues/41143)), e o travamento de gates desta esteira era o bug de truncamento acima, não estouro de turnos. Turno alto se resolve com task atômica e leitura focada, não com teto baixo — um executor cortado no meio custa mais que um que terminou.
 
 ## Territórios
 

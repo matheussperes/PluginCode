@@ -32,6 +32,22 @@ CLAUDE.md
 
 O inicializador é seguro para repetir: cria apenas o que falta e nunca sobrescreve documento existente.
 
+## Maestro como agente principal deste projeto
+
+O inicializador cria `.claude/settings.json` com:
+
+```json
+{ "agent": "maestro:maestro" }
+```
+
+Isso faz o Maestro ser a **thread principal** das sessões abertas neste diretório, em vez de um subagente convocado por outra sessão. A diferença é estrutural, não cosmética: como agente principal ele ganha `AskUserQuestion` e pergunta direto ao operador (subagentes não têm essa ferramenta), as notificações dos gates chegam nele em vez de subirem para uma sessão acima, e os gates passam a rodar a um nível de profundidade em vez de dois.
+
+O escopo é **deste projeto**, nunca global — o Maestro tem `disallowedTools: Edit, NotebookEdit`, então ligá-lo como agente padrão de toda sessão impediria você de editar arquivos em qualquer outro repositório.
+
+Se `.claude/settings.json` já existir, ele é preservado: avise o operador para acrescentar a chave `"agent": "maestro:maestro"` manualmente, ou para rodar `claude --agent maestro:maestro` quando quiser conduzir a esteira.
+
+Para uma sessão normal de Claude Code neste mesmo projeto, sem a esteira, use `claude --agent claude`.
+
 ## Grafo de Código (Graphify) — pré-requisito da esteira
 
 A esteira depende do grafo do Graphify para consulta de dependências. Sem ele, os executores voltam a varrer o repositório com `Glob`/`Grep`, que é exatamente o custo que a esteira existe para evitar.

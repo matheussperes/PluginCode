@@ -10,6 +10,11 @@ Produzido pelo agente `backlog-planner` ao final da descoberta e mantido pelo `m
 | ⏳ Em Progresso | Branch efêmera aberta |
 | ✅ Completo | Aprovado em todos os gates e mesclado |
 | 🔴 Bloqueado | Circuit Breaker ativado ou dependência não resolvida |
+| 🔶 Gate Indisponível | Gate técnico sem veredito 2x seguidas — aguardando decisão do operador |
+
+## Convenção de registro
+
+Se um gate nunca chegou a rodar (estourou sem veredito) e a task avançou por decisão do operador, o registro precisa dizer isso — nunca "Aprovado &lt;gate&gt;" como se o gate tivesse validado normalmente. Use, por exemplo: `"<gate> indisponível (2x sem veredito) — revisão assumida pelo Maestro, aprovada pelo operador em <data>"`.
 
 ## Formato de task
 

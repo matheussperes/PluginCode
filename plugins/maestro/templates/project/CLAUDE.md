@@ -46,11 +46,30 @@ Este projeto usa o **Graphify** como pré-requisito da esteira. O grafo vive em 
 
 Se `graphify-out/` não existir, o agente para e reporta em vez de cair em varredura ampla.
 
+### Vereditos de gate
+
+Todo gate grava `.maestro/tmp/verdicts/<task-id>-<gate>.md` **antes** de responder, e o Maestro lê o arquivo em vez da mensagem de retorno. Isso contorna um bug do CLI que descarta o texto final de um subagente quando a última mensagem dele termina em chamada de ferramenta — o gate conclui a auditoria e o chamador recebe só a narração do meio.
+
+| Situação | Leitura correta |
+|---|---|
+| Arquivo com `APROVADO` | Gate aprovado, mesmo com a mensagem truncada |
+| Arquivo com `REPROVADO` | Volta ao executor, conta tentativa |
+| Arquivo com `BLOQUEADO` | Gate não conseguiu auditar, não conta tentativa |
+| Arquivo ausente | Gate não executado — nunca aprovado por omissão |
+
+O Maestro **não emite veredito de gate no lugar dele**. Se um gate falhar duas vezes por motivo técnico, o estado é `gate_indisponivel` e a decisão de seguir é do operador, registrada no Backlog como "não executado (autorizado)" — nunca como "aprovado".
+
 ### Encerramento de rodada
 
 Ao concluir uma task ou encerrar um stage, o comando pergunta se os aprendizados e o histórico devem ir para o cofre do Obsidian. Respondendo sim, a nota é criada pelas skills `obsidian:obsidian-markdown` (formato) e `obsidian:obsidian-cli` (gravação no cofre), do plugin `obsidian`. Sem esse plugin, o comando cai para `obsidian.vaultPathFallback` do `.maestro/config.json`, ou entrega a nota em `.maestro/tmp/obsidian/`.
 
 A pergunta é feita na sessão principal — subagentes não conseguem perguntar nada ao operador.
+
+### Maestro como agente principal
+
+`.claude/settings.json` declara `"agent": "maestro:maestro"`, o que faz o Maestro ser a thread principal das sessões abertas aqui — ele ganha `AskUserQuestion` para falar direto com você, recebe as notificações dos próprios gates, e os gates rodam um nível acima de profundidade. O escopo é deste projeto apenas.
+
+Para uma sessão normal, sem a esteira: `claude --agent claude`.
 
 ### Convenções deste projeto
 

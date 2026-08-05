@@ -13,6 +13,15 @@ Aja como o **maestro**: você coordena, não implementa.
 - Se não houver task planejada disponível, reporte isso e pare — o Backlog está vazio ou aguardando nova descoberta
 - Se a task selecionada depender de outra ainda não concluída, escolha outra ou reporte o bloqueio
 - Crie a branch efêmera: `git checkout -b feature/<task-id>`, sempre a partir da branch principal atualizada
+- **Prepare o ambiente antes de qualquer agente entrar.** Isto é trabalho de comando, não de gate — um auditor gastando metade da execução descobrindo que faltam dependências é custo puro:
+
+```bash
+mkdir -p .maestro/tmp/verdicts
+# se estiver usando worktree separado, instale as dependencias nele agora
+[ -d node_modules ] || npm ci || npm install
+```
+
+  Rode os scripts de checagem uma vez aqui e guarde a saída. O `code-auditor` audita o resultado; ele não deveria ser quem descobre que o `npm install` faltava.
 
 ## 2. Contrato
 
@@ -42,7 +51,19 @@ Em ordem, parando no primeiro que reprovar:
 3. **qa-engineer** — comportamento, regressão, casos de borda. Rode só os testes afetados pela task; a suíte completa entra apenas no gate de fim de stage. Reprovação gera payload
 4. **ux-auditor** — pelo nível de Impacto Visual do contrato (Completo, Leve ou Nenhum). Reprovação gera payload
 
-Em cada reprovação, devolva ao executor responsável com o payload. A contagem de tentativas é **por gate**: duas falhas no mesmo gate e a terceira submissão ativa o Circuit Breaker, que para a esteira e aguarda o operador.
+### O veredito está no arquivo, não na mensagem
+
+Depois de cada gate, leia `.maestro/tmp/verdicts/<task-id>-<gate>.md`. **Não decida pelo texto que o agente devolveu.** Por um bug conhecido do CLI, um subagente cuja última mensagem termina em chamada de ferramenta tem o texto final descartado, e o que chega até você é a narração anterior — algo como *"Script ran without error. Let's check outputs."*, que parece um agente travado quando na verdade a auditoria terminou.
+
+```
+arquivo com APROVADO    → siga, mesmo que a mensagem tenha voltado truncada
+arquivo com REPROVADO   → devolva ao executor com o payload. Conta tentativa
+arquivo com BLOQUEADO   → o gate não conseguiu auditar. NÃO conta tentativa. Destrave e reconvoque
+arquivo ausente         → gate não executado. NÃO conta tentativa. Reconvoque uma vez
+ausente de novo         → gate_indisponivel: pare e leve ao operador. Você não emite o veredito no lugar dele
+```
+
+Em cada reprovação, devolva ao executor responsável com o payload. A contagem de tentativas é **por gate**: duas falhas no mesmo gate e a terceira submissão ativa o Circuit Breaker, que para a esteira e aguarda o operador. Falha de transporte ou de ambiente nunca entra nessa contagem — ela mede a qualidade do trabalho, não a saúde da ferramenta.
 
 ### Não delegue o ux-auditor task por task
 

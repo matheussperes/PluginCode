@@ -74,6 +74,8 @@ Nenhum   = texto ou token existente, sem mudanca estrutural
 
 ## 6. Protocolo de Veto
 
+Cada gate grava seu veredito em `.maestro/tmp/verdicts/<task-id>-<gate>.md`. **O arquivo é o veredito** — a mensagem de retorno do agente pode chegar truncada por limitação do CLI, e nesse caso o arquivo continua válido. Arquivo ausente = gate não executado, nunca aprovado por omissão.
+
 Reprovação gera payload em `.maestro/tmp/<Security|QA|UX>-Decline-Payload.md`. O executor lê o payload, corrige **apenas o apontado** e re-submete — sem refatoração colateral.
 
 Duas reprovações no mesmo gate: a terceira submissão ativa o Circuit Breaker. Contagem por gate, não agregada. O `code-auditor` é exceção — erro de build, lint ou tipo é autoexplicativo, não gera payload e não conta tentativas.
@@ -91,6 +93,7 @@ Se a task revelar lacuna de produto ou de arquitetura, o executor **para e repor
   "current_gate": "code_review",
   "executor": "",
   "attempts": { "security": 0, "qa": 0, "ux": 0 },
+  "gates_indisponiveis": [],
   "blockers": [],
   "last_update": ""
 }

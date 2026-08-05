@@ -16,6 +16,10 @@ Delegue em ordem, parando no primeiro que reprovar:
 3. **qa-engineer** — comportamento, regressão, casos de borda
 4. **ux-auditor** — apenas se houver mudança visual na diferença
 
+Antes de convocar o primeiro gate, prepare o ambiente: `mkdir -p .maestro/tmp/verdicts` e garanta que as dependências estão instaladas (`[ -d node_modules ] || npm ci || npm install`). Gate não é o lugar de descobrir que falta `npm install`.
+
+Cada gate grava seu veredito em `.maestro/tmp/verdicts/<task-id>-<gate>.md`. **Leia o arquivo, não a mensagem de retorno** — um subagente cuja última mensagem termina em chamada de ferramenta tem o texto final descartado pelo CLI, e o que chega parece um agente travado. Arquivo ausente significa gate não executado (reconvoque uma vez, sem contar tentativa); ausente de novo é `gate_indisponivel`, que vai ao operador. Você não emite o veredito no lugar do gate.
+
 **Fast-fail é literal**: ao reprovar num gate, não convoque os seguintes. Um `security-auditor` ou `qa-engineer` convocado depois de o build já ter quebrado gasta contexto para auditar código que vai mudar de qualquer forma. Devolva ao executor e recomece a sequência do início quando ele re-submeter.
 
 Antes de convocar o **security-auditor**, se a diferença tocar autenticação, política de RLS, pagamento, dado pessoal sensível ou segredo de integração, avise o operador de que ele roda em `sonnet` com `effort: high` e ofereça subir o modelo da sessão para `opus` antes de seguir.
@@ -38,9 +42,11 @@ Consolide num relatório único:
 **qa-engineer**: aprovado | reprovado | <n> achados
 **ux-auditor**: aprovado | reprovado | não aplicável
 
-**Veredicto**: liberado para merge | correções necessárias
+**Veredicto**: liberado para merge | correções necessárias | gate indisponível
 
+**Vereditos lidos**: <caminhos em .maestro/tmp/verdicts/>
 **Payloads gerados**: <lista de caminhos>
+**Gates não executados**: <lista, se houver — nunca contados como aprovados>
 **Observações fora do escopo**: <n>
 ```
 

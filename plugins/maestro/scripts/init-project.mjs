@@ -50,7 +50,7 @@ if (!fs.existsSync(raizDosTemplates)) {
 
 copiarAusentes(raizDosTemplates, raizDoProjeto);
 
-for (const diretorio of ["tmp", "cache", "logs", "state", "proposals", "state/contracts", "tmp/screenshots"]) {
+for (const diretorio of ["tmp", "cache", "logs", "state", "proposals", "state/contracts", "tmp/screenshots", "tmp/verdicts"]) {
   fs.mkdirSync(path.join(raizDoProjeto, ".maestro", diretorio), { recursive: true });
 }
 

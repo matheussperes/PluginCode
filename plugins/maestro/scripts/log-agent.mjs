@@ -11,6 +11,18 @@
  *
  * Falha aberta por design: se nao houver .maestro, ou se qualquer coisa
  * der errado, o hook sai em silencio sem interromper a esteira.
+ *
+ * DIAGNOSTICO TEMPORARIO (ver .maestro/proposals — investigacao de gates
+ * que estouram sem veredito): em pelo menos um ambiente observado, os campos
+ * turnos/duracao_ms/encerrado_por_limite abaixo vem sempre null, porque este
+ * script assume o formato de payload do hook SubagentStop do Claude Code CLI
+ * puro, e nem todo harness expoe os mesmos campos. Por isso o registro agora
+ * inclui `payload_bruto` (o JSON inteiro recebido do hook) e, quando nem
+ * `agent_type` vier preenchido, o evento cai em agents-sem-agente.jsonl em vez
+ * de ser descartado. Isso deixa o dado real disponivel na proxima ocorrencia
+ * de estouro, sem precisar reproduzir o problema de proposito. Depois que o
+ * formato real for confirmado, remova `payload_bruto` e o arquivo secundario,
+ * e ajuste a extracao de campos para o nome correto.
  */
 
 import fs from "node:fs";
@@ -65,20 +77,27 @@ async function principal() {
   const raiz = raizDoProjeto();
   if (!raiz) return;
 
+  const destino = path.join(raiz, ".maestro", "logs");
+  fs.mkdirSync(destino, { recursive: true });
+
   const registro = {
     ts: new Date().toISOString(),
     agente: entrada?.agent_type ?? null,
     sessao: entrada?.session_id ?? null,
     turnos: entrada?.num_turns ?? null,
     duracao_ms: entrada?.duration_ms ?? null,
-    encerrado_por_limite: entrada?.stop_hook_active ?? null
+    encerrado_por_limite: entrada?.stop_hook_active ?? null,
+    payload_bruto: entrada ?? null
   };
 
-  if (!registro.agente) return;
+  if (registro.agente) {
+    fs.appendFileSync(path.join(destino, "agents.jsonl"), JSON.stringify(registro) + "\n", "utf8");
+    return;
+  }
 
-  const destino = path.join(raiz, ".maestro", "logs");
-  fs.mkdirSync(destino, { recursive: true });
-  fs.appendFileSync(path.join(destino, "agents.jsonl"), JSON.stringify(registro) + "\n", "utf8");
+  // agent_type tambem pode vir vazio neste ambiente — nao descarte o evento,
+  // grave em separado para nao perder o dado so porque um campo esperado faltou.
+  fs.appendFileSync(path.join(destino, "agents-sem-agente.jsonl"), JSON.stringify(registro) + "\n", "utf8");
 }
 
 principal().catch(() => {});
