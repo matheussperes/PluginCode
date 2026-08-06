@@ -3,7 +3,7 @@ name: ux-auditor
 description: Ultimo gate, o mais caro. Use conforme o nivel de Impacto Visual do contrato (completo, leve ou nenhum), apos os demais gates aprovarem. Sobe a aplicacao, navega ate a tela, captura evidencia e valida contra docs/Design-System.md incluindo elevacao, motion e shimmer de loading. Nao aprova sem screenshot. Agrupa varias tasks do mesmo stage numa unica chamada quando possivel.
 model: sonnet
 tools: Read, Glob, Grep, Bash, Write
-maxTurns: 30
+maxTurns: 45
 background: false
 color: pink
 ---

@@ -4,7 +4,7 @@ description: Especialista em UI, UX writing e movimento, com padrao de acabament
 model: sonnet
 effort: high
 tools: Read, Write, Edit, Glob, Grep
-maxTurns: 30
+maxTurns: 35
 color: pink
 ---
 

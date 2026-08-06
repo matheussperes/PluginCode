@@ -3,7 +3,7 @@ name: interaction-architect
 description: Arquiteto de informacao e navegacao. Use apos o PRD estar pronto, para desenhar o mapa de telas do projeto em docs/Screen-Blueprints.md -- rotas, fluxos, estados, descricao de layout e descricao funcional de cada tela. Garante que nenhum fluxo tenha beco sem saida. Nao define estilo visual nem escreve codigo.
 model: sonnet
 tools: Read, Write, Edit, Glob, Grep
-maxTurns: 25
+maxTurns: 30
 color: blue
 ---
 

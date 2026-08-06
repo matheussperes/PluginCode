@@ -3,7 +3,7 @@ name: qa-engineer
 description: Gate de comportamento. Use apos o security-auditor aprovar, para validar que a task faz o que o contrato prometeu, cobrindo testes de unidade, integracao e fluxo, casos de borda e ausencia de regressao. Gate condicional, roda so o que faz sentido para a task. Nunca corrige codigo.
 model: sonnet
 tools: Read, Glob, Grep, Bash, Write
-maxTurns: 30
+maxTurns: 40
 background: false
 color: purple
 ---

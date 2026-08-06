@@ -11,31 +11,66 @@ Agentes que vêm de plugin **ignoram** três campos de frontmatter, por seguran�
 
 Quando você precisar de um desses três campos em um agente específico, ejete-o. Ele passa a ser um agente comum, com precedência sobre a versão do plugin.
 
+## O plugin é a raiz — ejeção é empréstimo, não mudança de sede
+
+**Ejetar é temporário por definição.** A cópia ejetada congela na versão do dia e para de receber correção do plugin, e nada avisa quando ela fica para trás — o projeto simplesmente roda com bugs já resolvidos no núcleo compartilhado. Toda alteração que valha a pena manter pertence ao plugin, não à cópia.
+
+Antes de ejetar, confirme que é mesmo necessário. Só três campos justificam:
+
+| Você precisa de | Ejetar resolve? |
+|---|---|
+| `permissionMode`, `hooks` ou `mcpServers` no frontmatter | Sim — plugin ignora esses três |
+| Mudar prompt, `tools`, `model`, `effort`, `maxTurns` | **Não** — tudo isso funciona vindo do plugin. Altere no plugin e bumpe a versão |
+| Testar uma alteração antes de mandar pro plugin | **Não** — use `claude --plugin-dir <caminho-do-plugin>`, que lê do disco sem cache nem cópia |
+| Um ajuste só deste projeto | **Não** — isso é `.maestro/config.json` ou o contrato da task, não uma cópia de agente |
+
+Se o pedido cair em qualquer linha com "Não", **não ejete**: diga qual é o caminho certo e pare.
+
 ## Passos
 
-1. Se o escopo não foi informado, pergunte: **projeto** (`.claude/agents/`, vale só neste repositório e pode ser versionado) ou **usuário** (`~/.claude/agents/`, vale em todos os seus projetos).
+1. Pergunte **por que** a ejeção é necessária e qual dos três campos vai ser usado. Sem uma resposta que caia na primeira linha da tabela, pare aqui.
 
-2. Confirme que o agente existe em `${CLAUDE_PLUGIN_ROOT}/agents/<nome>.md`. Se não existir, liste os disponíveis e pare.
+2. Se o escopo não foi informado, pergunte: **projeto** (`.claude/agents/`, vale só neste repositório e pode ser versionado) ou **usuário** (`~/.claude/agents/`, vale em todos os seus projetos).
 
-3. Copie o arquivo para o destino escolhido, preservando o conteúdo integralmente.
+3. Confirme que o agente existe em `${CLAUDE_PLUGIN_ROOT}/agents/<nome>.md`. Se não existir, liste os disponíveis e pare.
 
-4. Adicione ao topo do corpo do agente, logo após o frontmatter, um comentário de procedência:
+4. Copie o arquivo para o destino escolhido, preservando o conteúdo integralmente.
+
+5. Adicione ao topo do corpo do agente, logo após o frontmatter, um comentário de procedência **com o motivo**:
 
    ```
-   <!-- Ejetado do plugin maestro v<versão> em <data>. Esta cópia tem precedência sobre a do plugin. -->
+   <!-- Ejetado do plugin maestro v<versão> em <data>.
+        Motivo: <campo destravado e para quê>.
+        Desfazer quando: <condição concreta que encerra a necessidade>.
+        Esta cópia tem precedência sobre a do plugin e NÃO recebe atualizações dele. -->
    ```
 
-5. Informe ao operador quais campos ele acabou de destravar e mostre um exemplo aplicável ao agente ejetado.
+   O campo "Desfazer quando" não é decorativo: sem ele, ninguém sabe se a cópia ainda faz sentido seis meses depois.
+
+6. Registre a ejeção em `.maestro/proposals/` como candidata a virar mudança de plugin, se o que você precisa puder ser generalizado.
+
+7. Informe ao operador o que ele destravou, mostre um exemplo aplicável, e repita o aviso abaixo.
 
 ## Aviso obrigatório
 
 Diga isto ao operador, sem rodeios:
 
-> Esta cópia **não recebe mais atualizações do plugin**. Quando o Maestro for atualizado, este agente continua na versão de hoje até você ejetá-lo de novo ou apagar a cópia.
+> Esta cópia **não recebe mais atualizações do plugin**. Quando o Maestro for corrigido, este agente continua na versão de hoje. Desfaça a ejeção assim que a necessidade acabar, e rode `/maestro-status` periodicamente — ele detecta cópias ejetadas desatualizadas.
 
-## Reverter
+## Reverter — faça isso assim que puder
 
-Para voltar a usar a versão do plugin, basta apagar o arquivo ejetado. A precedência volta automaticamente para o plugin na próxima sessão.
+Apagar o arquivo ejetado devolve a precedência ao plugin na próxima sessão. Nada mais é necessário.
+
+```bash
+rm .claude/agents/<nome>.md        # escopo de projeto
+rm ~/.claude/agents/<nome>.md      # escopo de usuário
+```
+
+Antes de apagar, compare a cópia com a versão atual do plugin: se houver alteração que valha a pena, leve para o plugin primeiro (com bump de versão) e só então apague. Alteração perdida por reversão apressada é pior que a ejeção.
+
+```bash
+diff .claude/agents/<nome>.md "${CLAUDE_PLUGIN_ROOT}/agents/<nome>.md"
+```
 
 ## Nota sobre permissionMode
 

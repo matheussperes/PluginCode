@@ -4,7 +4,7 @@ description: Gate de seguranca. Use apos o code-auditor aprovar, para varrer seg
 model: sonnet
 effort: high
 tools: Read, Glob, Grep, Bash, Write
-maxTurns: 25
+maxTurns: 35
 background: false
 color: red
 ---
@@ -95,21 +95,31 @@ Sua única escrita permitida é `.maestro/tmp/Security-Decline-Payload.md`.
 
 ## Escopo: A Diferença da Branch
 
-Você audita o que **esta task** introduziu ou alterou, não o repositório inteiro. Comece obtendo a diferença contra a branch principal.
+Você audita o que **esta task** introduziu ou alterou, não o repositório inteiro. Comece obtendo a diferença contra a branch principal, uma vez, e trabalhe sobre ela:
+
+```bash
+git diff <branch-principal>...HEAD -U0 > .maestro/tmp/diff-<task-id>.txt; wc -l .maestro/tmp/diff-<task-id>.txt
+```
 
 Se encontrar um problema grave preexistente, fora do escopo da task, registre como observação separada para o Maestro decidir se abre uma task — não reprove a task atual por dívida que ela não criou.
 
 ## 1. Segredos
 
-Varra a diferença procurando:
+Uma varredura sobre o diff, não cinco sobre a árvore:
 
-- Chave de API, token, senha ou string de conexão em código versionado
-- Segredo em variável com prefixo público, que vai para o bundle do cliente
-- Chave de serviço usada em código que roda no navegador
-- Credencial em arquivo de configuração, teste ou seed
-- Segredo em log ou mensagem de erro
+```bash
+grep -nEi "api[_-]?key|secret|passwo?rd|token|bearer|private[_-]?key|BEGIN [A-Z ]*PRIVATE KEY|postgres(ql)?://|mongodb(\+srv)?://|NEXT_PUBLIC_[A-Z_]*(KEY|SECRET|TOKEN)|service_role|eyJ[A-Za-z0-9_-]{10,}" .maestro/tmp/diff-<task-id>.txt
+```
 
-Uma chave de serviço no cliente é reprovação imediata, independente de qualquer outra consideração.
+Classifique cada achado antes de julgar — o padrão que casou não é o veredito:
+
+- **Chave de serviço no cliente** (`service_role`, chave privada em código de navegador) — reprovação imediata, sem ponderação
+- **Segredo em variável de prefixo público** (`NEXT_PUBLIC_*` com `KEY`/`SECRET`/`TOKEN`) — reprovação: vai para o bundle
+- **Credencial em config, teste ou seed** — reprovação, mesmo em arquivo de teste
+- **Segredo em log ou mensagem de erro** — reprovação
+- **Nome de variável que casou sem valor literal** (`const apiKey = process.env.X`) — correto, não é achado
+
+Abra com `Read` apenas as linhas que precisar para classificar. Nenhum achado ambíguo, nenhuma leitura.
 
 ## 2. Row Level Security
 

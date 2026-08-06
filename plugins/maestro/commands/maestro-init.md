@@ -32,6 +32,18 @@ CLAUDE.md
 
 O inicializador é seguro para repetir: cria apenas o que falta e nunca sobrescreve documento existente.
 
+## Limpeza de projeto vindo de versão antiga
+
+Se `.maestro/agents/` existir, ela é lixo de uma versão anterior à 3.4, quando o inicializador copiava os agentes para dentro do projeto. **O Claude Code nunca leu essa pasta** — ela não é `.claude/agents/`. Os agentes em execução sempre foram os do plugin.
+
+Reporte ao operador e recomende apagar. Manter é pior que inútil: alguém eventualmente vai editar um arquivo de lá esperando efeito, ou vai diagnosticar um problema lendo agentes que não estão no ar.
+
+```bash
+ls .maestro/agents/*.md 2>/dev/null
+```
+
+Um agente que não existe mais no plugin atual (`solution-architect`, por exemplo, que virou `data-architect`, `product-strategist`, `interaction-architect` e `product-designer`) confirma o diagnóstico de pasta legada.
+
 ## Maestro como agente principal deste projeto
 
 O inicializador cria `.claude/settings.json` com:

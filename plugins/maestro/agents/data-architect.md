@@ -4,7 +4,7 @@ description: Arquiteto de dados e de dominio. Use apos os Screen-Blueprints para
 model: sonnet
 effort: high
 tools: Read, Write, Edit, Glob, Grep
-maxTurns: 30
+maxTurns: 35
 color: yellow
 ---
 

@@ -4,7 +4,7 @@ description: Primeiro agente de qualquer projeto novo. Use quando o operador tro
 model: sonnet
 effort: high
 tools: Read, Write, Edit, Glob, Grep, WebSearch, WebFetch
-maxTurns: 30
+maxTurns: 35
 color: orange
 ---
 

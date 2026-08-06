@@ -46,9 +46,18 @@ Se a task exigir mais de um executor, ela não era atômica: execute sequencialm
 
 ## 4. Gates de qualidade
 
+**Antes de convocar o code-auditor**, gere o log de verificação. Rodar comando é trabalho de script; julgar resultado é trabalho de agente — e essa separação é o que mantém o gate curto e previsível:
+
+```bash
+{ echo "sha: $(git rev-parse --short HEAD)"; echo "---";
+  npm run build; npm run lint; npm run typecheck; } > .maestro/tmp/verify-<task-id>.log 2>&1
+```
+
+Note o `;` entre os comandos, não `&&`: os três rodam sempre, e o executor recebe todos os erros de uma vez em vez de descobrir um por rodada. Regenere o log a cada re-submissão do executor — log com `sha` diferente do `HEAD` faz o gate retornar `BLOQUEADO`, de propósito.
+
 Em ordem, parando no primeiro que reprovar:
 
-1. **code-auditor** — build, lint, tipos. Reprovação volta direto ao executor, sem payload formal
+1. **code-auditor** — lê o log e varre o diff. Reprovação volta direto ao executor, sem payload formal
 2. **security-auditor** — segredos, RLS, OWASP. Reprovação gera payload
 3. **qa-engineer** — comportamento, regressão, casos de borda. Rode só os testes afetados pela task; a suíte completa entra apenas no gate de fim de stage. Reprovação gera payload
 4. **ux-auditor** — pelo nível de Impacto Visual do contrato (Completo, Leve ou Nenhum). Reprovação gera payload

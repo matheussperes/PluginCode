@@ -64,11 +64,16 @@ No dia a dia:
 | `/maestro-visual-kit` | Gera prompts de logo, telas e criativo de lançamento para ferramentas externas de imagem. Sempre confirma antes de gerar |
 | `/maestro-eject` | Copia um agente para escopo editável |
 
-Ou simplesmente, dentro do projeto:
+Mas você **não precisa** usar comando nenhum. O jeito normal de operar a esteira é conversar:
 
 ```
-Aja como o Maestro. Quero criar uma tela de dashboard...
+Aja como o Maestro e continue de onde paramos.
+Aja como o Maestro, vamos iniciar um projeto novo.
 ```
+
+O Maestro lê o estado do projeto, cruza com o que você pediu e dispara a rotina certa sozinho — init se falta estrutura, descoberta se falta PRD, próxima task se há fila, retrospectiva se um stage fechou, auditoria se você trouxe código feito fora da esteira. As rotinas são as mesmas skills da tabela acima; ele as invoca em vez de reimplementar, então digitar o comando e deixar ele decidir levam exatamente ao mesmo lugar.
+
+Quando a leitura de estado for ambígua e a rotina for cara — descoberta, visual kit, auditoria completa — ele diz em uma linha o que entendeu antes de rodar. Rotina barata ele dispara direto. E se o que você pediu não bate com o estado (você diz "continue" mas a descoberta nunca foi auditada), ele desvia para o certo e explica por quê numa frase.
 
 ## Os quatro squads
 
@@ -118,6 +123,30 @@ Os gates rodam do mais barato ao mais caro. Não faz sentido gastar auditoria vi
 O `ux-auditor` roda em três níveis, não binário: **completo** para tela nova ou componente compartilhado entre telas, **leve** (um breakpoint, sem os 4 estados) para ajuste isolado sem reuso, e **nenhum** para texto ou token já existente. O critério é raio de alcance — um componente compartilhado sempre recebe o gate completo, mesmo que o diff seja pequeno. Quando há mais de uma task do mesmo stage aguardando este gate, o Maestro agrupa numa única chamada, amortizando o setup fixo (subir app, autenticar, navegar).
 
 Duas reprovações no mesmo gate e a terceira submissão ativa o **Circuit Breaker**: a esteira para e espera o operador. A contagem é por gate, não agregada.
+
+## Onde os agentes moram — e onde não moram
+
+O Claude Code carrega agentes de exatamente dois lugares: `.claude/agents/` no projeto e `~/.claude/agents/` no usuário. Qualquer outra pasta com arquivos de agente **não é lida por nada**.
+
+Isso importa porque versões do Maestro anteriores à 3.4 copiavam os agentes para `.maestro/agents/` no `/maestro-init`, e essa pasta sobrevive em projetos antigos. Ela é inerte: os agentes que rodam são os do plugin. Editar um arquivo de lá não muda nem o frontmatter nem o prompt de nada — e já custou um diagnóstico inteiro, que concluiu "os agentes ejetados estão desatualizados, é essa a causa raiz" quando nenhum deles estava em uso.
+
+`/maestro-init` e `/maestro-status` detectam a pasta e recomendam apagar.
+
+## Uma instância de Maestro por Lote
+
+O Maestro reenvia a conversa inteira a cada turno seu. Uma instância que atravessa o dia começa custando ~120k tokens por chamada e termina em ~300k — e esse crescimento sozinho supera todos os cortes de gate somados. É o maior item da fatura da esteira.
+
+Por isso o escopo de uma instância é **um Lote**. Ao fechá-lo, o Maestro escreve `.maestro/state/handoff.md` e recomenda sessão nova. Trocar de instância não perde memória, porque a memória dele nunca esteve na conversa: está em `docs/Status.md`, `docs/Backlog.md`, `.maestro/state/` e no handoff — cerca de 5k tokens no total. Se algo relevante existe só na conversa e não em arquivo, isso é falha de registro, não motivo para segurar a instância viva.
+
+O gatilho é o limite de trabalho, não uma estimativa de consumo: o agente não consegue enxergar o próprio tamanho, então pedir que ele "pare quando ficar grande" não funciona. Lote fechado é um marco objetivo.
+
+## Comando é trabalho de script, julgamento é trabalho de agente
+
+Antes do `code-auditor`, a camada de comando gera `.maestro/tmp/verify-<task-id>.log` com o `sha` do commit e a saída de build, lint e checagem de tipos — os três separados por `;`, nunca por `&&`, para que o executor receba todos os erros numa rodada só em vez de descobrir um por vez. O gate lê o log, confere o `sha` contra o `HEAD` (log defasado retorna `BLOQUEADO`, nunca aprovação) e varre o diff numa única chamada com alternação, classificando cada achado por padrão.
+
+Isso tira o gate mais apertado da esteira de oito chamadas de overhead para três, e — mais importante que a economia — separa o que uma máquina faz melhor do que um modelo faz melhor. O mesmo princípio vale no `security-auditor`: um `git diff` gravado uma vez, uma varredura de segredos sobre ele, e classificação dos achados antes do veredito.
+
+Note o que **não** foi feito: nenhum agente recebeu instrução para monitorar o próprio consumo de turnos. Um agente ocupado estimando quanto orçamento lhe resta é um agente com atenção dividida, e ele não tem como medir isso de qualquer forma. O caminho é dar menos trabalho mecânico e mais margem — não pedir autocontrole que o modelo não consegue exercer.
 
 ## Vereditos de gate — por que eles vão para arquivo
 
@@ -239,7 +268,11 @@ O plugin instala dois hooks:
 
 Agentes vindos de plugin ignoram três campos de frontmatter, por segurança: `permissionMode`, `hooks` e `mcpServers`. Todos os outros funcionam, e `tools`, `disallowedTools` e `model` cobrem a maior parte dos casos.
 
-Se precisar de um desses três num agente específico, use `/maestro-eject <agente>`, que copia o arquivo para `.claude/agents/` ou `~/.claude/agents/`, onde os campos voltam a valer. A cópia deixa de receber atualizações do plugin.
+Se precisar de um desses três num agente específico, use `/maestro-eject <agente>`, que copia o arquivo para `.claude/agents/` ou `~/.claude/agents/`, onde os campos voltam a valer.
+
+**Ejeção é empréstimo, não mudança de sede.** A cópia congela na versão do dia e para de receber correção do plugin — e nada avisa quando ela fica para trás, então o projeto passa a rodar com bugs já resolvidos no núcleo. Mudar prompt, `tools`, `model`, `effort` ou `maxTurns` **não** exige ejeção: isso tudo funciona vindo do plugin. Para testar uma alteração antes de publicar, use `claude --plugin-dir <caminho>`, que lê do disco sem cache nem cópia.
+
+O comando registra o motivo e a condição de reversão no cabeçalho da cópia, e o `/maestro-status` compara a versão de cada agente ejetado com a do plugin e reporta drift. Desfazer é apagar o arquivo — mas confira antes se a cópia tem alteração que valha levar para o plugin: `diff .claude/agents/<nome>.md "${CLAUDE_PLUGIN_ROOT}/agents/<nome>.md"`.
 
 ## Estrutura do repositório
 

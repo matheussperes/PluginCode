@@ -4,7 +4,7 @@ description: Gate de saida da fase de descoberta. Use depois que PRD, Business-S
 model: sonnet
 effort: high
 tools: Read, Glob, Grep, Bash, Write
-maxTurns: 30
+maxTurns: 35
 background: false
 color: red
 ---

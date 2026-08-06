@@ -4,7 +4,7 @@ description: Executor de logica de dominio e calculo puro em TypeScript, sem UI 
 model: sonnet
 effort: high
 tools: Read, Write, Edit, Glob, Grep, Bash
-maxTurns: 35
+maxTurns: 45
 color: yellow
 ---
 

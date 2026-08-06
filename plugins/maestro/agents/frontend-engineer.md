@@ -3,7 +3,7 @@ name: frontend-engineer
 description: Executor de interface em React com Next.js ou Expo, Tailwind, biblioteca de componentes declarada por plataforma e motion (Framer Motion ou Moti). Use para tasks de tela, componente visual ou qualquer trabalho de UI de acabamento premium. Le apenas os trechos do docs/Design-System.md apontados pelo contrato e nunca inventa valor de cor, espacamento, tipografia, elevacao ou motion.
 model: sonnet
 tools: Read, Write, Edit, Glob, Grep, Bash
-maxTurns: 35
+maxTurns: 45
 color: blue
 ---
 

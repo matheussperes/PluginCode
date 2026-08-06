@@ -4,7 +4,7 @@ description: Agente de retrospectiva. Use ao final de uma sprint ou pipeline sta
 model: sonnet
 effort: low
 tools: Read, Write, Edit, Glob, Grep, Bash
-maxTurns: 20
+maxTurns: 30
 color: green
 ---
 

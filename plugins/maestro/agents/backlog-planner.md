@@ -3,7 +3,7 @@ name: backlog-planner
 description: Ultimo agente da descoberta. Use apos PRD, Blueprints, Design System e schema estarem prontos, para fatiar o MVP em micro-tasks atomicas em docs/Backlog.md, definir dependencias, executor e modelo recomendado por task. Otimiza custo de execucao.
 model: sonnet
 tools: Read, Write, Edit, Glob, Grep
-maxTurns: 25
+maxTurns: 30
 color: green
 ---
 
