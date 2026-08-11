@@ -160,7 +160,11 @@ A esteira convive com isso em três camadas:
 
 **Ferramenta antes, resposta depois.** Oitava diretriz Ponytail, nos 17 agentes: toda escrita e todo comando acontecem antes de começar a redigir; a última mensagem é exclusivamente texto. Ataca o gatilho do bug diretamente.
 
-**Primeiro plano nos gates.** `background: false` nos cinco auditores, para o chamador bloquear e receber o resultado inline em vez de depender de notificação assíncrona.
+**Stub antes da auditoria.** Todo gate grava o arquivo com `veredito: EM_ANDAMENTO` **antes** de investigar, e o sobrescreve no fim. Sem isso, morrer no primeiro minuto e morrer no nono produzem o mesmo sintoma para o Maestro — arquivo ausente — e recebem o mesmo tratamento errado: reconvocação do zero. Com o stub, `EM_ANDAMENTO` no disco significa que há trabalho a retomar.
+
+**Primeiro plano nos gates, por hook.** Até a 3.7 isto era `background: false` no frontmatter dos cinco auditores — e não funcionava: o campo só tem semântica documentada para `true`, e desde a v2.1.198 subagentes rodam em background por padrão. Os gates seguiam assíncronos, expostos a [#47936](https://github.com/anthropics/claude-code/issues/47936), em que subagentes de background são encerrados externamente em 14–30% das execuções, sem gravar arquivo, e o pai recebe `status: completed`.
+
+A partir da 3.8 quem garante isso é o hook `shape-agent-call.mjs`, que reescreve os argumentos da ferramenta `Agent` via `hookSpecificOutput.updatedInput`. O motivo de ser hook e não instrução: em investigação nesta base, o modelo **afirmou que o parâmetro `run_in_background` não existia e não o emitiu nem sob instrução direta do operador**, apesar de existir no schema da build. Argumento de ferramenta emitido pelo modelo não é canal confiável; hook é.
 
 E uma regra que fecha o buraco: **o Maestro nunca emite o veredito de um gate no lugar dele.** Gate que falha duas vezes por motivo técnico vira `gate_indisponivel`, e a decisão de seguir sem ele é do operador — registrada no Backlog como "não executado (autorizado)", nunca como "aprovado". Falha de transporte também não conta tentativa de Circuit Breaker: esse contador mede a qualidade do trabalho, não a saúde da ferramenta.
 
@@ -170,7 +174,11 @@ E uma regra que fecha o buraco: **o Maestro nunca emite o veredito de um gate no
 
 Isso importa por três motivos concretos: como agente principal ele tem `AskUserQuestion` e pergunta direto ao operador, em vez de depender de alguém repassar mensagens; as notificações dos gates chegam nele, em vez de subirem para a sessão acima; e os gates rodam a um nível de profundidade em vez de dois.
 
-O escopo é **por projeto, nunca global** — o Maestro tem `disallowedTools: Edit, NotebookEdit`, então ativá-lo como agente padrão de toda sessão impediria você de editar arquivos em qualquer outro repositório. Para uma sessão comum dentro de um projeto Maestro: `claude --agent claude`.
+O escopo é **por projeto, nunca global**. Para uma sessão comum dentro de um projeto Maestro: `claude --agent claude`.
+
+Até a 3.7 o Maestro tinha `disallowedTools: Edit, NotebookEdit`, e isso custava caro por um motivo não óbvio: `disallowedTools` no agente da sessão principal remove a ferramenta da **sessão inteira, subagentes inclusive**. Os quatro executores declaravam `Edit` e nunca o recebiam — toda alteração de código virava `Write` de arquivo inteiro, caro e o maior ponto de queda de uma execução. E a regra nunca protegeu nada: o Maestro sempre teve `Write`, que não é escopado por pasta.
+
+Na 3.8 a proibição saiu do frontmatter e virou o hook `guard-write.mjs`, que bloqueia escrita em `src/`, `lib/`, `app/`, `components/`, `pages/`, `hooks/`, `styles/` e `supabase/` **vinda da thread principal**, e libera a mesma escrita quando vem de dentro de um executor. O discriminador é a presença de `agent_id` no payload do hook, que só existe quando o evento nasce dentro de um subagente. O resultado é mais estrito que antes — cobre `Write`, que estava aberto — e devolve `Edit` a quem precisa dele.
 
 ## Economia de tokens
 
@@ -259,10 +267,39 @@ Nenhum agente altera o framework sozinho. Uma peculiaridade de um projeto nunca 
 
 ## Hooks
 
-O plugin instala dois hooks:
+O plugin instala quatro hooks. Todos falham abertos: se o script quebrar, a ação passa.
 
-- **Guarda de comandos destrutivos** — bloqueia `git push --force`, `git reset --hard`, `rm -rf`, `DROP TABLE` e afins, com a alternativa segura na mensagem. Falha aberta: se o hook quebrar, o comando passa
-- **Registro de execução** — grava cada agente encerrado em `.maestro/logs/agents.jsonl`, dando ao `improvement-agent` dado real em vez de memória de sessão
+- **`guard-bash.mjs`** (`PreToolUse` em `Bash`) — bloqueia `git push --force`, `git reset --hard`, `rm -rf`, `DROP TABLE` e afins, com a alternativa segura na mensagem
+- **`guard-write.mjs`** (`PreToolUse` em `Edit|Write|MultiEdit|NotebookEdit`) — bloqueia escrita em código de aplicação vinda da thread principal, liberando executores. Desligável por projeto em `guards.blockMainThreadAppWrites`
+- **`shape-agent-call.mjs`** (`PreToolUse` em `Agent`) — força `run_in_background: false` nos gates listados em `gates.foreground` e atribui um `name` determinístico `<agente>-<task-id>`, que é o endereço usado para retomar um agente parado via `SendMessage`
+- **`log-agent.mjs`** (`SubagentStart` e `SubagentStop`) — correlaciona início e fim por `agent_id` e grava `.maestro/logs/agents.jsonl` com turnos, contagem de ferramentas, tipo do último bloco e `stop_reason`
+
+O registro é o que torna as falhas mensuráveis em vez de anedóticas. `ultimo_bloco: "tool_use"` (campo `saida_perdida`) marca a saída descartada pelo CLI; `stop_reason: null` marca encerramento externo; turnos perto do `maxTurns` marcam estouro de teto. Os três produziam o mesmo sintoma e exigiam correções diferentes.
+
+A versão anterior lia `agent_type` no `SubagentStop` e o campo vinha sempre vazio, o que jogava todo evento num arquivo de descarte — `agent_type` é entregue no `SubagentStart`.
+
+## Migração para a 3.8
+
+Projeto novo não precisa de nada: `/maestro-init` já grava o `config.json` no `schemaVersion 4`.
+
+Projeto que já existe continua funcionando sem tocar em nada — os hooks caem nos padrões embutidos, que são iguais ao template. Rodar `/maestro-init` de novo é seguro (ele nunca sobrescreve arquivo existente) e passa a avisar quais chaves faltam. Para ajustar a política por projeto, acrescente ao `.maestro/config.json`:
+
+```json
+{
+  "schemaVersion": 4,
+  "gates": {
+    "foreground": ["code-auditor", "security-auditor", "qa-engineer", "spec-auditor", "memory-manager"]
+  },
+  "guards": {
+    "blockMainThreadAppWrites": true,
+    "appPaths": ["src", "lib", "app", "components", "pages", "hooks", "styles", "supabase"]
+  }
+}
+```
+
+Ajuste `appPaths` se o seu repositório guarda código fora dessas pastas, e ponha `blockMainThreadAppWrites: false` se a sessão principal daquele repositório **não** for o Maestro — senão a guarda vai bloquear suas próprias edições.
+
+`ux-auditor` fica de fora de `gates.foreground` de propósito: é o único gate longo, e nove minutos de sessão bloqueada custam mais que o risco, que já está coberto pelo stub de veredito e pela retomada.
 
 ## Limitação conhecida
 

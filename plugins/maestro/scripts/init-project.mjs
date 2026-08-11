@@ -62,6 +62,36 @@ if (preservados.length > 0) {
   for (const item of preservados) console.log(`  = ${item}`);
 }
 
+// ---------------------------------------------------------------------------
+// Migracao de config.json — nunca sobrescreve, so aponta o que falta.
+// A partir do schemaVersion 4 os hooks leem `gates.foreground` e `guards`.
+// Sem essas chaves eles caem no padrao embutido, que e o mesmo — entao a
+// migracao e opcional, e serve para o projeto conseguir ajustar a politica.
+// ---------------------------------------------------------------------------
+
+const SCHEMA_ESPERADO = 4;
+const caminhoConfig = path.join(raizDoProjeto, ".maestro", "config.json");
+
+if (preservados.includes(path.join(".maestro", "config.json")) || fs.existsSync(caminhoConfig)) {
+  try {
+    const atual = JSON.parse(fs.readFileSync(caminhoConfig, "utf8"));
+    const versao = Number(atual?.schemaVersion ?? 0);
+    const faltando = [];
+    if (!Array.isArray(atual?.gates?.foreground)) faltando.push("gates.foreground");
+    if (typeof atual?.guards !== "object" || atual.guards === null) faltando.push("guards");
+
+    if (versao < SCHEMA_ESPERADO || faltando.length > 0) {
+      console.log(`\nconfig.json esta no schemaVersion ${versao || "ausente"} (esperado ${SCHEMA_ESPERADO}).`);
+      console.log("Nada foi alterado. Os hooks funcionam com os padroes embutidos, mas");
+      console.log("para ajustar a politica por projeto acrescente ao .maestro/config.json:");
+      console.log(`  faltando: ${faltando.join(", ") || "nenhuma chave, so a versao"}`);
+      console.log(`\nModelo completo em: ${path.join(raizDosTemplates, ".maestro", "config.json")}`);
+    }
+  } catch (erro) {
+    console.log(`\n  ! Nao foi possivel checar .maestro/config.json: ${erro.message}`);
+  }
+}
+
 const claudeMd = path.join(raizDoProjeto, "CLAUDE.md");
 const claudeMdPreservado = preservados.includes("CLAUDE.md");
 

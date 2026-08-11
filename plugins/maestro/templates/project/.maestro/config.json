@@ -1,8 +1,8 @@
 {
-  "schemaVersion": 3,
+  "schemaVersion": 4,
   "framework": {
     "plugin": "maestro",
-    "version": "3.7.0"
+    "version": "3.8.0"
   },
   "conventions": {
     "platforms": {
@@ -31,7 +31,27 @@
   "gates": {
     "maxAttemptsPerGate": 2,
     "uxAuditRequiresScreenshots": true,
-    "qaGateEnabled": true
+    "qaGateEnabled": true,
+    "foreground": [
+      "code-auditor",
+      "security-auditor",
+      "qa-engineer",
+      "spec-auditor",
+      "memory-manager"
+    ]
+  },
+  "guards": {
+    "blockMainThreadAppWrites": true,
+    "appPaths": [
+      "src",
+      "lib",
+      "app",
+      "components",
+      "pages",
+      "hooks",
+      "styles",
+      "supabase"
+    ]
   },
   "graph": {
     "enabled": true,
