@@ -2,3 +2,9 @@
 # de quem clona o repositório. Sem isso, o Git no Windows pode converter
 # para CRLF automaticamente e quebrar a execução via bash/Git Bash/WSL.
 *.sh text eol=lf
+
+# Força CRLF em scripts PowerShell. O Windows PowerShell 5.1 já é sensível a
+# encoding (arquivo UTF-8 sem BOM é lido como Windows-1252), e fim de linha
+# inconsistente fazia o Git marcar o arquivo inteiro como alterado a cada
+# gravação — 244 linhas de diff fantasma sem uma única mudança real.
+*.ps1 text eol=crlf
