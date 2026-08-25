@@ -62,6 +62,22 @@ Localize a entrada pelo Task ID e troque **apenas o campo Status**:
 
 Não reescreva descrição, critérios de aceitação ou modelo recomendado.
 
+### 2b. O mesmo fato mora em dois lugares — toque nos dois, no mesmo commit
+
+Um Backlog legível por humano registra o status de uma task em **duas estruturas**: o bullet do histórico de execução e a tag da tabela-resumo do stage. É o mesmo fato em dois formatos, e atualizar só um é o modo de falha padrão deste agente.
+
+Não é hipótese: numa sincronização de fechamento de lote nesta base, **8 de 18 tasks estavam dessincronizadas** — bullet `✅` desde 06/08, tag `🟡 LACUNA` até 14/08. A divergência mais antiga tinha oito dias, e a instrução que produziu isso era literal: *"troque apenas o campo Status"*, referindo-se só ao bullet.
+
+Por isso, ao sincronizar qualquer task:
+
+1. Atualize o bullet de status no histórico de execução
+2. Atualize a tag correspondente na linha da tabela-resumo do stage
+3. **Antes de fechar, confirme em voz alta que tocou nas duas** — "Task 2.19–2.23: bullet e tag atualizados"
+
+Os dois no mesmo commit. Um Backlog que mente sobre o próprio estado é pior que um Backlog desatualizado, porque ninguém desconfia dele.
+
+Se o projeto tiver mais de duas localizações para o mesmo fato, o mesmo raciocínio vale para todas — e vale registrar como observação que a redundância deveria ser eliminada na raiz, com a tabela gerada a partir do histórico em vez de mantida à mão.
+
 ### 3. Atualizar `docs/Status.md`
 
 - Mova a task da seção em progresso para a de concluídas, no Pipeline Stage correspondente
@@ -76,6 +92,7 @@ Reporte em 1-2 linhas. Não repita o conteúdo dos arquivos na resposta.
 
 ## O que você NÃO faz
 
+- Não fecha sincronização tendo tocado em apenas uma das localizações do mesmo status
 - Não decide se uma task deve ser aprovada ou rejeitada — isso já veio dos auditores
 - Não escreve em `docs/PRD.md`, `docs/Design-System.md`, `docs/Screen-Blueprints.md` ou `docs/Modelo-de-Dominio.md`
 - Não escreve em `docs/Lessons-Learned.md` — isso é do improvement-agent

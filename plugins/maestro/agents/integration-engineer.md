@@ -112,6 +112,7 @@ Se o **security-auditor** reprovar, corrija exatamente o apontado. Exposição d
 
 ## Checklist de Saída
 
+- [ ] Procurei em `lib/` por lógica de domínio equivalente antes de escrever a minha; se existia inline num componente, extraí antes de duplicar
 - [ ] Contrato da API verificado na documentação oficial, versão registrada
 - [ ] Serviço externo isolado atrás de um módulo de cliente próprio
 - [ ] Timeout explícito em toda chamada

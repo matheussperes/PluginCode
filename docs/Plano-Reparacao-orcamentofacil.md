@@ -23,6 +23,7 @@
 | Regra do Raio da Tela | `frontend-engineer` | O domínio da task passa a ser a tela, não o arquivo |
 | Task terminal de tela | `backlog-planner` | Toda tela ganha um dono do conjunto |
 | Teto de arquivo | `code-auditor` | 400 linhas em arquivo de UI reprova |
+| **3.9.1** — nove propostas | vários agentes | Investigação prévia antes do contrato, commits próprios antes de deletar branch, executor morto por limite de gasto, credencial nunca caçada, `GRANT` por coluna, parser do sink, duas localizações de status, reaproveitamento de `lib/`, posse de ID |
 
 ---
 
@@ -277,6 +278,40 @@ A proposta impressa é a mais importante das três, e provavelmente a mais negli
 
 ---
 
+## R.6b — Arquivar as propostas resolvidas (você, 5 minutos)
+
+Das 14 propostas em `.maestro/proposals/`, **13 estão resolvidas**: quatro já tinham sido promovidas ao plugin em versões anteriores e ninguém arquivou o arquivo; nove entraram na 3.9.1; e a de teste de interação (`2026-07-31-cobertura-teste-interacao-ui.md`) foi resolvida por decisão registrada — não investir na camada de teste, e nomear a lacuna no `qa-engineer` e no `art-director`.
+
+```powershell
+cd D:\Github\orcamentofacil\.maestro\proposals
+mkdir aplicadas
+move 2026-07-31-*.md aplicadas\
+move 2026-08-04-*.md aplicadas\
+move 2026-08-06-*.md aplicadas\
+move 2026-08-08-*.md aplicadas\
+move 2026-08-12-*.md aplicadas\
+move 2026-08-13-*.md aplicadas\
+move 2026-08-14-*.md aplicadas\
+move 2026-08-17-*.md aplicadas\
+```
+
+Fica em aberto **apenas** `2026-08-05-executor-nao-deve-cacar-credencial-supabase.md` — não pela regra do agente, que entrou na 3.9.1, mas pelos dois itens operacionais que ela levanta e que continuam de pé (abaixo).
+
+## R.6c — As duas pendências operacionais do Supabase (você)
+
+A proposta de 05/08 registra dois problemas que nunca foram resolvidos e que **não são do framework, são do seu ambiente**:
+
+**1. Chaves potencialmente comprometidas, rotação adiada.** O `backend-engineer` imprimiu chaves reais do Supabase no transcript em 05/08. Sua decisão na época foi tratar como comprometidas e adiar a rotação "para o lançamento". Você decidiu agora adiar de novo — o que é legítimo, mas desta vez com data. Registre no Backlog, com a data preenchida:
+
+```
+aceito adiar a rotação das chaves do Supabase — <motivo> — decidido em 2026-08-25
+— autorizado por Matheus — reavaliar em: <DATA>
+```
+
+Sugestão de gatilho, se preferir data condicional a data fixa: **antes do primeiro usuário real fora da sua conta**. É o momento em que "projeto em desenvolvimento" deixa de ser verdade, e é o argumento que sustentou os dois adiamentos anteriores.
+
+**2. Ninguém consegue aplicar migration no projeto real.** A CLI não tem privilégio na conta (`LegacyLinkProjectStatusError` — o projeto `ioakptuwhfvlirvrciwg` nem aparece em `supabase projects list`) e o sandbox bloqueia `db push`. Nem executor, nem Maestro. **Isso não trava a reparação** — R.1 a R.8 são só interface — mas trava a primeira task de backend depois dela. Duas saídas: relinkar a conta da CLI com a organização certa, ou assumir que migration real é sempre passo manual seu, pelo SQL Editor do dashboard, e registrar isso no `Status.md` para nenhum contrato voltar a pedir o impossível ao executor.
+
 ## R.7 — Fechar o cemitério (você + Maestro, 1 sessão)
 
 `docs/Backlog.md` tem três seções de "Gaps … sem task própria ainda", com cerca de 15 itens. Nenhum tem data, dono ou gate.
@@ -330,11 +365,13 @@ R.3  Decompor 3 monólitos                 frontend-engineer   (3 rodadas)
 R.4  Erradicar CSS legado                 frontend-engineer   (2 rodadas)
 R.5  Composição e acabamento — 5 telas    frontend-engineer   (5 rodadas)
 R.6  Vitrine — login, signup, proposta    frontend-engineer   (3 rodadas)
+R.6b Arquivar as 13 propostas resolvidas   você, 5 min
+R.6c Pendências do Supabase (chaves+CLI)   você
 R.7  Fechar o cemitério                   você + Maestro
 R.8  /maestro-stage-close                 os seis critérios
 ```
 
-**Regra de Lote**: são ~15 rodadas. Não tente numa sessão só — o Maestro reenvia a conversa inteira a cada turno, e uma instância que atravessa o dia começa custando ~120k tokens por chamada e termina em ~300k. Feche Lote a cada 3 ou 4 tasks, deixe o handoff em `.maestro/state/handoff.md` e abra sessão nova. Isso não perde memória: a memória está em arquivo.
+**Regra de Lote**: são ~15 rodadas de agente, mais três etapas suas. Não tente numa sessão só — o Maestro reenvia a conversa inteira a cada turno, e uma instância que atravessa o dia começa custando ~120k tokens por chamada e termina em ~300k. Feche Lote a cada 3 ou 4 tasks, deixe o handoff em `.maestro/state/handoff.md` e abra sessão nova. Isso não perde memória: a memória está em arquivo.
 
 ---
 

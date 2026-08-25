@@ -43,6 +43,12 @@ Regras de preenchimento (nao copiar para a copia preenchida):
 ## 3. Contexto Mínimo — Ponteiros
 
 <!-- Intervalo de linhas sempre que possivel: o executor abre com Read offset/limit. -->
+<!-- Nunca peca ao executor uma confirmacao que a ferramenta dele nao consegue produzir
+     (ex.: "migration aplicada no projeto real, confirmada sem erro" para um agente
+     Bash-only num sandbox que bloqueia escrita em banco). Ou o Maestro confirma antes
+     que o caminho existe, ou a aplicacao real vira passo do Maestro/operador apos os
+     gates. Contrato impossivel empurra o executor a contornar — foi assim que chaves
+     do Supabase acabaram impressas num transcript. -->
 
 - **Design System**: `docs/Design-System.md` (linhas <a>–<b> | seção `<nome>`) + Seção 0 (Direção de Arte)
 - **Composição de Tela**: `docs/Screen-Composition.md` (seção `<tela>` — lida INTEIRA, é a régua do art-director)
@@ -76,6 +82,8 @@ Nenhum   = texto ou token existente, sem mudanca estrutural
 - [ ] `scan-legacy` retorna 0 nos caminhos da tela (Regra do Raio da Tela)
 - [ ] Nenhum arquivo de UI tocado acima de `conventions.maxUiFileLines`
 - [ ] Os quatro estados no mesmo nível de acabamento, quando aplicável
+- [ ] **Reaproveitamento antes de escrever lógica de domínio nova**: procurei em `lib/` por função equivalente já existente para outra tela do mesmo domínio. Se existia inline num componente, extraí para módulo compartilhado ANTES de duplicar
+- [ ] **Posse de ID**: toda escrita que referencia um ID de entidade recebido do cliente é precedida de confirmação explícita de que o ID pertence ao tenant do usuário autenticado, replicando o padrão de qualquer função irmã do mesmo módulo
 - [ ] Lint e checagem de tipos sem erros
 - [ ] Testes existentes sem regressão
 - [ ] Sem segredo versionado, sem `console.log`, sem código de depuração

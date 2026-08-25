@@ -292,6 +292,24 @@ O registro é o que torna as falhas mensuráveis em vez de anedóticas. `ultimo_
 
 A versão anterior lia `agent_type` no `SubagentStop` e o campo vinha sempre vazio, o que jogava todo evento num arquivo de descarte — `agent_type` é entregue no `SubagentStart`.
 
+## 3.9.1 — nove propostas promovidas
+
+Nove propostas que aguardavam decisão em `.maestro/proposals/` de um projeto real viraram regra do framework. Todas são checklist ou protocolo; nenhuma muda a mecânica da esteira:
+
+| Onde | O que passou a valer |
+|---|---|
+| `maestro` | Investiga o estado real do código antes de escrever contrato de escopo múltiplo |
+| `maestro` | Confirma commits próprios na branch antes de merge e delete |
+| `maestro` | Executor morto por limite de gasto é substituído por outro executor — o Maestro nunca termina o código |
+| `backend-engineer` | Falha ao aplicar migration é bloqueio a reportar; nunca rodar comando que imprime segredo |
+| `security-auditor` | RLS de linha não protege coluna: coluna de autorização exige `GRANT` por coluna, achado bloqueante |
+| `security-auditor` | Normalização de string desalinhada do parser do sink real (`trim` vs WHATWG) é bypass |
+| `memory-manager` | Status mora em duas localizações; as duas são tocadas no mesmo commit |
+| Contrato | Procurar lógica de domínio equivalente em `lib/` antes de escrever a sua |
+| Contrato | Posse de ID recebido do cliente confirmada antes de qualquer escrita |
+
+Junto veio uma **decisão registrada, não uma lacuna**: este framework não mantém camada de teste automatizado de interação de componente. Bug de interação — diálogo com seletor, corrida de efeitos, transbordo de layout — é responsabilidade exclusiva da auditoria ao vivo. O `qa-engineer` passa a nomear a lacuna no veredito quando a task tem essa superfície, e o `art-director` passa a **interagir de verdade** com a tela, não só capturá-la parada.
+
 ## Migração para a 3.9
 
 A 3.9 acrescenta a doutrina de padrão de entrega e o gate de composição. O que muda em um projeto existente:

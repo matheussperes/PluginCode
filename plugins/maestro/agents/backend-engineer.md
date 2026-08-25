@@ -125,6 +125,7 @@ A lição é dupla, e a metade que é sua é esta: **um item de contrato que a s
 
 ## Checklist de Saída
 
+- [ ] Procurei em `lib/` por lógica de domínio equivalente antes de escrever a minha; se existia inline num componente, extraí antes de duplicar
 - [ ] Toda tabela nova ou alterada com `ENABLE ROW LEVEL SECURITY`
 - [ ] Toda tabela com políticas explícitas para as operações relevantes
 - [ ] Migration retrocompatível, sem quebra de dados ou queries

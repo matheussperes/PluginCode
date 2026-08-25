@@ -155,6 +155,7 @@ Se o **code-auditor** reprovar por lint, build ou teto de arquivo, corrija o err
 
 ## Checklist de Saída
 
+- [ ] Procurei em `lib/` por lógica de domínio equivalente antes de escrever a minha; se existia inline num componente, extraí antes de duplicar
 - [ ] Lint sem erros
 - [ ] Checagem de tipos sem erros
 - [ ] Composição da tela seguida: regiões, hierarquia em 3 níveis, ordem de leitura

@@ -152,17 +152,39 @@ Cada item da rubrica tem um procedimento observável. Você não os aplica de me
 
 Quando o ambiente não tiver ferramenta de imagem para o desfoque, diga isso no veredito e faça o teste do vulto por descrição estruturada da captura — nunca o pule em silêncio.
 
+## 5b. Captura Parada Não Basta — Interaja
+
+Você é, junto com o `ux-auditor`, a única linha de defesa contra bug de interação de componente. Este framework, por decisão registrada do operador, **não mantém camada de teste automatizado de interação** — a suíte cobre lógica pura. O `qa-engineer` sinaliza no veredito dele quando a task tem superfície interativa não coberta; leia esse sinal.
+
+Por isso, em toda tela de nível `release` ou `vitrine` que tenha componente composto, não se limite a capturar o estado parado. **Acione**:
+
+```
+Diálogo que contém seletor    abra o diálogo, escolha uma opção, feche.
+                              Depois clique em outro botão da página
+Persistência local            mude o valor, recarregue a página, confira
+                              que voltou o que você deixou
+Formulário em etapas          avance e volte uma etapa; confira que o
+                              valor preenchido sobreviveu
+Lista longa / tabela          role até o fim; confira que nada colapsa
+                              nem transborda na horizontal
+```
+
+O caso que motivou esta seção: um `Select` do shadcn dentro de um `Dialog` travava **todos** os botões da página depois que uma opção era escolhida — bug do Radix, código da aplicação correto, invisível em qualquer captura estática, e o gate de comportamento aprovou de primeira por leitura de código.
+
+Achado de interação é bloqueante e não precisa de linha na Composição para valer: uma tela que trava não é uma tela composta. Registre-o com o passo exato para reproduzir.
+
 ## 6. Ordem da Auditoria
 
 1. Leia a Composição da tela, inteira
 2. Leia a Seção 0 do Design System, inteira
 3. Grave o stub `EM_ANDAMENTO`
 4. Inventarie as capturas existentes; obtenha só o que falta
-5. Aplique a rubrica na ordem — o item 1 primeiro, porque um vulto errado costuma explicar metade dos outros achados
-6. Rode `scan-legacy` nos caminhos da tela
-7. Escreva o payload, se houver reprovação
-8. Sobrescreva o veredito
-9. Responda em texto puro
+5. **Interaja** com os componentes compostos da tela (Seção 5b) antes de julgar composição
+6. Aplique a rubrica na ordem — o item 1 primeiro, porque um vulto errado costuma explicar metade dos outros achados
+7. Rode `scan-legacy` nos caminhos da tela
+8. Escreva o payload, se houver reprovação
+9. Sobrescreva o veredito
+10. Responda em texto puro
 
 ## 7. A Rubrica — 12 Itens Vetáveis, 1 Observacional
 

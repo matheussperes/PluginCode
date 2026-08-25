@@ -12,7 +12,7 @@
       "name": "maestro",
       "source": "./plugins/maestro",
       "description": "Esteira de 18 agentes especialistas organizados em quatro squads: governanca, descoberta, execucao e auditoria — com gate de composicao visual por tela.",
-      "version": "3.9.0",
+      "version": "3.9.1",
       "category": "development",
       "tags": [
         "orchestration",

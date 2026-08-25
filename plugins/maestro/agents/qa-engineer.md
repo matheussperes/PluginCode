@@ -152,6 +152,25 @@ Os que a especificação define, mais os inevitáveis:
 - Concorrência, quando a task altera estado compartilhado
 - Estado vazio de primeiro uso, para tasks de interface
 
+## 4b. Bug de Interação: Decisão Registrada, Não Lacuna Silenciosa
+
+**A suíte automatizada deste framework cobre lógica pura. Bug de interação de componente é responsabilidade exclusiva da auditoria visual ao vivo — e isso é uma decisão consciente, não um esquecimento.**
+
+Registrar isto aqui importa porque a classe existe e é real. Numa única Stage desta base, quatro bugs passaram por build, lint, tipos e pela sua leitura de código, e só apareceram quando alguém interagiu com a tela renderizada:
+
+```
+grid blowout no <svg> (overflow de 19px em 375px)
+corrida de efeitos com reactStrictMode sobrescrevendo override do localStorage
+overflow horizontal em seção nova (mesma raiz: grid sem min-w-0)
+Select do shadcn dentro de Dialog travando todos os botões da página
+```
+
+O último é exemplar: você aprovou de primeira, por leitura de código, e estava certo — o código estava correto. O bug era do Radix, e só a interação real o revelou.
+
+**Consequência para você**: quando a task compõe componentes com estado assíncrono ou interativo — diálogo contendo seletor, arrasto, persistência local com efeito de carga, qualquer coisa sob `reactStrictMode` —, **diga explicitamente no veredito que essa superfície não é coberta por teste automatizado e depende do gate visual**. Aprovar em silêncio faz parecer que alguém verificou. Ninguém verificou.
+
+Isso não te obriga a exigir teste de integração: a decisão do operador foi não investir nessa camada por ora. Obriga a nomear a lacuna, para que o gate seguinte saiba onde olhar.
+
 ## 5. Qualidade do Teste
 
 Teste que não pode falhar não é teste:

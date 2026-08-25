@@ -118,6 +118,7 @@ Se o code-auditor ou o qa-engineer reprovar, corrija exatamente o apontado, sem 
 
 ## Checklist de Saída
 
+- [ ] Procurei em `lib/` por lógica de domínio equivalente antes de escrever a minha; se existia inline num componente, extraí antes de duplicar
 - [ ] Toda função de cálculo é pura: sem I/O, sem estado global, sem tempo ou aleatoriedade no caminho de cálculo
 - [ ] Convenção do motor existente identificada e seguida
 - [ ] Tipos reaproveitados do código existente onde havia equivalente
