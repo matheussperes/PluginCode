@@ -15,6 +15,7 @@ Delegue em ordem, parando no primeiro que reprovar:
 2. **security-auditor** — segredos, RLS, OWASP na diferença da branch
 3. **qa-engineer** — comportamento, regressão, casos de borda
 4. **ux-auditor** — apenas se houver mudança visual na diferença
+5. **art-director** — apenas se a diferença tocar uma tela inteira e existir seção dela em `docs/Screen-Composition.md`. Sem Composição escrita, não convoque: registre no relatório que a tela foi auditada só em conformidade, não em composição
 
 Antes de convocar o primeiro gate, prepare o ambiente: `mkdir -p .maestro/tmp/verdicts` e garanta que as dependências estão instaladas (`[ -d node_modules ] || npm ci || npm install`). Gate não é o lugar de descobrir que falta `npm install`.
 
@@ -29,6 +30,8 @@ Se não existir contrato em `.maestro/state/contracts/<task-id>.md`, avise os au
 ## Escopo
 
 Os auditores avaliam **a diferença contra a branch principal**, não o repositório inteiro. Problema grave preexistente entra como observação separada, para o operador decidir se abre uma task — não reprova o trabalho atual.
+
+Uma exceção deliberada: **coexistência de padrão legado dentro da tela auditada não é "preexistente inocente"**. Rode `node "${CLAUDE_PLUGIN_ROOT}/scripts/scan-legacy.mjs" <caminhos da tela>` e registre o número no relatório. Código que a esteira nunca tocou pode conviver com padrão antigo em paz; a tela que está sendo auditada agora, não — é ali que duas gerações de design viram interface poluída.
 
 ## Fechamento
 

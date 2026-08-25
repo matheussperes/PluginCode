@@ -29,6 +29,8 @@ mkdir -p .maestro/tmp/verdicts
 
 Copie `.maestro/contracts/Task-Execution-Contract.md` para `.maestro/state/contracts/<task-id>.md` e preencha a cópia com os dados da task: metadados, descrição, critérios de aceitação, arquivos impactados e as **referências de seção específicas** dos documentos de descoberta.
 
+Em task de UI, três campos não são opcionais: **Tela-alvo**, **Nível de Acabamento** e o ponteiro para a seção da tela em `docs/Screen-Composition.md`. Se a tela não tiver seção na Composição, **pare**: delegue antes ao `product-designer` em Modo Composição de Tela. Deixar o executor improvisar a composição é como uma tela vira colagem, uma task de cada vez.
+
 Este contrato preenchido é o único contexto que o executor recebe. Não passe o PRD completo nem o histórico da sessão.
 
 ## 3. Execução
@@ -62,6 +64,8 @@ Em ordem, parando no primeiro que reprovar:
 3. **qa-engineer** — comportamento, regressão, casos de borda. Rode só os testes afetados pela task; a suíte completa entra apenas no gate de fim de stage. Reprovação gera payload
 4. **ux-auditor** — pelo nível de Impacto Visual do contrato (Completo, Leve ou Nenhum). Reprovação gera payload
 
+O `art-director` **não entra aqui**: ele é gate de tela, não de task. Depois que esta task fechar, verifique no Backlog se ela era a última pendente do mesmo **Tela-alvo**. Se era, a tela está pronta para o gate de composição — convoque o `art-director` para ela (leva de no máximo duas telas). Se não era, siga; a tela espera as irmãs.
+
 ### O veredito está no arquivo, não na mensagem
 
 Depois de cada gate, leia `.maestro/tmp/verdicts/<task-id>-<gate>.md`. **Não decida pelo texto que o agente devolveu.** Por um bug conhecido do CLI, um subagente cuja última mensagem termina em chamada de ferramenta tem o texto final descartado, e o que chega até você é a narração anterior — algo como *"Script ran without error. Let's check outputs."*, que parece um agente travado quando na verdade a auditoria terminou.
@@ -89,3 +93,5 @@ Com todos os gates aplicáveis aprovados por arquivo de veredito, execute o **Pr
 O protocolo mora no agente, não aqui, justamente para valer também quando o operador conduz pela conversa em vez de por este comando. Não reimplemente os passos: execute-os de lá.
 
 Feche reportando ao operador o resultado da task, quantas rodadas de correção cada gate exigiu, e qual é a próxima task disponível.
+
+Se esta era a última task do Pipeline Stage, **não declare o stage encerrado aqui**: rode `/maestro-stage-close`. Stage fechado com task mesclada e teste verde, mas com a tela ainda amadora e a dívida arquivada em silêncio, é a forma mais cara de dar o trabalho por pronto.

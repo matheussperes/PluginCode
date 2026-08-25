@@ -30,10 +30,17 @@ Delegue a cada especialista **em ordem**, um de cada vez, usando a ferramenta Ag
    Este agente faz perguntas ao operador. **Pare e traga as perguntas para o operador responder.** Não responda por ele e não deduza. Só siga adiante quando as respostas estiverem dadas.
 
 2. **interaction-architect** — produz `docs/Screen-Blueprints.md`
-3. **product-designer** — produz `docs/Design-System.md`
-4. **data-architect** — produz `.maestro/tmp/schema.sql` e, quando o projeto tiver cálculo real, `docs/Modelo-de-Dominio.md`
-5. **backlog-planner** — produz `docs/Backlog.md`
-6. **spec-auditor** — valida a coerência cruzada de tudo e tem poder de veto
+3. **product-designer** — produz `docs/Design-System.md`, começando pela **Seção 0 — Direção de Arte**
+
+   A Seção 0 é escrita antes de qualquer token e traz tese visual, decisão assinatura, referências nomeadas, par tipográfico justificado, viés do neutro, easing assinatura e antipadrões proibidos. Ela fecha com o teste de identidade: *cubra a logo — alguém do setor reconhece que é este produto?* Se o próprio agente reportar que reescreveu a seção para passar no teste, isso é o processo funcionando, não retrabalho.
+
+4. **product-designer**, em **Modo Composição de Tela** — produz `docs/Screen-Composition.md`
+
+   Segunda convocação do mesmo agente, com escopo diferente: uma entrada por tela com grade, regiões, hierarquia em três níveis, ordem de leitura, poda e assinatura. É o documento que o `frontend-engineer` constrói contra e o `art-director` julga contra. **Sem ele, a esteira entrega peças conformes e telas amadoras** — pular esta etapa é a economia mais cara disponível.
+
+5. **data-architect** — produz `.maestro/tmp/schema.sql` e, quando o projeto tiver cálculo real, `docs/Modelo-de-Dominio.md`
+6. **backlog-planner** — produz `docs/Backlog.md`, com uma task terminal de composição por tela
+7. **spec-auditor** — valida a coerência cruzada de tudo e tem poder de veto
 
 ## Se o spec-auditor reprovar
 
@@ -73,10 +80,13 @@ Com a aprovação do spec-auditor, apresente ao operador o resumo dos artefatos 
 ```
 Descoberta concluída e auditada.
 
-- PRD: <escopo do MVP em uma linha>
+- PRD: <escopo do Release 1 em uma linha>
 - Estratégia: <modelo de monetização em uma linha>
 - Blueprints: <n> telas, <n> fluxos críticos
+- Direção de Arte: <tese visual em uma linha> | assinatura: <decisão assinatura>
 - Design System: paleta, tipografia, <n> componentes, UX Writing
+- Composição: <n> telas especificadas, <n> em nível vitrine
+- Padrão de entrega: <release | vitrine> — telas elevadas: <lista ou nenhuma>
 - Dados: <n> tabelas, <n> políticas de RLS
 - Domínio: <n> regras com exemplos trabalhados (ou: não se aplica)
 - Backlog: <n> tasks em <n> stages

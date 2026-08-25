@@ -1,8 +1,21 @@
 {
-  "schemaVersion": 4,
+  "schemaVersion": 5,
   "framework": {
     "plugin": "maestro",
-    "version": "3.8.0"
+    "version": "3.9.0"
+  },
+  "deliveryStandard": "release",
+  "screenLevels": {},
+  "docs": {
+    "prd": "docs/PRD.md",
+    "blueprints": "docs/Screen-Blueprints.md",
+    "composition": "docs/Screen-Composition.md",
+    "designSystem": "docs/Design-System.md",
+    "domain": "docs/Modelo-de-Dominio.md",
+    "businessStrategy": "docs/Business-Strategy.md",
+    "backlog": "docs/Backlog.md",
+    "status": "docs/Status.md",
+    "lessons": "docs/Lessons-Learned.md"
   },
   "conventions": {
     "platforms": {
@@ -10,6 +23,8 @@
       "mobile": "nao_iniciado"
     },
     "mobileComponentLibrary": null,
+    "legacyPatterns": [],
+    "maxUiFileLines": 400,
     "enginePath": null,
     "sourcePath": null,
     "migrationsPath": null,
@@ -31,6 +46,9 @@
   "gates": {
     "maxAttemptsPerGate": 2,
     "uxAuditRequiresScreenshots": true,
+    "artDirectorEnabled": true,
+    "artAuditRequiresComposition": true,
+    "maxScreensPerArtAudit": 2,
     "qaGateEnabled": true,
     "foreground": [
       "code-auditor",

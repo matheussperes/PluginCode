@@ -100,9 +100,14 @@ function tipoCurto(subagentType) {
 /**
  * Extrai o task-id do texto da delegacao. Cobre os formatos que o Backlog usa:
  * 2.1, 2.1-dedup, 2.8-2.11-back, 2.7-2.11-front, 5.10b.
+ *
+ * Cobre tambem os alvos que nao sao task: o `art-director` audita tela e stage
+ * (`tela-orcamento`, `stage-4`), e sem isso o nome dele cairia no slug da
+ * descricao — o que quebra a retomada por SendMessage justamente no gate mais
+ * caro de refazer do zero.
  */
 function taskId(...textos) {
-  const padrao = /\b(\d+\.\d+[a-z]?(?:\s*[-–]\s*\d+\.\d+[a-z]?)?(?:-(?:back|front|dedup|motor|web|mobile))?)\b/i;
+  const padrao = /\b((?:tela|stage)-[a-z0-9][a-z0-9-]{0,40}|\d+\.\d+[a-z]?(?:\s*[-–]\s*\d+\.\d+[a-z]?)?(?:-(?:back|front|dedup|motor|web|mobile))?)\b/i;
   for (const texto of textos) {
     if (typeof texto !== "string") continue;
     const achado = texto.match(padrao);

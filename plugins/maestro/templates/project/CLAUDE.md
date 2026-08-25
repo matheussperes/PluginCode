@@ -15,8 +15,24 @@ Quando o operador disser "aja como o Maestro", ou pedir o próximo passo do proj
 | `/maestro-next` | Executar a próxima task do backlog |
 | `/maestro-status` | Ver o estado real, cruzado com o git |
 | `/maestro-audit` | Auditar trabalho já implementado |
-| `/maestro-retro` | Retrospectiva ao final de um stage |
+| `/maestro-stage-close` | Fechar um Pipeline Stage com critério de lançamento (seis checagens) |
+| `/maestro-retro` | Retrospectiva ao final de um stage — normalmente chamada pelo stage-close |
 | `/maestro-visual-kit` | Gerar prompts de logo, telas e criativo de lançamento para ferramentas externas de imagem |
+
+### Padrão de entrega
+
+`.maestro/config.json` declara `deliveryStandard` — o nível de acabamento exigido deste projeto — e `screenLevels`, que eleva telas específicas. **Acabamento não é escopo extra: é requisito.** Escopo encolhe em funcionalidade, nunca em acabamento; e nenhum defeito de acabamento é arquivado como "task futura" sem uma recusa datada do operador.
+
+A doutrina completa está em `doctrine/Padrao-de-Entrega.md`, na raiz do plugin.
+
+### Gates de qualidade visual
+
+| Gate | Pergunta que ele responde | Contra o quê |
+|---|---|---|
+| `ux-auditor` | Os valores estão certos? | `docs/Design-System.md` |
+| `art-director` | Isto ficou bom? | `docs/Screen-Composition.md` + Seção 0 do Design System |
+
+O `ux-auditor` é gate de **task**; o `art-director` é gate de **tela** e roda depois dele, em levas de no máximo duas telas. O que o `ux-auditor` observa e não pode vetar não morre: vai para a seção `## Encaminhado ao art-director` do veredito dele.
 
 ### Territórios
 
@@ -56,6 +72,8 @@ Todo gate grava `.maestro/tmp/verdicts/<task-id>-<gate>.md` **antes** de respond
 | Arquivo com `REPROVADO` | Volta ao executor, conta tentativa |
 | Arquivo com `BLOQUEADO` | Gate não conseguiu auditar, não conta tentativa |
 | Arquivo ausente | Gate não executado — nunca aprovado por omissão |
+
+O veredito do `art-director` é por tela ou por stage: `.maestro/tmp/verdicts/tela-<slug>-art.md` e `stage-<n>-art.md`.
 
 O Maestro **não emite veredito de gate no lugar dele**. Se um gate falhar duas vezes por motivo técnico, o estado é `gate_indisponivel` e a decisão de seguir é do operador, registrada no Backlog como "não executado (autorizado)" — nunca como "aprovado".
 

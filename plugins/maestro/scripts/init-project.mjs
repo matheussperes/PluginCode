@@ -65,11 +65,15 @@ if (preservados.length > 0) {
 // ---------------------------------------------------------------------------
 // Migracao de config.json — nunca sobrescreve, so aponta o que falta.
 // A partir do schemaVersion 4 os hooks leem `gates.foreground` e `guards`.
+// A partir do 5 a esteira le `deliveryStandard`, `docs` e `conventions.legacyPatterns`:
+// sem `deliveryStandard` os agentes assumem `release`; sem `docs` eles caem nos
+// nomes padrao de arquivo, que e exatamente como um projeto passa a auditar o
+// vazio quando renomeia um documento de descoberta.
 // Sem essas chaves eles caem no padrao embutido, que e o mesmo — entao a
 // migracao e opcional, e serve para o projeto conseguir ajustar a politica.
 // ---------------------------------------------------------------------------
 
-const SCHEMA_ESPERADO = 4;
+const SCHEMA_ESPERADO = 5;
 const caminhoConfig = path.join(raizDoProjeto, ".maestro", "config.json");
 
 if (preservados.includes(path.join(".maestro", "config.json")) || fs.existsSync(caminhoConfig)) {
@@ -79,6 +83,10 @@ if (preservados.includes(path.join(".maestro", "config.json")) || fs.existsSync(
     const faltando = [];
     if (!Array.isArray(atual?.gates?.foreground)) faltando.push("gates.foreground");
     if (typeof atual?.guards !== "object" || atual.guards === null) faltando.push("guards");
+    if (typeof atual?.deliveryStandard !== "string") faltando.push("deliveryStandard");
+    if (typeof atual?.docs !== "object" || atual.docs === null) faltando.push("docs");
+    if (!Array.isArray(atual?.conventions?.legacyPatterns)) faltando.push("conventions.legacyPatterns");
+    if (!Number.isFinite(atual?.conventions?.maxUiFileLines)) faltando.push("conventions.maxUiFileLines");
 
     if (versao < SCHEMA_ESPERADO || faltando.length > 0) {
       console.log(`\nconfig.json esta no schemaVersion ${versao || "ausente"} (esperado ${SCHEMA_ESPERADO}).`);

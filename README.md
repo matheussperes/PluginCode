@@ -1,8 +1,8 @@
 # PluginCode — Maestro
 
-O **Maestro** é um plugin do Claude Code que transforma uma ideia bruta em software entregue, passando por uma esteira de 17 agentes especialistas organizados em quatro squads.
+O **Maestro** é um plugin do Claude Code que transforma uma ideia bruta em software entregue, passando por uma esteira de 18 agentes especialistas organizados em quatro squads.
 
-Cada agente roda em janela de contexto própria, com modelo e ferramentas próprios. É isso que permite ter dezessete especialistas sem que nenhum deles fique sobrecarregado de contexto alheio.
+Cada agente roda em janela de contexto própria, com modelo e ferramentas próprios. É isso que permite ter dezoito especialistas sem que nenhum deles fique sobrecarregado de contexto alheio.
 
 ## Instalação
 
@@ -60,6 +60,7 @@ No dia a dia:
 | `/maestro-next` | Executa a próxima task, do contrato aos gates |
 | `/maestro-status` | Estado real do projeto, cruzado com o git |
 | `/maestro-audit` | Audita trabalho já implementado |
+| `/maestro-stage-close` | Fecha um Pipeline Stage com critério de lançamento — seis checagens, não só tasks mescladas |
 | `/maestro-retro` | Retrospectiva com evidência ao final de um stage |
 | `/maestro-visual-kit` | Gera prompts de logo, telas e criativo de lançamento para ferramentas externas de imagem. Sempre confirma antes de gerar |
 | `/maestro-eject` | Copia um agente para escopo editável |
@@ -91,7 +92,7 @@ Quando a leitura de estado for ambígua e a rotina for cara — descoberta, visu
 |---|---|---|
 | `product-strategist` | sonnet + effort high | `PRD.md` e `Business-Strategy.md` (monetização, fases de crescimento, expansão, roadmap pós-MVP) |
 | `interaction-architect` | sonnet | `Screen-Blueprints.md` — o mapa de telas, com descrição de layout e funcional por tela |
-| `product-designer` | sonnet + effort high | `Design-System.md` (tokens, elevação, motion premium) e, sob demanda, `Image-Prompts.md` |
+| `product-designer` | sonnet + effort high | `Design-System.md` — abrindo pela **Seção 0, Direção de Arte** — mais `Screen-Composition.md` em modo próprio e, sob demanda, `Image-Prompts.md` |
 | `data-architect` | sonnet + effort high | `schema.sql` e `Modelo-de-Dominio.md` |
 | `backlog-planner` | sonnet | `Backlog.md` |
 | `spec-auditor` | sonnet + effort high | Gate de coerência cruzada, com reauditoria incremental. Poder de veto |
@@ -116,11 +117,16 @@ O `spec-auditor` é o único gate entre a descoberta e a primeira linha de códi
 | `code-auditor` | haiku | Build, lint, tipos | não |
 | `security-auditor` | sonnet + effort high | Segredos, RLS, OWASP | sim |
 | `qa-engineer` | sonnet | Comportamento, regressão, bordas — testes afetados por task, suíte completa no fim do stage | sim |
-| `ux-auditor` | sonnet | Validação visual com evidência, por raio de alcance | sim |
+| `ux-auditor` | sonnet | Conformidade visual com evidência, por raio de alcance | sim |
+| `art-director` | opus + effort high | Composição e identidade, por **tela** — hierarquia, ritmo, densidade, coexistência de sistemas | sim |
 
 Os gates rodam do mais barato ao mais caro. Não faz sentido gastar auditoria visual em código que não compila.
 
 O `ux-auditor` roda em três níveis, não binário: **completo** para tela nova ou componente compartilhado entre telas, **leve** (um breakpoint, sem os 4 estados) para ajuste isolado sem reuso, e **nenhum** para texto ou token já existente. O critério é raio de alcance — um componente compartilhado sempre recebe o gate completo, mesmo que o diff seja pequeno. Quando há mais de uma task do mesmo stage aguardando este gate, o Maestro agrupa numa única chamada, amortizando o setup fixo (subir app, autenticar, navegar).
+
+O `art-director` é o único gate cujo objeto é a **tela inteira**, não a task. Ele entra quando todas as tasks de um mesmo Tela-alvo passaram no `ux-auditor`, e julga contra `docs/Screen-Composition.md` e a Seção 0 do Design System — nunca contra gosto: todo achado dele cita uma linha escrita ou um item da rubrica de 12 pontos, com evidência em imagem. Ele reaproveita as capturas do `ux-auditor` em vez de repagar o setup, e roda em levas de no máximo duas telas.
+
+A divisão entre os dois é deliberada: o `ux-auditor` responde *"os valores estão certos?"*, o `art-director` responde *"isto ficou bom?"*. O que o primeiro observa e não pode vetar vai para a seção `## Encaminhado ao art-director` do veredito dele, em vez de morrer como observação.
 
 Duas reprovações no mesmo gate e a terceira submissão ativa o **Circuit Breaker**: a esteira para e espera o operador. A contagem é por gate, não agregada.
 
@@ -211,7 +217,15 @@ O `product-designer` define, e o `frontend-engineer` executa, um padrão de acab
 
 O `ux-auditor` audita esses itens como token — compara contra o que o Design System especificou, nunca contra uma noção subjetiva de "parece premium o bastante". Isso mantém o padrão de qualidade sem reabrir ciclo de veto por gosto.
 
-O squad visual (`product-designer`, `interaction-architect`, `ux-auditor`) carrega ainda os **princípios Impeccable**: referência nomeada antes de adjetivo, hierarquia por espaçamento e peso antes de cor e caixa, alinhamento óptico em vez de geométrico, ritmo de espaçamento consistente entre telas, um objetivo primário por tela, e uma passada adversarial contra "cara de template genérico de IA" antes de entregar. Achado de acabamento sem token correspondente violado é **observação** para o `product-designer` estender o sistema, não veto para o `frontend-engineer` corrigir.
+A partir da 3.9, isso deixou de ser o fim da história. Conformidade de token nunca conseguiu barrar hierarquia confusa, ritmo irregular ou dois sistemas de botão convivendo na mesma tela — e é isso, não a cor errada, que faz um produto parecer amador. Três peças novas fecham esse vão:
+
+- **`docs/Screen-Composition.md`** — o artefato que faltava entre a prosa dos Blueprints e os tokens do Design System: grade, regiões com propósito, hierarquia em três níveis com o mecanismo de cada um, ordem de leitura, poda e assinatura, por tela.
+- **Seção 0 — Direção de Arte** — tese visual, decisão assinatura, par tipográfico justificado, viés do neutro, easing assinatura e antipadrões nomeados, escritos **antes** de qualquer token. Fecha com o teste de identidade: cubra a logo — alguém do setor reconhece que é este produto?
+- **`art-director`** — o gate que julga a tela inteira contra os dois documentos acima, com poder de veto e critério escrito.
+
+O autor e o juiz continuam separados: o `product-designer` escreve a composição, o `art-director` julga contra ela. É isso que impede o gate novo de virar veto por capricho — a mesma lógica do par `frontend-engineer` / `ux-auditor`.
+
+O squad visual (`product-designer`, `interaction-architect`, `ux-auditor`) carrega ainda os **princípios Impeccable**: referência nomeada antes de adjetivo, hierarquia por espaçamento e peso antes de cor e caixa, alinhamento óptico em vez de geométrico, ritmo de espaçamento consistente entre telas, um objetivo primário por tela, e uma passada adversarial contra "cara de template genérico de IA" antes de entregar. Achado de acabamento sem token correspondente violado não é veto do `ux-auditor` — mas também não morre mais ali: ele é encaminhado ao `art-director`, que tem a régua escrita para julgá-lo.
 
 ## Visual Kit
 
@@ -278,6 +292,26 @@ O registro é o que torna as falhas mensuráveis em vez de anedóticas. `ultimo_
 
 A versão anterior lia `agent_type` no `SubagentStop` e o campo vinha sempre vazio, o que jogava todo evento num arquivo de descarte — `agent_type` é entregue no `SubagentStart`.
 
+## Migração para a 3.9
+
+A 3.9 acrescenta a doutrina de padrão de entrega e o gate de composição. O que muda em um projeto existente:
+
+```jsonc
+// .maestro/config.json — schemaVersion 5
+"deliveryStandard": "release",          // rascunho | release | vitrine
+"screenLevels": { "/login": "vitrine" },// eleva telas específicas, nunca rebaixa
+"docs": { "composition": "docs/Screen-Composition.md", /* ... */ },
+"conventions": {
+  "legacyPatterns": [],                 // padrões que este projeto declarou obsoletos
+  "maxUiFileLines": 400
+},
+"gates": { "artDirectorEnabled": true, "maxScreensPerArtAudit": 2 }
+```
+
+Passos, na ordem: preencher `legacyPatterns` com os padrões antigos que ainda vivem no projeto; rodar `node scripts/scan-legacy.mjs` para ver o tamanho da dívida; convocar o `product-designer` para escrever a Seção 0 e a Composição das telas existentes; só então ligar o `art-director`. Ligar o gate antes de existir Composição só produz `BLOQUEADO`.
+
+O bloco `docs` também corrige uma falha silenciosa: agentes que citavam `docs/Screen-Blueprints.md` por nome fixo auditavam o vazio em projetos que tinham renomeado o arquivo.
+
 ## Migração para a 3.8
 
 Projeto novo não precisa de nada: `/maestro-init` já grava o `config.json` no `schemaVersion 4`.
@@ -318,8 +352,9 @@ PluginCode/
 ├── .claude-plugin/marketplace.json    # catálogo local
 ├── plugins/maestro/
 │   ├── .claude-plugin/plugin.json
-│   ├── agents/                        # 17 subagents
-│   ├── commands/                      # 8 slash commands
+│   ├── agents/                        # 18 subagents
+│   ├── commands/                      # 9 slash commands
+│   ├── doctrine/Padrao-de-Entrega.md  # nível de acabamento exigido
 │   ├── hooks/hooks.json
 │   ├── scripts/
 │   └── templates/project/             # ponto de partida de cada projeto
