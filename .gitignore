@@ -1,6 +1,5 @@
-# Maestro Framework Temporary Files
-.maestro/tmp/
-.maestro/tmp/**/*
+# O estado de execução pertence aos projetos consumidores e é ignorado em
+# templates/project/.maestro/.gitignore.
 
 # Node.js
 node_modules/
@@ -33,3 +32,6 @@ coverage/
 # Logs
 logs/
 *.log
+
+# Configuracao local do Claude Code (caminhos especificos da maquina)
+.claude/settings.local.json

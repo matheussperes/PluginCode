@@ -1,0 +1,87 @@
+{
+  "schemaVersion": 5,
+  "framework": {
+    "plugin": "maestro",
+    "version": "3.9.0"
+  },
+  "deliveryStandard": "release",
+  "screenLevels": {},
+  "docs": {
+    "prd": "docs/PRD.md",
+    "blueprints": "docs/Screen-Blueprints.md",
+    "composition": "docs/Screen-Composition.md",
+    "designSystem": "docs/Design-System.md",
+    "domain": "docs/Modelo-de-Dominio.md",
+    "businessStrategy": "docs/Business-Strategy.md",
+    "backlog": "docs/Backlog.md",
+    "status": "docs/Status.md",
+    "lessons": "docs/Lessons-Learned.md"
+  },
+  "conventions": {
+    "platforms": {
+      "web": "ativo",
+      "mobile": "nao_iniciado"
+    },
+    "mobileComponentLibrary": null,
+    "legacyPatterns": [],
+    "maxUiFileLines": 400,
+    "enginePath": null,
+    "sourcePath": null,
+    "migrationsPath": null,
+    "scripts": {
+      "build": null,
+      "lint": null,
+      "typecheck": null,
+      "test": null,
+      "dev": null,
+      "seedQaUser": null
+    },
+    "breakpoints": {
+      "mobile": 375,
+      "tablet": 768,
+      "desktop": 1440
+    },
+    "mainBranch": "main"
+  },
+  "gates": {
+    "maxAttemptsPerGate": 2,
+    "uxAuditRequiresScreenshots": true,
+    "artDirectorEnabled": true,
+    "artAuditRequiresComposition": true,
+    "maxScreensPerArtAudit": 2,
+    "qaGateEnabled": true,
+    "foreground": [
+      "code-auditor",
+      "security-auditor",
+      "qa-engineer",
+      "spec-auditor",
+      "memory-manager"
+    ]
+  },
+  "guards": {
+    "blockMainThreadAppWrites": true,
+    "appPaths": [
+      "src",
+      "lib",
+      "app",
+      "components",
+      "pages",
+      "hooks",
+      "styles",
+      "supabase"
+    ]
+  },
+  "graph": {
+    "enabled": true,
+    "tool": "graphify",
+    "outputDir": "graphify-out",
+    "report": "graphify-out/GRAPH_REPORT.md",
+    "data": "graphify-out/graph.json"
+  },
+  "obsidian": {
+    "askOnRoundEnd": true,
+    "useObsidianPlugin": true,
+    "vaultPathFallback": null,
+    "notesSubfolder": "Maestro"
+  }
+}

@@ -1,65 +1,43 @@
-# Status do Projeto
+# Status do Projeto — PDF Explicativo do Framework .maestro
 
 **Data Última Atualização**: 2026-07-20  
-**Estado Geral**: 🟢 Pipeline Stage 5 Completo — Framework Operacional de Ponta a Ponta
+**Estado Geral**: ✅ Projeto Concluído — PDF Explicativo do Framework .maestro entregue e aprovado
 
 ## Resumo Executivo
 
-Framework .maestro com fundação de arquivos, contratos, 9 agentes especializados e os 4 documentos de pipeline declarativo (Discovery → Development → Quality → Retrospective) que conectam esses agentes em um fluxo executável pelo Maestro. Aguardando definição do próximo Pipeline Stage pelo operador ou o primeiro ciclo real de uso.
+Projeto concluído neste repositório: PDF de referência explicando a estrutura, os agentes e os pipelines do framework .maestro, gerado a partir das fontes de verdade já existentes (sem duplicação manual de conteúdo). A construção do próprio framework está preservada em `docs/archive/maestro-framework-bootstrap/`. Todos os 4 Pipeline Stages concluídos e aprovados pelo operador. Entregável final: `dist/Maestro-Framework-Guide.pdf` (gerado via `npm run build:pdf-guide`, não versionado — `dist/` está no `.gitignore`).
 
 ## Progresso por Pipeline
 
-### Pipeline Stage 1: Fundação do Sistema de Arquivos e Memória
-- ✅ Task 1.1: Inicialização da Estrutura de Diretórios `.maestro`
-- ✅ Task 1.2: Templates de Contratos de Troca de Estado
-- ✅ Task 1.3: Agent Definitions (9 de 9 agentes criados via Stages 2, 3 e 4)
-- ✅ Task 1.4: Design-System.md e Backlog.md
+### Pipeline Stage 1: Discovery & Planning
+- ✅ Task 1.1: Discovery do Projeto (`PRD.md`, `Design-System.md`, schema N/A, `Backlog.md`)
 
-### Pipeline Stage 2: Prompts de Sistema dos Agentes (Especialistas)
-- ✅ Task 2.1: Agente Maestro e Orquestrador Git (`maestro.md`)
-- ✅ Task 2.2: Agente Executor Frontend (`frontend-engineer.md`)
-- ✅ Task 2.3: Agente UX Auditor + Script de Seed do Supabase (`ux-auditor.md`, `seed-qa-user.ts`)
+### Pipeline Stage 2: Extração e Estruturação de Conteúdo
+- ✅ Task 2.1: Inventário e Outline do Conteúdo-Fonte (`docs/Content-Outline.md`)
+- ✅ Task 2.2: Template HTML/CSS do Documento (`tools/pdf-guide/template.html`, `styles.css`)
 
-### Pipeline Stage 3: Esteira de Qualidade e Retrospectiva
-- ✅ Task 3.1: Agentes Code Auditor e Memory Manager (`code-auditor.md`, `memory-manager.md`)
-- ✅ Task 3.2: Improvement Agent e Sincronizador de Aprendizados (`improvement-agent.md`, `sync-lessons.sh`)
+### Pipeline Stage 3: Geração do PDF
+- ✅ Task 3.1: Script de Build (`tools/pdf-guide/build-pdf.ts`)
+- ✅ Task 3.2: Revisão de Conteúdo e Diagramas — 3 bugs reais encontrados e corrigidos via inspeção visual (screenshot), não apenas checagem estrutural
 
-### Pipeline Stage 4: Discovery e Planejamento
-- ✅ Task 4.1A: Agente Solution Architect (`solution-architect.md`)
-- ✅ Task 4.1B: Agente Backend Engineer / Supabase Specialist (`backend-engineer.md`)
-- ✅ Task 4.1C: Agente Security Auditor (`security-auditor.md`)
-- ✅ Task 4.2: Script de Bootstrap de Dependências (`bootstrap.sh`)
+### Pipeline Stage 4: Validação e Entrega
+- ✅ Task 4.1: Validação Final e Aprovação do Operador — aprovação recebida ("ok, aprovado."); reprodutibilidade confirmada via rebuild limpo
 
-### Pipeline Stage 5: Documentação Declarativa dos Pipelines
-- ✅ Task 5.1: Pipeline 01 — Discovery & Planning (`01-discovery.md`)
-- ✅ Task 5.2: Pipeline 02 — Development (`02-development.md`)
-- ✅ Task 5.3: Pipeline 03 — Quality & Audit Gates (`03-quality.md`)
-- ✅ Task 5.4: Pipeline 04 — Retrospective & Sync (`04-retrospective.md`)
+## Histórico do Repositório
 
-## Catálogo Completo de Agentes
-| Agente | Arquivo | Papel |
-|---|---|---|
-| Maestro | `maestro.md` | Orquestrador — nunca programa |
-| Solution Architect | `solution-architect.md` | Discovery e Planejamento |
-| Frontend Engineer | `frontend-engineer.md` | Executor — React/Tailwind/Shadcn |
-| Backend Engineer | `backend-engineer.md` | Executor — Supabase/RLS/Edge Functions |
-| Code Auditor | `code-auditor.md` | Fiscalizador — build/lint |
-| UX Auditor | `ux-auditor.md` | Fiscalizador — visual, com poder de veto |
-| Security Auditor | `security-auditor.md` | Fiscalizador — secrets/RLS/OWASP, com poder de veto |
-| Memory Manager | `memory-manager.md` | Atualiza Backlog.md/Status.md |
-| Improvement Agent | `improvement-agent.md` | Retrospectiva e Lessons-Learned.md |
+A construção do próprio framework .maestro (9 agentes, 4 pipelines, 2 contratos, scripts de bootstrap/seed/sync) foi concluída antes deste projeto. Os artefatos originais dessa fase (PRD, Design-System, Backlog, Status) estão preservados em `docs/archive/maestro-framework-bootstrap/`. `docs/Lessons-Learned.md` continua acumulando entradas de forma contínua, independente do produto em construção.
 
 ## Branches Ativas
-- `claude/maestro-framework-prd-0ehq5t` - Desenvolvimento do framework
+- `main` — snapshot do framework completo
+- `claude/maestro-framework-prd-0ehq5t` — branch de desenvolvimento ativa
 
 ## Bloqueadores
-Nenhum no momento.
 
-## Ambiente de Runtime
-- `package.json`/`package-lock.json` na raiz, gerados via `.maestro/scripts/bootstrap.sh`
-- `devDependencies` instaladas: `@supabase/supabase-js`, `typescript`, `ts-node`, `dotenv` (necessárias para rodar `seed-qa-user.ts`)
+Nenhum. Projeto concluído.
 
 ## Próximos Passos
-1. Aguardar definição do próximo Pipeline Stage pelo operador
-2. Validar `seed-qa-user.ts` contra uma instância Supabase real e `sync-lessons.sh` em um cenário de retrospectiva real
-3. Rodar o primeiro ciclo end-to-end real seguindo `01-discovery.md` → `02-development.md` → `03-quality.md` → `04-retrospective.md`, com um projeto/ideia concreta, para validar os 4 pipelines e os 9 agentes na prática
+
+Nenhum pendente para este projeto. Possíveis iterações futuras (fora do escopo deste MVP, conforme `docs/PRD.md` Seção 4):
+1. Versão interativa/HTML navegável do guia
+2. Tradução para outros idiomas
+3. Regenerar o PDF sempre que os arquivos fonte (`plugins/maestro/agents/`, `plugins/maestro/commands/`) mudarem, via `npm run build:pdf-guide`

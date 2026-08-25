@@ -7,7 +7,9 @@
     "doc": "docs"
   },
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "build:pdf-guide": "ts-node tools/pdf-guide/build-pdf.ts",
+    "init:project": "node plugins/maestro/scripts/init-project.mjs"
   },
   "repository": {
     "type": "git",
@@ -19,7 +21,9 @@
   "devDependencies": {
     "@supabase/supabase-js": "^2.110.7",
     "dotenv": "^17.4.2",
+    "marked": "^18.0.6",
+    "playwright": "^1.61.1",
     "ts-node": "^10.9.2",
-    "typescript": "^7.0.2"
+    "typescript": "^5.9.3"
   }
 }
