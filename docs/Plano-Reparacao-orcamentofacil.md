@@ -29,17 +29,18 @@
 
 ## R.0 — Preparação (você, 15 minutos, sem agente)
 
-### R.0.1 Atualize o `.maestro/config.json`
+### R.0.1 Substitua o `.maestro/config.json`
 
-O projeto está no `schemaVersion` 4. Acrescente os blocos abaixo — **sem remover nada do que já existe**:
+O projeto está no **`schemaVersion` 2, framework 3.3.0** — cinco versões atrás do plugin. Ele nunca teve `gates.foreground`, `guards` nem `graph`: os hooks vinham funcionando pelos padrões embutidos nos próprios scripts, o que dá o mesmo resultado, mas por acidente e não por configuração. Não é caso de acrescentar blocos; é caso de substituir o arquivo.
+
+O conteúdo abaixo já preserva tudo que era seu — `enginePath`, `sourcePath`, `migrationsPath`, os scripts reais e o caminho do cofre do Obsidian — e acrescenta o que faltava. Entregue junto deste plano como `config-orcamentofacil.json`; é só renomear para `config.json` e colocar em `.maestro/`.
 
 ```jsonc
 {
   "schemaVersion": 5,
-  "framework": { "plugin": "maestro", "version": "3.9.0" },
+  "framework": { "plugin": "maestro", "version": "3.9.1" },
 
   "deliveryStandard": "release",
-
   "screenLevels": {
     "/login": "vitrine",
     "/signup": "vitrine",
@@ -48,8 +49,8 @@ O projeto está no `schemaVersion` 4. Acrescente os blocos abaixo — **sem remo
 
   "docs": {
     "prd": "docs/PRD.md",
-    "blueprints": "docs/Mapa-de-Telas.md",
-    "composition": "docs/Screen-Composition.md",
+    "blueprints": "docs/Mapa-de-Telas.md",      // <- o arquivo que existe de verdade
+    "composition": "docs/Screen-Composition.md", // <- ainda não existe; R.2 cria
     "designSystem": "docs/Design-System.md",
     "domain": "docs/Modelo-de-Dominio.md",
     "businessStrategy": "docs/Business-Strategy.md",
@@ -59,28 +60,63 @@ O projeto está no `schemaVersion` 4. Acrescente os blocos abaixo — **sem remo
   },
 
   "conventions": {
+    "platforms": { "web": "ativo", "mobile": "nao_iniciado" },
+    "mobileComponentLibrary": null,
     "legacyPatterns": [
-      "legado-grid",
-      "className=\"card",
-      "className=\"campos",
-      "className=\"acoes",
-      "className=\"primary",
-      "className=\"ghost\"",
-      "className=\"danger",
-      "--legacy-"
+      "legado-grid", "className=\"card", "className=\"campos",
+      "className=\"acoes", "className=\"primary", "className=\"ghost\"",
+      "className=\"danger", "--legacy-"
     ],
-    "maxUiFileLines": 400
+    "maxUiFileLines": 400,
+    "enginePath": "engine",
+    "sourcePath": "app",
+    "migrationsPath": "supabase/migrations",
+    "scripts": {
+      "build": "npm run build", "lint": "npm run lint",
+      "typecheck": "npm run typecheck", "test": "npm run test",
+      "dev": "npm run dev", "seedQaUser": null
+    },
+    "breakpoints": { "mobile": 375, "tablet": 768, "desktop": 1440 },
+    "mainBranch": "main"
   },
 
   "gates": {
+    "maxAttemptsPerGate": 2,
+    "uxAuditRequiresScreenshots": true,
     "artDirectorEnabled": true,
     "artAuditRequiresComposition": true,
-    "maxScreensPerArtAudit": 2
+    "maxScreensPerArtAudit": 2,
+    "qaGateEnabled": true,
+    "foreground": ["code-auditor", "security-auditor", "qa-engineer",
+                   "spec-auditor", "memory-manager"]
+  },
+
+  "guards": {
+    "blockMainThreadAppWrites": true,
+    "appPaths": ["src", "lib", "app", "components", "pages",
+                 "hooks", "styles", "supabase", "engine"]
+  },
+
+  "graph": {
+    "enabled": true, "tool": "graphify", "outputDir": "graphify-out",
+    "report": "graphify-out/GRAPH_REPORT.md", "data": "graphify-out/graph.json"
+  },
+
+  "obsidian": {
+    "askOnRoundEnd": true, "useObsidianPlugin": true,
+    "vaultPathFallback": "C:\\Users\\teteu\\iCloudDrive\\iCloud~md~obsidian\\Obsidian-Claude\\00 - Inbox",
+    "notesSubfolder": "Maestro"
   }
 }
 ```
 
-**A linha mais importante deste bloco é `"blueprints": "docs/Mapa-de-Telas.md"`.** Os agentes procuravam `docs/Screen-Blueprints.md`, que **nunca existiu neste projeto** — eles vinham construindo telas sem o documento de telas. Isso está corrigido aqui.
+Três linhas merecem atenção especial:
+
+**`"blueprints": "docs/Mapa-de-Telas.md"`** — os agentes procuravam `docs/Screen-Blueprints.md`, que nunca existiu neste projeto. Telas foram construídas sem o documento de telas, e nada avisou. Esta linha fecha esse buraco.
+
+**`"engine"` acrescentado a `guards.appPaths`** — o motor de cálculo mora lá e não estava protegido contra escrita vinda da thread principal.
+
+**`"foreground"`** — nunca existiu no projeto. Sem ele os hooks caem no padrão embutido, que por acaso é a mesma lista; com ele, a política passa a ser sua e não do script.
 
 ### R.0.2 Meça o ponto de partida
 
@@ -100,7 +136,15 @@ acima de 400 linhas      AmbientesLab 2250 · BoxCanvas 1086 · EditorItemNucleo
                          PropostaLab 528
 ```
 
-### R.0.3 Abra o stage
+### R.0.3 Confirme que o plugin está em 3.9.1
+
+```powershell
+claude plugin details maestro@plugincode
+```
+
+Precisa dizer **3.9.1**, com **18 agentes** e `art-director` entre eles. Se disser 3.8.0, o `claude plugin update maestro@plugincode` não rodou ou a sessão não foi reiniciada — o plugin é copiado na instalação, não lido ao vivo da pasta.
+
+### R.0.4 Abra o stage
 
 ```
 Aja como o Maestro. Abra o Pipeline Stage "Reparação" no Backlog, com as tasks
